@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace FileCabinetApp
 {
@@ -19,6 +20,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("exit", Exit),
             new Tuple<string, Action<string>>("stat", Stat),
+            new Tuple<string, Action<string>>("create", Create),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -26,6 +28,7 @@ namespace FileCabinetApp
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "prints counts of records.", "The 'stat' command prints counts of records." },
+            new string[] { "create", "create new user.", "The 'create' command create new user." },
         };
 
         public static void Main(string[] args)
@@ -102,11 +105,58 @@ namespace FileCabinetApp
             isRunning = false;
         }
 
-
         private static void Stat(string parameters)
         {
             var recordsCount = Program.fileCabinetService.GetStat();
             Console.WriteLine($"{recordsCount} record(s).");
+        }
+
+        private static void Create(string parameters)
+        {
+            string[] parameterName = { "First name", "Last name", "Date of birth" };
+            string[] personParams = new string[parameterName.Length];
+            DateTime dateOfBd = default;
+            int positionDateOfBd = 2;
+
+            for (int i = 0; i < parameterName.Length; i++)
+            {
+                Console.Write($"{parameterName[i]}: ");
+                personParams[i] = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(personParams[i]))
+                {
+                    Console.WriteLine($"{parameterName[i]} can not be empty or white space.");
+                    i--;
+                }
+
+                if (i == positionDateOfBd && !IsDateOfBdValid(personParams[i], out dateOfBd))
+                {
+                    i--;
+                }
+            }
+
+            fileCabinetService.CreateRecord(personParams[0], personParams[1], dateOfBd);
+        }
+
+        private static bool IsDateOfBdValid(string birthDay, out DateTime dateOfBd)
+        {
+            string format = "MM/dd/yyyy";
+            CultureInfo formatProvider = CultureInfo.CreateSpecificCulture("en-US");
+            DateTimeStyles style = DateTimeStyles.None;
+            if (DateTime.TryParseExact(birthDay, format, formatProvider, style, out dateOfBd))
+            {
+                if (dateOfBd < DateTime.Now)
+                {
+                    return true;
+                }
+
+                Console.WriteLine($"Date of birthday can not be bidder than now date.");
+            }
+            else
+            {
+                Console.WriteLine("Incorrect format of date, try to write like that - dd/mm/yyyy");
+            }
+
+            return false;
         }
     }
 }
