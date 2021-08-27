@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace FileCabinetApp
@@ -13,7 +14,7 @@ namespace FileCabinetApp
 
         private static bool isRunning = true;
 
-        private static FileCabinetService fileCabinetService;
+        private static FileCabinetService fileCabinetService = new FileCabinetService();
 
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
@@ -21,6 +22,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("exit", Exit),
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
+            new Tuple<string, Action<string>>("list", Program.List),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -29,6 +31,7 @@ namespace FileCabinetApp
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "prints counts of records.", "The 'stat' command prints counts of records." },
             new string[] { "create", "create new user.", "The 'create' command create new user." },
+            new string[] { "list", "returned list of created users.", "The 'list' command returned list of created users." },
         };
 
         public static void Main(string[] args)
@@ -43,7 +46,6 @@ namespace FileCabinetApp
                 var inputs = Console.ReadLine().Split(' ', 2);
                 const int commandIndex = 0;
                 var command = inputs[commandIndex];
-                Program.fileCabinetService = new FileCabinetService();
 
                 if (string.IsNullOrEmpty(command))
                 {
@@ -128,7 +130,7 @@ namespace FileCabinetApp
                     i--;
                 }
 
-                if (i == positionDateOfBd && !IsDateOfBdValid(personParams[i], out dateOfBd))
+                if (i == positionDateOfBd && !Validator.IsDateOfBdValid(personParams[i], out dateOfBd))
                 {
                     i--;
                 }
@@ -137,26 +139,20 @@ namespace FileCabinetApp
             fileCabinetService.CreateRecord(personParams[0], personParams[1], dateOfBd);
         }
 
-        private static bool IsDateOfBdValid(string birthDay, out DateTime dateOfBd)
+        private static void List(string parameters)
         {
-            string format = "MM/dd/yyyy";
-            CultureInfo formatProvider = CultureInfo.CreateSpecificCulture("en-US");
-            DateTimeStyles style = DateTimeStyles.None;
-            if (DateTime.TryParseExact(birthDay, format, formatProvider, style, out dateOfBd))
+            var records = fileCabinetService.GetRecords();
+            string dateTimeFormat = "yyyy-MMM-dd";
+            var culture = CultureInfo.CreateSpecificCulture("en-US");
+            if (records.Length == 0)
             {
-                if (dateOfBd < DateTime.Now)
-                {
-                    return true;
-                }
-
-                Console.WriteLine($"Date of birthday can not be bidder than now date.");
-            }
-            else
-            {
-                Console.WriteLine("Incorrect format of date, try to write like that - dd/mm/yyyy");
+                Console.WriteLine("No records yet.");
             }
 
-            return false;
+            foreach (FileCabinetRecord record in records)
+            {
+                Console.WriteLine("#{0}, {1}, {2}, {3}", record.Id, record.FirstName, record.LastName, record.DateOfBirth.ToString(dateTimeFormat, culture));
+            }
         }
     }
 }
