@@ -115,28 +115,32 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            string[] parameterName = { "First name", "Last name", "Date of birth" };
+            string[] parameterName = { "First name", "Last name", "Date of birth", "property1", "property1", "property1" };
+            Type[] types = {typeof(string), typeof(string), typeof(DateTime), typeof(short), typeof(decimal), typeof(char) };
             string[] personParams = new string[parameterName.Length];
             DateTime dateOfBd = default;
-            int positionDateOfBd = 2;
+            decimal decimalValue = default;
+            char charValue = default;
+            short shortValue = default;
 
-            for (int i = 0; i < parameterName.Length; i++)
+            for (int i = 0; i < parameterName.Length;)
             {
                 Console.Write($"{parameterName[i]}: ");
                 personParams[i] = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(personParams[i]))
+                bool isParsed = Type.GetTypeCode(types[i]) switch
                 {
-                    Console.WriteLine($"{parameterName[i]} can not be empty or white space.");
-                    i--;
-                }
+                    TypeCode.String => !string.IsNullOrWhiteSpace(personParams[i]),
+                    TypeCode.Int16 => short.TryParse(personParams[i], out shortValue),
+                    TypeCode.Char => char.TryParse(personParams[i], out charValue),
+                    TypeCode.Decimal => decimal.TryParse(personParams[i], out decimalValue),
+                    TypeCode.DateTime => Parser.TryParseDateTimeBd(personParams[i], out dateOfBd),
+                    _ => false
+                };
 
-                if (i == positionDateOfBd && !Validator.IsDateOfBdValid(personParams[i], out dateOfBd))
-                {
-                    i--;
-                }
+                i = isParsed ? i + 1 : i;
             }
 
-            fileCabinetService.CreateRecord(personParams[0], personParams[1], dateOfBd);
+            fileCabinetService.CreateRecord(personParams[0], personParams[1], dateOfBd, shortValue, decimalValue, charValue);
         }
 
         private static void List(string parameters)
