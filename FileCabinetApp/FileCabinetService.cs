@@ -45,7 +45,7 @@ namespace FileCabinetApp
                 throw new ArgumentException("The Annual income must be bigger than 0.");
             }
 
-            var driverLicenseCategoryUpper = char.ToUpper(driverLicenseCategory, CultureInfo.CurrentCulture);
+            var driverLicenseCategoryUpper = char.ToUpper(driverLicenseCategory, CultureInfo.CreateSpecificCulture("en-US"));
 
             if (!(driverLicenseCategoryUpper == 'A' || driverLicenseCategoryUpper == 'B' || driverLicenseCategoryUpper == 'C' || driverLicenseCategoryUpper == 'D'))
             {

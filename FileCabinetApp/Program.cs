@@ -115,32 +115,32 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            string[] parameterName = { "First name", "Last name", "Date of birth", "Working Hours Per Week", "Annual Income", "Driver License Category" };
-            Type[] types = { typeof(string), typeof(string), typeof(DateTime), typeof(short), typeof(decimal), typeof(char) };
-            string[] personParams = new string[parameterName.Length];
+            string[] parameterNames = { "First name", "Last name", "Date of birth", "Working Hours Per Week", "Annual Income", "Driver License Category" };
+            string firstName = null, lastName = null;
             DateTime dateOfBd = default;
             decimal annualIncome = default;
             char driverLicenseCategory = default;
             short workingHoursPerWeek = default;
 
-            for (int i = 0; i < parameterName.Length;)
+            for (int i = 0; i < parameterNames.Length;)
             {
-                Console.Write($"{parameterName[i]}: ");
-                personParams[i] = Console.ReadLine();
-                bool isParsed = Type.GetTypeCode(types[i]) switch
+                Console.Write($"{parameterNames[i]}: ");
+                string personParameter = Console.ReadLine();
+                bool isParsed = parameterNames[i] switch
                 {
-                    TypeCode.String => !string.IsNullOrWhiteSpace(personParams[i]),
-                    TypeCode.Int16 => short.TryParse(personParams[i], out workingHoursPerWeek),
-                    TypeCode.Char => char.TryParse(personParams[i], out driverLicenseCategory),
-                    TypeCode.Decimal => decimal.TryParse(personParams[i], out annualIncome),
-                    TypeCode.DateTime => Parser.TryParseDateTimeBd(personParams[i], out dateOfBd),
+                    var parameterName when parameterName == "First name" => Validator.TryGetValidFirstName(personParameter, out firstName),
+                    var parameterName when parameterName == "Last name" => Validator.TryGetValidLastName(personParameter, out lastName),
+                    var parameterName when parameterName == "Working Hours Per Week" => Validator.TryGetValidWorkingHoursPerWeek(personParameter, out workingHoursPerWeek),
+                    var parameterName when parameterName == "Driver License Category" => Validator.TryGetValidDriverLicenseCategory(personParameter, out driverLicenseCategory),
+                    var parameterName when parameterName == "Annual Income" => Validator.TryGetValidAnnualIncome(personParameter, out annualIncome),
+                    var parameterName when parameterName == "Date of birth" => Validator.TryGetValidDateTimeOfBd(personParameter, out dateOfBd),
                     _ => false
                 };
 
                 i = isParsed ? i + 1 : i;
             }
 
-            fileCabinetService.CreateRecord(personParams[0], personParams[1], dateOfBd, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            fileCabinetService.CreateRecord(firstName, lastName, dateOfBd, workingHoursPerWeek, annualIncome, driverLicenseCategory);
         }
 
         private static void List(string parameters)
