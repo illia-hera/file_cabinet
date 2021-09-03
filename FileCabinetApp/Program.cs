@@ -115,13 +115,13 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            string[] parameterName = { "First name", "Last name", "Date of birth", "property1", "property1", "property1" };
-            Type[] types = {typeof(string), typeof(string), typeof(DateTime), typeof(short), typeof(decimal), typeof(char) };
+            string[] parameterName = { "First name", "Last name", "Date of birth", "Working Hours Per Week", "Annual Income", "Driver License Category" };
+            Type[] types = { typeof(string), typeof(string), typeof(DateTime), typeof(short), typeof(decimal), typeof(char) };
             string[] personParams = new string[parameterName.Length];
             DateTime dateOfBd = default;
-            decimal decimalValue = default;
-            char charValue = default;
-            short shortValue = default;
+            decimal annualIncome = default;
+            char driverLicenseCategory = default;
+            short workingHoursPerWeek = default;
 
             for (int i = 0; i < parameterName.Length;)
             {
@@ -130,9 +130,9 @@ namespace FileCabinetApp
                 bool isParsed = Type.GetTypeCode(types[i]) switch
                 {
                     TypeCode.String => !string.IsNullOrWhiteSpace(personParams[i]),
-                    TypeCode.Int16 => short.TryParse(personParams[i], out shortValue),
-                    TypeCode.Char => char.TryParse(personParams[i], out charValue),
-                    TypeCode.Decimal => decimal.TryParse(personParams[i], out decimalValue),
+                    TypeCode.Int16 => short.TryParse(personParams[i], out workingHoursPerWeek),
+                    TypeCode.Char => char.TryParse(personParams[i], out driverLicenseCategory),
+                    TypeCode.Decimal => decimal.TryParse(personParams[i], out annualIncome),
                     TypeCode.DateTime => Parser.TryParseDateTimeBd(personParams[i], out dateOfBd),
                     _ => false
                 };
@@ -140,7 +140,7 @@ namespace FileCabinetApp
                 i = isParsed ? i + 1 : i;
             }
 
-            fileCabinetService.CreateRecord(personParams[0], personParams[1], dateOfBd, shortValue, decimalValue, charValue);
+            fileCabinetService.CreateRecord(personParams[0], personParams[1], dateOfBd, workingHoursPerWeek, annualIncome, driverLicenseCategory);
         }
 
         private static void List(string parameters)
