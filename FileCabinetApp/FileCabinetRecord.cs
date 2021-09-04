@@ -16,10 +16,10 @@ namespace FileCabinetApp
 
         public DateTime DateOfBirth { get; set; }
 
-        public short ShortValue { get; set; }
+        public short WorkingHoursPerWeek { get; set; }
 
-        public decimal DecimalValue { get; set; }
+        public decimal AnnualIncome { get; set; }
 
-        public char CharValue { get; set; }
+        public char DriverLicenseCategory { get; set; }
     }
 }

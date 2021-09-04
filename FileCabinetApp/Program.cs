@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace FileCabinetApp
 {
@@ -22,7 +23,8 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("exit", Exit),
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
-            new Tuple<string, Action<string>>("list", Program.List),
+            new Tuple<string, Action<string>>("list", List),
+            new Tuple<string, Action<string>>("edit", Edit),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -32,6 +34,7 @@ namespace FileCabinetApp
             new string[] { "stat", "prints counts of records.", "The 'stat' command prints counts of records." },
             new string[] { "create", "create new user.", "The 'create' command create new user." },
             new string[] { "list", "returned list of created users.", "The 'list' command returned list of created users." },
+            new string[] { "edit", "edit user parameters.", "The 'edit' command edit user parameters." },
         };
 
         public static void Main(string[] args)
@@ -115,37 +118,15 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            string[] parameterName = { "First name", "Last name", "Date of birth", "property1", "property1", "property1" };
-            Type[] types = {typeof(string), typeof(string), typeof(DateTime), typeof(short), typeof(decimal), typeof(char) };
-            string[] personParams = new string[parameterName.Length];
-            DateTime dateOfBd = default;
-            decimal decimalValue = default;
-            char charValue = default;
-            short shortValue = default;
+            GetPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory);
 
-            for (int i = 0; i < parameterName.Length;)
-            {
-                Console.Write($"{parameterName[i]}: ");
-                personParams[i] = Console.ReadLine();
-                bool isParsed = Type.GetTypeCode(types[i]) switch
-                {
-                    TypeCode.String => !string.IsNullOrWhiteSpace(personParams[i]),
-                    TypeCode.Int16 => short.TryParse(personParams[i], out shortValue),
-                    TypeCode.Char => char.TryParse(personParams[i], out charValue),
-                    TypeCode.Decimal => decimal.TryParse(personParams[i], out decimalValue),
-                    TypeCode.DateTime => Parser.TryParseDateTimeBd(personParams[i], out dateOfBd),
-                    _ => false
-                };
-
-                i = isParsed ? i + 1 : i;
-            }
-
-            fileCabinetService.CreateRecord(personParams[0], personParams[1], dateOfBd, shortValue, decimalValue, charValue);
+            int recordId = fileCabinetService.CreateRecord(firstName, lastName, dateOfBd, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            Console.WriteLine($"Record #{recordId} is created.");
         }
 
         private static void List(string parameters)
         {
-            var records = fileCabinetService.GetRecords();
+            FileCabinetRecord[] records = fileCabinetService.GetRecords();
             string dateTimeFormat = "yyyy-MMM-dd";
             var culture = CultureInfo.CreateSpecificCulture("en-US");
             if (records.Length == 0)
@@ -156,6 +137,52 @@ namespace FileCabinetApp
             foreach (FileCabinetRecord record in records)
             {
                 Console.WriteLine("#{0}, {1}, {2}, {3}", record.Id, record.FirstName, record.LastName, record.DateOfBirth.ToString(dateTimeFormat, culture));
+            }
+        }
+
+        private static void Edit(string parameters)
+        {
+            bool isParsedId = int.TryParse(parameters, out int id);
+
+            FileCabinetRecord[] records = fileCabinetService.GetRecords();
+            var record = records.FirstOrDefault(r => r.Id == id);
+
+            if (!isParsedId || record is null)
+            {
+                Console.WriteLine($"#{id} record is not found.");
+            }
+
+            GetPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory);
+            fileCabinetService.EditRecord(id, firstName, lastName, dateOfBd, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            Console.WriteLine($"Record #{id} is updated.");
+        }
+
+        private static void GetPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory)
+        {
+            string[] parameterNames = { "First name", "Last name", "Date of birth", "Working Hours Per Week", "Annual Income", "Driver License Category" };
+            firstName = null;
+            lastName = null;
+            dateOfBd = default;
+            annualIncome = default;
+            driverLicenseCategory = default;
+            workingHoursPerWeek = default;
+
+            for (int i = 0; i < parameterNames.Length;)
+            {
+                Console.Write($"{parameterNames[i]}: ");
+                string personParameter = Console.ReadLine();
+                bool isParsed = parameterNames[i] switch
+                {
+                    var parameterName when parameterName == "First name" => Validator.TryGetValidFirstName(personParameter, out firstName),
+                    var parameterName when parameterName == "Last name" => Validator.TryGetValidLastName(personParameter, out lastName),
+                    var parameterName when parameterName == "Working Hours Per Week" => Validator.TryGetValidWorkingHoursPerWeek(personParameter, out workingHoursPerWeek),
+                    var parameterName when parameterName == "Driver License Category" => Validator.TryGetValidDriverLicenseCategory(personParameter, out driverLicenseCategory),
+                    var parameterName when parameterName == "Annual Income" => Validator.TryGetValidAnnualIncome(personParameter, out annualIncome),
+                    var parameterName when parameterName == "Date of birth" => Validator.TryGetValidDateTimeOfBd(personParameter, out dateOfBd),
+                    _ => false
+                };
+
+                i = isParsed ? i + 1 : i;
             }
         }
     }
