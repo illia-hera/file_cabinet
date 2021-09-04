@@ -199,6 +199,7 @@ namespace FileCabinetApp
             FileCabinetRecord[] records = parameter switch
             {
                 var p when p.Equals("firstName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByFirstName(value.Trim('\"')),
+                var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByLastName(value.Trim('\"')),
                 _ => Array.Empty<FileCabinetRecord>()
             };
 
