@@ -29,6 +29,7 @@ namespace FileCabinetApp
             this.list.Add(record);
             this.AddRecordToFirstNameDict(firstName, record);
             this.AddRecordToLastNameDict(lastName, record);
+            this.AddRecordToDateOfBirthDict(dateOfBirth, record);
 
             return record.Id;
         }
@@ -45,6 +46,7 @@ namespace FileCabinetApp
 
             this.EditFirstNameDictionary(firstName, record);
             this.EditLastNameDictionary(lastName, record);
+            this.EditDateOfBirthDictionary(dateOfBirth, record);
 
             record.FirstName = firstName;
             record.LastName = lastName;
@@ -180,6 +182,32 @@ namespace FileCabinetApp
                 }
 
                 this.AddRecordToLastNameDict(lastName, record);
+            }
+        }
+
+        private void AddRecordToDateOfBirthDict(DateTime dateOfBirth, FileCabinetRecord record)
+        {
+            if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
+            {
+                this.dateOfBirthDictionary[dateOfBirth].Add(record);
+            }
+            else
+            {
+                this.dateOfBirthDictionary.Add(dateOfBirth, new List<FileCabinetRecord>() { record });
+            }
+        }
+
+        private void EditDateOfBirthDictionary(DateTime dateOfBirth, FileCabinetRecord record)
+        {
+            if (dateOfBirth != record.DateOfBirth)
+            {
+                this.dateOfBirthDictionary[dateOfBirth].Remove(record);
+                if (this.dateOfBirthDictionary[dateOfBirth].Count == 0)
+                {
+                    this.dateOfBirthDictionary.Remove(dateOfBirth);
+                }
+
+                this.AddRecordToDateOfBirthDict(dateOfBirth, record);
             }
         }
     }
