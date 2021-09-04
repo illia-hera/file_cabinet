@@ -8,6 +8,7 @@ namespace FileCabinetApp
     public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
         {
@@ -24,6 +25,7 @@ namespace FileCabinetApp
             };
 
             this.list.Add(record);
+            this.AddRecordToFirstNameDict(firstName, record);
 
             return record.Id;
         }
@@ -37,6 +39,8 @@ namespace FileCabinetApp
             }
 
             ValidateParameters(firstName, lastName, dateOfBirth, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+
+            this.EditFirstNameDictionary(firstName, record);
 
             record.FirstName = firstName;
             record.LastName = lastName;
@@ -59,8 +63,7 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] FindByFirstName(string firstName)
         {
-            FileCabinetRecord[] resultArray = this.list.Where(r =>
-                firstName.Equals(r.FirstName, StringComparison.OrdinalIgnoreCase)).ToArray();
+            FileCabinetRecord[] resultArray = this.firstNameDictionary.ContainsKey(firstName) ? this.firstNameDictionary[firstName].ToArray() : Array.Empty<FileCabinetRecord>();
 
             return resultArray;
         }
@@ -122,6 +125,32 @@ namespace FileCabinetApp
             if (!(driverLicenseCategoryUpper == 'A' || driverLicenseCategoryUpper == 'B' || driverLicenseCategoryUpper == 'C' || driverLicenseCategoryUpper == 'D'))
             {
                 throw new ArgumentException("The Driver License Category can be only - A, B, C, D.");
+            }
+        }
+
+        private void AddRecordToFirstNameDict(string firstName, FileCabinetRecord record)
+        {
+            if (this.firstNameDictionary.ContainsKey(firstName))
+            {
+                this.firstNameDictionary[firstName].Add(record);
+            }
+            else
+            {
+                this.firstNameDictionary.Add(firstName, new List<FileCabinetRecord>() { record });
+            }
+        }
+
+        private void EditFirstNameDictionary(string firstName, FileCabinetRecord record)
+        {
+            if (!firstName.Equals(record.FirstName, StringComparison.OrdinalIgnoreCase))
+            {
+                this.firstNameDictionary[record.FirstName].Remove(record);
+                if (this.firstNameDictionary[record.FirstName].Count == 0)
+                {
+                    this.firstNameDictionary.Remove(record.FirstName);
+                }
+
+                this.AddRecordToFirstNameDict(firstName, record);
             }
         }
     }
