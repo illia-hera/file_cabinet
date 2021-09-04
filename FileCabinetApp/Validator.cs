@@ -24,7 +24,7 @@ namespace FileCabinetApp
         public static bool TryGetValidFirstName(string value, out string firstName)
         {
             firstName = value;
-            if (string.IsNullOrWhiteSpace(firstName) || (firstName.Length > 2 && firstName.Length < 60))
+            if (string.IsNullOrWhiteSpace(firstName) || (firstName.Length >= 2 && firstName.Length <= 60))
             {
                 return true;
             }
@@ -35,7 +35,7 @@ namespace FileCabinetApp
         public static bool TryGetValidLastName(string value, out string lastName)
         {
             lastName = value;
-            if (string.IsNullOrWhiteSpace(lastName) || (lastName.Length > 2 && lastName.Length < 60))
+            if (string.IsNullOrWhiteSpace(lastName) || (lastName.Length >= 2 && lastName.Length <= 60))
             {
                 return true;
             }
@@ -46,7 +46,7 @@ namespace FileCabinetApp
         public static bool TryGetValidWorkingHoursPerWeek(string value, out short shortValueHours)
         {
             if (short.TryParse(value, out shortValueHours)
-                && (shortValueHours > 0 && shortValueHours < 40))
+                && (shortValueHours >= 0 && shortValueHours <= 40))
             {
                 return true;
             }
@@ -57,7 +57,7 @@ namespace FileCabinetApp
         public static bool TryGetValidAnnualIncome(string value, out decimal annualIncome)
         {
             if (decimal.TryParse(value, out annualIncome)
-                && annualIncome > 0)
+                && annualIncome >= 0)
             {
                 return true;
             }
@@ -69,7 +69,7 @@ namespace FileCabinetApp
         {
             if (char.TryParse(value, out driverLicenseCategory))
             {
-                var driverLicenseCategoryUpper = char.ToUpper(driverLicenseCategory, CultureInfo.CreateSpecificCulture("en-US"));
+                var driverLicenseCategoryUpper = char.ToUpper(driverLicenseCategory, CultureInfo.CurrentCulture);
                 if (driverLicenseCategoryUpper == 'A' || driverLicenseCategoryUpper == 'B' || driverLicenseCategoryUpper == 'C' || driverLicenseCategoryUpper == 'D')
                 {
                     return true;

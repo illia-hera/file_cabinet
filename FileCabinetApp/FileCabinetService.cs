@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace FileCabinetApp
 {
@@ -9,6 +10,54 @@ namespace FileCabinetApp
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
+        {
+            ValidateParameters(firstName, lastName, dateOfBirth, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            var record = new FileCabinetRecord
+            {
+                Id = this.list.Count + 1,
+                FirstName = firstName,
+                LastName = lastName,
+                DateOfBirth = dateOfBirth,
+                WorkingHoursPerWeek = workingHoursPerWeek,
+                AnnualIncome = annualIncome,
+                DriverLicenseCategory = driverLicenseCategory,
+            };
+
+            this.list.Add(record);
+
+            return record.Id;
+        }
+
+        public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
+        {
+            var record = this.list.FirstOrDefault(r => r.Id == id);
+            if (record == null)
+            {
+                throw new ArgumentException($"#{id} record is not found.");
+            }
+
+            ValidateParameters(firstName, lastName, dateOfBirth, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+
+            record.FirstName = firstName;
+            record.LastName = lastName;
+            record.AnnualIncome = annualIncome;
+            record.DateOfBirth = dateOfBirth;
+            record.DriverLicenseCategory = driverLicenseCategory;
+            record.WorkingHoursPerWeek = workingHoursPerWeek;
+        }
+
+        public FileCabinetRecord[] GetRecords()
+        {
+            FileCabinetRecord[] resultArray = this.list.ToArray();
+            return resultArray;
+        }
+
+        public int GetStat()
+        {
+            return this.list.Count;
+        }
+
+        private static void ValidateParameters(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
         {
             if (firstName is null)
             {
@@ -45,38 +94,12 @@ namespace FileCabinetApp
                 throw new ArgumentException("The Annual income must be bigger than 0.");
             }
 
-            var driverLicenseCategoryUpper = char.ToUpper(driverLicenseCategory, CultureInfo.CreateSpecificCulture("en-US"));
+            var driverLicenseCategoryUpper = char.ToUpper(driverLicenseCategory, CultureInfo.CurrentCulture);
 
             if (!(driverLicenseCategoryUpper == 'A' || driverLicenseCategoryUpper == 'B' || driverLicenseCategoryUpper == 'C' || driverLicenseCategoryUpper == 'D'))
             {
                 throw new ArgumentException("The Driver License Category can be only - A, B, C, D.");
             }
-
-            var record = new FileCabinetRecord
-            {
-                Id = this.list.Count + 1,
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                WorkingHoursPerWeek = workingHoursPerWeek,
-                AnnualIncome = annualIncome,
-                DriverLicenseCategory = driverLicenseCategory,
-            };
-
-            this.list.Add(record);
-
-            return record.Id;
-        }
-
-        public FileCabinetRecord[] GetRecords()
-        {
-            FileCabinetRecord[] resultArray = this.list.ToArray();
-            return resultArray;
-        }
-
-        public int GetStat()
-        {
-            return this.list.Count;
         }
     }
 }
