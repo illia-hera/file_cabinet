@@ -9,6 +9,8 @@ namespace FileCabinetApp
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
         {
@@ -26,6 +28,7 @@ namespace FileCabinetApp
 
             this.list.Add(record);
             this.AddRecordToFirstNameDict(firstName, record);
+            this.AddRecordToLastNameDict(lastName, record);
 
             return record.Id;
         }
@@ -41,6 +44,7 @@ namespace FileCabinetApp
             ValidateParameters(firstName, lastName, dateOfBirth, workingHoursPerWeek, annualIncome, driverLicenseCategory);
 
             this.EditFirstNameDictionary(firstName, record);
+            this.EditLastNameDictionary(lastName, record);
 
             record.FirstName = firstName;
             record.LastName = lastName;
@@ -70,8 +74,7 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] FindByLastName(string lastName)
         {
-            FileCabinetRecord[] resultArray = this.list.Where(r =>
-                lastName.Equals(r.LastName, StringComparison.OrdinalIgnoreCase)).ToArray();
+            FileCabinetRecord[] resultArray = this.lastNameDictionary.ContainsKey(lastName) ? this.lastNameDictionary[lastName].ToArray() : Array.Empty<FileCabinetRecord>();
 
             return resultArray;
         }
@@ -151,6 +154,32 @@ namespace FileCabinetApp
                 }
 
                 this.AddRecordToFirstNameDict(firstName, record);
+            }
+        }
+
+        private void AddRecordToLastNameDict(string lastName, FileCabinetRecord record)
+        {
+            if (this.lastNameDictionary.ContainsKey(lastName))
+            {
+                this.lastNameDictionary[lastName].Add(record);
+            }
+            else
+            {
+                this.lastNameDictionary.Add(lastName, new List<FileCabinetRecord>() { record });
+            }
+        }
+
+        private void EditLastNameDictionary(string lastName, FileCabinetRecord record)
+        {
+            if (!lastName.Equals(record.FirstName, StringComparison.OrdinalIgnoreCase))
+            {
+                this.lastNameDictionary[record.FirstName].Remove(record);
+                if (this.lastNameDictionary[record.FirstName].Count == 0)
+                {
+                    this.lastNameDictionary.Remove(record.FirstName);
+                }
+
+                this.AddRecordToLastNameDict(lastName, record);
             }
         }
     }
