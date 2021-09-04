@@ -25,6 +25,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
+            new Tuple<string, Action<string>>("find", Find),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -35,6 +36,7 @@ namespace FileCabinetApp
             new string[] { "create", "create new user.", "The 'create' command create new user." },
             new string[] { "list", "returned list of created users.", "The 'list' command returned list of created users." },
             new string[] { "edit", "edit user parameters.", "The 'edit' command edit user parameters." },
+            new string[] { "find", "find user by parameter.", "The 'find' command find user by parameter." },
         };
 
         public static void Main(string[] args)
@@ -127,16 +129,15 @@ namespace FileCabinetApp
         private static void List(string parameters)
         {
             FileCabinetRecord[] records = fileCabinetService.GetRecords();
-            string dateTimeFormat = "yyyy-MMM-dd";
-            var culture = CultureInfo.CreateSpecificCulture("en-US");
             if (records.Length == 0)
             {
                 Console.WriteLine("No records yet.");
+                return;
             }
 
             foreach (FileCabinetRecord record in records)
             {
-                Console.WriteLine("#{0}, {1}, {2}, {3}", record.Id, record.FirstName, record.LastName, record.DateOfBirth.ToString(dateTimeFormat, culture));
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
             }
         }
 
@@ -150,6 +151,7 @@ namespace FileCabinetApp
             if (!isParsedId || record is null)
             {
                 Console.WriteLine($"#{id} record is not found.");
+                return;
             }
 
             GetPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory);
@@ -173,16 +175,38 @@ namespace FileCabinetApp
                 string personParameter = Console.ReadLine();
                 bool isParsed = parameterNames[i] switch
                 {
-                    var parameterName when parameterName == "First name" => Validator.TryGetValidFirstName(personParameter, out firstName),
-                    var parameterName when parameterName == "Last name" => Validator.TryGetValidLastName(personParameter, out lastName),
-                    var parameterName when parameterName == "Working Hours Per Week" => Validator.TryGetValidWorkingHoursPerWeek(personParameter, out workingHoursPerWeek),
-                    var parameterName when parameterName == "Driver License Category" => Validator.TryGetValidDriverLicenseCategory(personParameter, out driverLicenseCategory),
-                    var parameterName when parameterName == "Annual Income" => Validator.TryGetValidAnnualIncome(personParameter, out annualIncome),
-                    var parameterName when parameterName == "Date of birth" => Validator.TryGetValidDateTimeOfBd(personParameter, out dateOfBd),
+                    var name when name == "First name" => Validator.TryGetValidFirstName(personParameter, out firstName),
+                    var name when name == "Last name" => Validator.TryGetValidLastName(personParameter, out lastName),
+                    var name when name == "Working Hours Per Week" => Validator.TryGetValidWorkingHoursPerWeek(personParameter, out workingHoursPerWeek),
+                    var name when name == "Driver License Category" => Validator.TryGetValidDriverLicenseCategory(personParameter, out driverLicenseCategory),
+                    var name when name == "Annual Income" => Validator.TryGetValidAnnualIncome(personParameter, out annualIncome),
+                    var name when name == "Date of birth" => Validator.TryGetValidDateTimeOfBd(personParameter, out dateOfBd),
                     _ => false
                 };
 
                 i = isParsed ? i + 1 : i;
+            }
+        }
+
+        private static void Find(string parameters)
+        {
+            string[] inputs = parameters.Split(' ', 2);
+            const int parameterIndex = 0;
+            const int valueIndex = 1;
+            string parameter = inputs[parameterIndex];
+            string value = inputs.Length > 1 ? inputs[valueIndex] : string.Empty;
+
+            FileCabinetRecord[] records = parameter switch
+            {
+                var p when p.Equals("firstName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByFirstName(value.Trim('\"')),
+                var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByLastName(value.Trim('\"')),
+                var p when p.Equals("dateOfBirth", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByDateOfBirthName(DateTime.Parse(value.Trim('\"'), CultureInfo.CreateSpecificCulture("en-US"))),
+                _ => Array.Empty<FileCabinetRecord>()
+            };
+
+            foreach (FileCabinetRecord record in records)
+            {
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
             }
         }
     }
