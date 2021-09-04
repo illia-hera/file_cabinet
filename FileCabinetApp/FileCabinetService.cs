@@ -73,6 +73,13 @@ namespace FileCabinetApp
             return resultArray;
         }
 
+        public FileCabinetRecord[] FindByDateOfBirthName(DateTime dateOfBirth)
+        {
+            FileCabinetRecord[] resultArray = this.list.Where(r => dateOfBirth.Equals(r.DateOfBirth)).ToArray();
+
+            return resultArray;
+        }
+
         private static void ValidateParameters(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
         {
             if (firstName is null)

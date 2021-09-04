@@ -200,6 +200,7 @@ namespace FileCabinetApp
             {
                 var p when p.Equals("firstName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByFirstName(value.Trim('\"')),
                 var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByLastName(value.Trim('\"')),
+                var p when p.Equals("dateOfBirth", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByDateOfBirthName(DateTime.Parse(value.Trim('\"'), CultureInfo.CreateSpecificCulture("en-US"))),
                 _ => Array.Empty<FileCabinetRecord>()
             };
 
