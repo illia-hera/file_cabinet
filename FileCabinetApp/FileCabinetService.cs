@@ -57,6 +57,14 @@ namespace FileCabinetApp
             return this.list.Count;
         }
 
+        public FileCabinetRecord[] FindByFirstName(string firstName)
+        {
+            FileCabinetRecord[] resultArray = this.list.Where(r =>
+                firstName.Equals(r.FirstName, StringComparison.OrdinalIgnoreCase)).ToArray();
+
+            return resultArray;
+        }
+
         private static void ValidateParameters(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
         {
             if (firstName is null)
