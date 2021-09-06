@@ -18,31 +18,31 @@ namespace FileCabinetApp
         /// <summary>
         /// Creates the record.
         /// </summary>
-        /// <param name="firstName">The first name.</param>
-        /// <param name="lastName">The last name.</param>
-        /// <param name="dateOfBirth">The date of birth.</param>
-        /// <param name="workingHoursPerWeek">The working hours per week.</param>
-        /// <param name="annualIncome">The annual income.</param>
-        /// <param name="driverLicenseCategory">The driver license category.</param>
+        /// <param name="container">The container of parameters.</param>
         /// <returns>Return Id of created record.</returns>
-        public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
+        public int CreateRecord(ParametersContainer container)
         {
-            ValidateParameters(firstName, lastName, dateOfBirth, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            ValidateParameters(container);
             var record = new FileCabinetRecord
             {
                 Id = this.list.Count + 1,
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                WorkingHoursPerWeek = workingHoursPerWeek,
-                AnnualIncome = annualIncome,
-                DriverLicenseCategory = driverLicenseCategory,
+                FirstName = container.FirstName,
+                LastName = container.LastName,
+                DateOfBirth = container.DateOfBirthday,
+                WorkingHoursPerWeek = container.WorkingHoursPerWeek,
+                AnnualIncome = container.AnnualIncome,
+                DriverLicenseCategory = container.DriverLicenseCategory,
             };
 
             this.list.Add(record);
-            this.AddRecordToFirstNameDict(firstName, record);
-            this.AddRecordToLastNameDict(lastName, record);
-            this.AddRecordToDateOfBirthDict(dateOfBirth, record);
+            this.AddRecordToFirstNameDict(container.FirstName, record);
+            this.AddRecordToLastNameDict(container.LastName, record);
+            this.AddRecordToDateOfBirthDict(container.DateOfBirthday, record);
 
             return record.Id;
         }
@@ -51,14 +51,10 @@ namespace FileCabinetApp
         /// Edits the record.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <param name="firstName">The first name.</param>
-        /// <param name="lastName">The last name.</param>
-        /// <param name="dateOfBirth">The date of birth.</param>
-        /// <param name="workingHoursPerWeek">The working hours per week.</param>
-        /// <param name="annualIncome">The annual income.</param>
-        /// <param name="driverLicenseCategory">The driver license category.</param>
+        /// <param name="container">The container of parameters.</param>
         /// <exception cref="System.ArgumentException">#{id} record is not found.</exception>
-        public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
+        /// <exception cref="System.ArgumentNullException">container.</exception>
+        public void EditRecord(int id, ParametersContainer container)
         {
             var record = this.list.FirstOrDefault(r => r.Id == id);
             if (record == null)
@@ -66,18 +62,23 @@ namespace FileCabinetApp
                 throw new ArgumentException($"#{id} record is not found.");
             }
 
-            ValidateParameters(firstName, lastName, dateOfBirth, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
 
-            this.EditFirstNameDictionary(firstName, record);
-            this.EditLastNameDictionary(lastName, record);
-            this.EditDateOfBirthDictionary(dateOfBirth, record);
+            ValidateParameters(container);
 
-            record.FirstName = firstName;
-            record.LastName = lastName;
-            record.AnnualIncome = annualIncome;
-            record.DateOfBirth = dateOfBirth;
-            record.DriverLicenseCategory = driverLicenseCategory;
-            record.WorkingHoursPerWeek = workingHoursPerWeek;
+            this.EditFirstNameDictionary(container.FirstName, record);
+            this.EditLastNameDictionary(container.LastName, record);
+            this.EditDateOfBirthDictionary(container.DateOfBirthday, record);
+
+            record.FirstName = container.FirstName;
+            record.LastName = container.LastName;
+            record.AnnualIncome = container.AnnualIncome;
+            record.DateOfBirth = container.DateOfBirthday;
+            record.DriverLicenseCategory = container.DriverLicenseCategory;
+            record.WorkingHoursPerWeek = container.WorkingHoursPerWeek;
         }
 
         /// <summary>
@@ -126,7 +127,7 @@ namespace FileCabinetApp
         /// <summary>
         /// Finds the records by date of birthday.
         /// </summary>
-        /// <param name="dateOfBirth">The date of birth.</param>
+        /// <param name="dateOfBirth">The date of birthday.</param>
         /// <returns>Return array of records.</returns>
         public FileCabinetRecord[] FindByDateOfBirthName(DateTime dateOfBirth)
         {
@@ -138,16 +139,13 @@ namespace FileCabinetApp
         /// <summary>
         /// Validates the parameters.
         /// </summary>
-        /// <param name="firstName">The first name.</param>
-        /// <param name="lastName">The last name.</param>
-        /// <param name="dateOfBirth">The date of birth.</param>
-        /// <param name="workingHoursPerWeek">The working hours per week.</param>
-        /// <param name="annualIncome">The annual income.</param>
-        /// <param name="driverLicenseCategory">The driver license category.</param>
+        /// <param name="container">The container of parameters.</param>
         /// <exception cref="System.ArgumentNullException">
-        /// firstName - can not be null
+        /// container
         /// or
-        /// lastName - can not be null.
+        /// container
+        /// or
+        /// container.
         /// </exception>
         /// <exception cref="System.ArgumentException">
         /// First name must to have from 2 to 60 characters.
@@ -162,51 +160,56 @@ namespace FileCabinetApp
         /// or
         /// The Driver License Category can be only - A, B, C, D.
         /// </exception>
-        private static void ValidateParameters(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
+        private static void ValidateParameters(ParametersContainer container)
         {
-            if (firstName is null)
+            if (container is null)
             {
-                throw new ArgumentNullException(nameof(firstName), "can not be null");
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            if (container.FirstName is null)
+            {
+                throw new ArgumentNullException(nameof(container), $"{container.FirstName}can not be null");
             }
 
             const int maxLengthFirstName = 60;
             const int minLengthFirstName = 2;
-            if (firstName.Length < minLengthFirstName || firstName.Length > maxLengthFirstName)
+            if (container.FirstName.Length < minLengthFirstName || container.FirstName.Length > maxLengthFirstName)
             {
                 throw new ArgumentException("First name must to have from 2 to 60 characters.");
             }
 
-            if (lastName is null)
+            if (container.LastName is null)
             {
-                throw new ArgumentNullException(nameof(lastName), "can not be null");
+                throw new ArgumentNullException(nameof(container), $"{container.LastName}can not be null");
             }
 
             const int maxLengthLastName = 60;
             const int minLengthLastName = 2;
-            if (lastName.Length < minLengthLastName || lastName.Length > maxLengthLastName)
+            if (container.LastName.Length < minLengthLastName || container.LastName.Length > maxLengthLastName)
             {
                 throw new ArgumentException("Last name must to have from 2 to 60 characters.");
             }
 
-            if (dateOfBirth < DateTime.Parse("01-Jan-1950", CultureInfo.CurrentCulture) || dateOfBirth > DateTime.Now)
+            if (container.DateOfBirthday < DateTime.Parse("01-Jan-1950", CultureInfo.CurrentCulture) || container.DateOfBirthday > DateTime.Now)
             {
                 throw new ArgumentException("The minimum date is January 01, 1950, the maximum date is the current one.");
             }
 
             const int minWorkingHoursPerWeek = 0;
             const int maxWorkingHoursPerWeek = 40;
-            if (workingHoursPerWeek > maxWorkingHoursPerWeek || workingHoursPerWeek < minWorkingHoursPerWeek)
+            if (container.WorkingHoursPerWeek > maxWorkingHoursPerWeek || container.WorkingHoursPerWeek < minWorkingHoursPerWeek)
             {
                 throw new ArgumentException("The minimum hours is 1 hour, the maximum hours is the 40 according to the Labor Code of the RB.");
             }
 
             const int minAnnualIncome = 1000;
-            if (annualIncome < minAnnualIncome)
+            if (container.AnnualIncome < minAnnualIncome)
             {
                 throw new ArgumentException("The Annual income must be bigger than 0.");
             }
 
-            var driverLicenseCategoryUpper = char.ToUpper(driverLicenseCategory, CultureInfo.CurrentCulture);
+            var driverLicenseCategoryUpper = char.ToUpper(container.DriverLicenseCategory, CultureInfo.CurrentCulture);
 
             if (!(driverLicenseCategoryUpper == 'A' || driverLicenseCategoryUpper == 'B' || driverLicenseCategoryUpper == 'C' || driverLicenseCategoryUpper == 'D'))
             {
@@ -282,10 +285,10 @@ namespace FileCabinetApp
         {
             if (dateOfBirth != record.DateOfBirth)
             {
-                this.dateOfBirthDictionary[dateOfBirth].Remove(record);
-                if (this.dateOfBirthDictionary[dateOfBirth].Count == 0)
+                this.dateOfBirthDictionary[record.DateOfBirth].Remove(record);
+                if (this.dateOfBirthDictionary[record.DateOfBirth].Count == 0)
                 {
-                    this.dateOfBirthDictionary.Remove(dateOfBirth);
+                    this.dateOfBirthDictionary.Remove(record.DateOfBirth);
                 }
 
                 this.AddRecordToDateOfBirthDict(dateOfBirth, record);

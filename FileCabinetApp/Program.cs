@@ -125,15 +125,11 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            GetInputPersonParameters(
-                out string firstName,
-                out string lastName,
-                out DateTime dateOfBd,
-                out short workingHoursPerWeek,
-                out decimal annualIncome,
-                out char driverLicenseCategory);
+            var propertiesContainer = new ParametersContainer();
 
-            int recordId = fileCabinetService.CreateRecord(firstName, lastName, dateOfBd, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            InitInputParameters(propertiesContainer);
+
+            int recordId = fileCabinetService.CreateRecord(propertiesContainer);
             Console.WriteLine($"Record #{recordId} is created.");
         }
 
@@ -168,27 +164,17 @@ namespace FileCabinetApp
                 return;
             }
 
-            GetInputPersonParameters(
-                out string firstName,
-                out string lastName,
-                out DateTime dateOfBd,
-                out short workingHoursPerWeek,
-                out decimal annualIncome,
-                out char driverLicenseCategory);
+            var parametersContainer = new ParametersContainer();
 
-            fileCabinetService.EditRecord(id, firstName, lastName, dateOfBd, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            InitInputParameters(parametersContainer);
+
+            fileCabinetService.EditRecord(id, parametersContainer);
             Console.WriteLine($"Record #{id} is updated.");
         }
 
-        private static void GetInputPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory)
+        private static void InitInputParameters(ParametersContainer parametersContainer)
         {
             string[] parameterNames = { "First name", "Last name", "Date of birth", "Working Hours Per Week", "Annual Income", "Driver License Category" };
-            firstName = null;
-            lastName = null;
-            dateOfBd = default;
-            annualIncome = default;
-            driverLicenseCategory = default;
-            workingHoursPerWeek = default;
 
             for (int i = 0; i < parameterNames.Length;)
             {
@@ -196,12 +182,12 @@ namespace FileCabinetApp
                 string personParameter = Console.ReadLine();
                 bool isParsed = parameterNames[i] switch
                 {
-                    var name when name == "First name" => CustomParser.TryGetValidFirstName(personParameter, out firstName),
-                    var name when name == "Last name" => CustomParser.TryGetValidLastName(personParameter, out lastName),
-                    var name when name == "Working Hours Per Week" => CustomParser.TryGetValidWorkingHoursPerWeek(personParameter, out workingHoursPerWeek),
-                    var name when name == "Driver License Category" => CustomParser.TryGetValidDriverLicenseCategory(personParameter, out driverLicenseCategory),
-                    var name when name == "Annual Income" => CustomParser.TryGetValidAnnualIncome(personParameter, out annualIncome),
-                    var name when name == "Date of birth" => CustomParser.TryGetValidDateTimeOfBd(personParameter, out dateOfBd),
+                    var name when name == "First name" => parametersContainer.TrySetFirstName(personParameter),
+                    var name when name == "Last name" => parametersContainer.TrySetLastName(personParameter),
+                    var name when name == "Working Hours Per Week" => parametersContainer.TrySetWorkingHoursPerWeek(personParameter),
+                    var name when name == "Driver License Category" => parametersContainer.TrySetDriverLicenseCategory(personParameter),
+                    var name when name == "Annual Income" => parametersContainer.TrySetAnnualIncome(personParameter),
+                    var name when name == "Date of birth" => parametersContainer.TrySetDateTimeOfBd(personParameter),
                     _ => false
                 };
 

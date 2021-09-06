@@ -4,59 +4,6 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="T:FileCabinetApp.CustomParser">
-            <summary>
-            Class <c>CustomParser</c> parsed and validate string values.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomParser.TryGetValidDateTimeOfBd(System.String,System.DateTime@)">
-            <summary>
-            Tries the get valid value date of birth day.
-            </summary>
-            <param name="value">The string value.</param>
-            <param name="dateOfBd">The date of bd.</param>
-            <returns>Return validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomParser.TryGetValidFirstName(System.String,System.String@)">
-            <summary>
-            Tries the first name of the get valid.
-            </summary>
-            <param name="value">The value.</param>
-            <param name="firstName">The first name.</param>
-            <returns>Return validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomParser.TryGetValidLastName(System.String,System.String@)">
-            <summary>
-            Tries the last name of the get valid.
-            </summary>
-            <param name="value">The string value.</param>
-            <param name="lastName">The last name.</param>
-            <returns>Return validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomParser.TryGetValidWorkingHoursPerWeek(System.String,System.Int16@)">
-            <summary>
-            Tries the get valid working hours per week.
-            </summary>
-            <param name="value">The string value.</param>
-            <param name="shortValueHours">The short value hours.</param>
-            <returns>Return validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomParser.TryGetValidAnnualIncome(System.String,System.Decimal@)">
-            <summary>
-            Tries the get valid annual income.
-            </summary>
-            <param name="value">The value.</param>
-            <param name="annualIncome">The annual income.</param>
-            <returns>Return validation result.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomParser.TryGetValidDriverLicenseCategory(System.String,System.Char@)">
-            <summary>
-            Tries the get valid driver license category.
-            </summary>
-            <param name="value">The value.</param>
-            <param name="driverLicenseCategory">The driver license category.</param>
-            <returns>Return validation result.</returns>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
             Class <c>FileCabinetRecord</c> describe the user of File Cabinet.
@@ -123,30 +70,21 @@
             Class <c>FileCabinetService</c> with File Cabinet.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char)">
+        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.ParametersContainer)">
             <summary>
             Creates the record.
             </summary>
-            <param name="firstName">The first name.</param>
-            <param name="lastName">The last name.</param>
-            <param name="dateOfBirth">The date of birth.</param>
-            <param name="workingHoursPerWeek">The working hours per week.</param>
-            <param name="annualIncome">The annual income.</param>
-            <param name="driverLicenseCategory">The driver license category.</param>
+            <param name="container">The container of parameters.</param>
             <returns>Return Id of created record.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32,System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char)">
+        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32,FileCabinetApp.ParametersContainer)">
             <summary>
             Edits the record.
             </summary>
             <param name="id">The identifier.</param>
-            <param name="firstName">The first name.</param>
-            <param name="lastName">The last name.</param>
-            <param name="dateOfBirth">The date of birth.</param>
-            <param name="workingHoursPerWeek">The working hours per week.</param>
-            <param name="annualIncome">The annual income.</param>
-            <param name="driverLicenseCategory">The driver license category.</param>
+            <param name="container">The container of parameters.</param>
             <exception cref="T:System.ArgumentException">#{id} record is not found.</exception>
+            <exception cref="T:System.ArgumentNullException">container.</exception>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
             <summary>
@@ -178,23 +116,20 @@
             <summary>
             Finds the records by date of birthday.
             </summary>
-            <param name="dateOfBirth">The date of birth.</param>
+            <param name="dateOfBirth">The date of birthday.</param>
             <returns>Return array of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.ValidateParameters(System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char)">
+        <member name="M:FileCabinetApp.FileCabinetService.ValidateParameters(FileCabinetApp.ParametersContainer)">
             <summary>
             Validates the parameters.
             </summary>
-            <param name="firstName">The first name.</param>
-            <param name="lastName">The last name.</param>
-            <param name="dateOfBirth">The date of birth.</param>
-            <param name="workingHoursPerWeek">The working hours per week.</param>
-            <param name="annualIncome">The annual income.</param>
-            <param name="driverLicenseCategory">The driver license category.</param>
+            <param name="container">The container of parameters.</param>
             <exception cref="T:System.ArgumentNullException">
-            firstName - can not be null
+            container
             or
-            lastName - can not be null.
+            container
+            or
+            container.
             </exception>
             <exception cref="T:System.ArgumentException">
             First name must to have from 2 to 60 characters.
@@ -209,6 +144,101 @@
             or
             The Driver License Category can be only - A, B, C, D.
             </exception>
+        </member>
+        <member name="T:FileCabinetApp.ParametersContainer">
+            <summary>
+            Class <c>ParametersContainer</c> parsed and validate string values.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ParametersContainer.DateOfBirthday">
+            <summary>
+            Gets the date of birthday.
+            </summary>
+            <value>
+            The date of birthday.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.ParametersContainer.FirstName">
+            <summary>
+            Gets the first name.
+            </summary>
+            <value>
+            The first name.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.ParametersContainer.LastName">
+            <summary>
+            Gets the last name.
+            </summary>
+            <value>
+            The last name.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.ParametersContainer.WorkingHoursPerWeek">
+            <summary>
+            Gets the working hours per week.
+            </summary>
+            <value>
+            The working hours per week.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.ParametersContainer.AnnualIncome">
+            <summary>
+            Gets the annual income.
+            </summary>
+            <value>
+            The annual income.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.ParametersContainer.DriverLicenseCategory">
+            <summary>
+            Gets the driver license category.
+            </summary>
+            <value>
+            The driver license category.
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.ParametersContainer.TrySetDateTimeOfBd(System.String)">
+            <summary>
+            Tries the get valid firstName date of birth day.
+            </summary>
+            <param name="value">The string value date of birthday.</param>
+            <returns>Return validation result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ParametersContainer.TrySetFirstName(System.String)">
+            <summary>
+            Tries the first name of the get valid.
+            </summary>
+            <param name="firstName">The first name.</param>
+            <returns>Return validation result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ParametersContainer.TrySetLastName(System.String)">
+            <summary>
+            Tries the last name of the get valid.
+            </summary>
+            <param name="lastName">The last name.</param>
+            <returns>Return validation result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ParametersContainer.TrySetWorkingHoursPerWeek(System.String)">
+            <summary>
+            Tries the get valid working hours per week.
+            </summary>
+            <param name="value">The string working hours.</param>
+            <returns>Return validation result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ParametersContainer.TrySetAnnualIncome(System.String)">
+            <summary>
+            Tries the get valid annual income.
+            </summary>
+            <param name="value">The string value annual income.</param>
+            <returns>Return validation result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ParametersContainer.TrySetDriverLicenseCategory(System.String)">
+            <summary>
+            Tries the get valid driver license category.
+            </summary>
+            <param name="value">The firstName.</param>
+            <returns>Return validation result.</returns>
         </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
