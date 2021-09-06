@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Class <c>Program</c> - initial class.
+    /// </summary>
     public static class Program
     {
         private const string DeveloperName = "Ilya Gerasimchik";
@@ -38,7 +41,10 @@ namespace FileCabinetApp
             new string[] { "find", "find record by parameter.", "The 'find' command find record by parameter." },
         };
 
-        public static void Main(string[] args)
+        /// <summary>
+        /// Defines the entry point of the application.
+        /// </summary>
+        public static void Main()
         {
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
@@ -190,12 +196,12 @@ namespace FileCabinetApp
                 string personParameter = Console.ReadLine();
                 bool isParsed = parameterNames[i] switch
                 {
-                    var name when name == "First name" => Validator.TryGetValidFirstName(personParameter, out firstName),
-                    var name when name == "Last name" => Validator.TryGetValidLastName(personParameter, out lastName),
-                    var name when name == "Working Hours Per Week" => Validator.TryGetValidWorkingHoursPerWeek(personParameter, out workingHoursPerWeek),
-                    var name when name == "Driver License Category" => Validator.TryGetValidDriverLicenseCategory(personParameter, out driverLicenseCategory),
-                    var name when name == "Annual Income" => Validator.TryGetValidAnnualIncome(personParameter, out annualIncome),
-                    var name when name == "Date of birth" => Validator.TryGetValidDateTimeOfBd(personParameter, out dateOfBd),
+                    var name when name == "First name" => CustomParser.TryGetValidFirstName(personParameter, out firstName),
+                    var name when name == "Last name" => CustomParser.TryGetValidLastName(personParameter, out lastName),
+                    var name when name == "Working Hours Per Week" => CustomParser.TryGetValidWorkingHoursPerWeek(personParameter, out workingHoursPerWeek),
+                    var name when name == "Driver License Category" => CustomParser.TryGetValidDriverLicenseCategory(personParameter, out driverLicenseCategory),
+                    var name when name == "Annual Income" => CustomParser.TryGetValidAnnualIncome(personParameter, out annualIncome),
+                    var name when name == "Date of birth" => CustomParser.TryGetValidDateTimeOfBd(personParameter, out dateOfBd),
                     _ => false
                 };
 

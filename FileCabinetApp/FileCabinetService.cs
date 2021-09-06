@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Class <c>FileCabinetService</c> with File Cabinet.
+    /// </summary>
     public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
@@ -12,6 +15,16 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
+        /// <summary>
+        /// Creates the record.
+        /// </summary>
+        /// <param name="firstName">The first name.</param>
+        /// <param name="lastName">The last name.</param>
+        /// <param name="dateOfBirth">The date of birth.</param>
+        /// <param name="workingHoursPerWeek">The working hours per week.</param>
+        /// <param name="annualIncome">The annual income.</param>
+        /// <param name="driverLicenseCategory">The driver license category.</param>
+        /// <returns>Return Id of created record.</returns>
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
         {
             ValidateParameters(firstName, lastName, dateOfBirth, workingHoursPerWeek, annualIncome, driverLicenseCategory);
@@ -34,6 +47,17 @@ namespace FileCabinetApp
             return record.Id;
         }
 
+        /// <summary>
+        /// Edits the record.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="firstName">The first name.</param>
+        /// <param name="lastName">The last name.</param>
+        /// <param name="dateOfBirth">The date of birth.</param>
+        /// <param name="workingHoursPerWeek">The working hours per week.</param>
+        /// <param name="annualIncome">The annual income.</param>
+        /// <param name="driverLicenseCategory">The driver license category.</param>
+        /// <exception cref="System.ArgumentException">#{id} record is not found.</exception>
         public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
         {
             var record = this.list.FirstOrDefault(r => r.Id == id);
@@ -56,17 +80,30 @@ namespace FileCabinetApp
             record.WorkingHoursPerWeek = workingHoursPerWeek;
         }
 
+        /// <summary>
+        /// Gets all records in File Cabinet.
+        /// </summary>
+        /// <returns>Return array of <c>FileCabinetRecord</c>.</returns>
         public FileCabinetRecord[] GetRecords()
         {
             FileCabinetRecord[] resultArray = this.list.ToArray();
             return resultArray;
         }
 
+        /// <summary>
+        /// Gets the stat of users.
+        /// </summary>
+        /// <returns>Return count of records in File Cabinet.</returns>
         public int GetStat()
         {
             return this.list.Count;
         }
 
+        /// <summary>
+        /// Finds the records by the first name.
+        /// </summary>
+        /// <param name="firstName">The first name.</param>
+        /// <returns>Return array of records.</returns>
         public FileCabinetRecord[] FindByFirstName(string firstName)
         {
             FileCabinetRecord[] resultArray = this.firstNameDictionary.ContainsKey(firstName) ? this.firstNameDictionary[firstName].ToArray() : Array.Empty<FileCabinetRecord>();
@@ -74,6 +111,11 @@ namespace FileCabinetApp
             return resultArray;
         }
 
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="lastName">The last name.</param>
+        /// <returns>Return array of records.</returns>
         public FileCabinetRecord[] FindByLastName(string lastName)
         {
             FileCabinetRecord[] resultArray = this.lastNameDictionary.ContainsKey(lastName) ? this.lastNameDictionary[lastName].ToArray() : Array.Empty<FileCabinetRecord>();
@@ -81,6 +123,11 @@ namespace FileCabinetApp
             return resultArray;
         }
 
+        /// <summary>
+        /// Finds the records by date of birthday.
+        /// </summary>
+        /// <param name="dateOfBirth">The date of birth.</param>
+        /// <returns>Return array of records.</returns>
         public FileCabinetRecord[] FindByDateOfBirthName(DateTime dateOfBirth)
         {
             FileCabinetRecord[] resultArray = this.dateOfBirthDictionary.ContainsKey(dateOfBirth) ? this.dateOfBirthDictionary[dateOfBirth].ToArray() : Array.Empty<FileCabinetRecord>();
@@ -88,6 +135,33 @@ namespace FileCabinetApp
             return resultArray;
         }
 
+        /// <summary>
+        /// Validates the parameters.
+        /// </summary>
+        /// <param name="firstName">The first name.</param>
+        /// <param name="lastName">The last name.</param>
+        /// <param name="dateOfBirth">The date of birth.</param>
+        /// <param name="workingHoursPerWeek">The working hours per week.</param>
+        /// <param name="annualIncome">The annual income.</param>
+        /// <param name="driverLicenseCategory">The driver license category.</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// firstName - can not be null
+        /// or
+        /// lastName - can not be null.
+        /// </exception>
+        /// <exception cref="System.ArgumentException">
+        /// First name must to have from 2 to 60 characters.
+        /// or
+        /// Last name must to have from 2 to 60 characters.
+        /// or
+        /// The minimum date is January 01, 1950, the maximum date is the current one.
+        /// or
+        /// The minimum hours is 1 hour, the maximum hours is the 40 according to the Labor Code of the RB.
+        /// or
+        /// The Annual income must be bigger than 0.
+        /// or
+        /// The Driver License Category can be only - A, B, C, D.
+        /// </exception>
         private static void ValidateParameters(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
         {
             if (firstName is null)

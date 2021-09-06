@@ -3,7 +3,10 @@ using System.Globalization;
 
 namespace FileCabinetApp
 {
-    public static class Validator
+    /// <summary>
+    /// Class <c>CustomParser</c> parsed and validate string values.
+    /// </summary>
+    public static class CustomParser
     {
         private const int MinAnnualIncome = 1000;
         private const int MaxLengthLastName = 60;
@@ -15,6 +18,12 @@ namespace FileCabinetApp
         private static readonly DateTime MinDateOfBirth = DateTime.Parse("01-Jan-1950", CultureInfo.CurrentCulture);
         private static readonly DateTime MaxDateOfBirth = DateTime.Now;
 
+        /// <summary>
+        /// Tries the get valid value date of birth day.
+        /// </summary>
+        /// <param name="value">The string value.</param>
+        /// <param name="dateOfBd">The date of bd.</param>
+        /// <returns>Return validation result.</returns>
         public static bool TryGetValidDateTimeOfBd(string value, out DateTime dateOfBd)
         {
             string format = "MM/dd/yyyy";
@@ -30,6 +39,12 @@ namespace FileCabinetApp
             return false;
         }
 
+        /// <summary>
+        /// Tries the first name of the get valid.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="firstName">The first name.</param>
+        /// <returns>Return validation result.</returns>
         public static bool TryGetValidFirstName(string value, out string firstName)
         {
             firstName = value;
@@ -41,6 +56,12 @@ namespace FileCabinetApp
             return false;
         }
 
+        /// <summary>
+        /// Tries the last name of the get valid.
+        /// </summary>
+        /// <param name="value">The string value.</param>
+        /// <param name="lastName">The last name.</param>
+        /// <returns>Return validation result.</returns>
         public static bool TryGetValidLastName(string value, out string lastName)
         {
             lastName = value;
@@ -52,6 +73,12 @@ namespace FileCabinetApp
             return false;
         }
 
+        /// <summary>
+        /// Tries the get valid working hours per week.
+        /// </summary>
+        /// <param name="value">The string value.</param>
+        /// <param name="shortValueHours">The short value hours.</param>
+        /// <returns>Return validation result.</returns>
         public static bool TryGetValidWorkingHoursPerWeek(string value, out short shortValueHours)
         {
             if (short.TryParse(value, out shortValueHours)
@@ -63,6 +90,12 @@ namespace FileCabinetApp
             return false;
         }
 
+        /// <summary>
+        /// Tries the get valid annual income.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="annualIncome">The annual income.</param>
+        /// <returns>Return validation result.</returns>
         public static bool TryGetValidAnnualIncome(string value, out decimal annualIncome)
         {
             if (decimal.TryParse(value, out annualIncome)
@@ -74,6 +107,12 @@ namespace FileCabinetApp
             return false;
         }
 
+        /// <summary>
+        /// Tries the get valid driver license category.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="driverLicenseCategory">The driver license category.</param>
+        /// <returns>Return validation result.</returns>
         public static bool TryGetValidDriverLicenseCategory(string value, out char driverLicenseCategory)
         {
             if (char.TryParse(value, out driverLicenseCategory))
