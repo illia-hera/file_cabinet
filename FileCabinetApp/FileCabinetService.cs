@@ -83,7 +83,7 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] FindByDateOfBirthName(DateTime dateOfBirth)
         {
-            FileCabinetRecord[] resultArray = this.list.Where(r => dateOfBirth.Equals(r.DateOfBirth)).ToArray();
+            FileCabinetRecord[] resultArray = this.dateOfBirthDictionary.ContainsKey(dateOfBirth) ? this.dateOfBirthDictionary[dateOfBirth].ToArray() : Array.Empty<FileCabinetRecord>();
 
             return resultArray;
         }
@@ -95,7 +95,9 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(firstName), "can not be null");
             }
 
-            if (firstName.Length < 2 || firstName.Length > 60)
+            const int maxLengthFirstName = 60;
+            const int minLengthFirstName = 2;
+            if (firstName.Length < minLengthFirstName || firstName.Length > maxLengthFirstName)
             {
                 throw new ArgumentException("First name must to have from 2 to 60 characters.");
             }
@@ -105,7 +107,9 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(lastName), "can not be null");
             }
 
-            if (lastName.Length < 2 || lastName.Length > 60)
+            const int maxLengthLastName = 60;
+            const int minLengthLastName = 2;
+            if (lastName.Length < minLengthLastName || lastName.Length > maxLengthLastName)
             {
                 throw new ArgumentException("Last name must to have from 2 to 60 characters.");
             }
@@ -115,12 +119,15 @@ namespace FileCabinetApp
                 throw new ArgumentException("The minimum date is January 01, 1950, the maximum date is the current one.");
             }
 
-            if (workingHoursPerWeek > 40 || workingHoursPerWeek < 0)
+            const int minWorkingHoursPerWeek = 0;
+            const int maxWorkingHoursPerWeek = 40;
+            if (workingHoursPerWeek > maxWorkingHoursPerWeek || workingHoursPerWeek < minWorkingHoursPerWeek)
             {
                 throw new ArgumentException("The minimum hours is 1 hour, the maximum hours is the 40 according to the Labor Code of the RB.");
             }
 
-            if (annualIncome < 0)
+            const int minAnnualIncome = 1000;
+            if (annualIncome < minAnnualIncome)
             {
                 throw new ArgumentException("The Annual income must be bigger than 0.");
             }

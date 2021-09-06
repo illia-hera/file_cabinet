@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -33,10 +32,10 @@ namespace FileCabinetApp
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "prints counts of records.", "The 'stat' command prints counts of records." },
-            new string[] { "create", "create new user.", "The 'create' command create new user." },
-            new string[] { "list", "returned list of created users.", "The 'list' command returned list of created users." },
-            new string[] { "edit", "edit user parameters.", "The 'edit' command edit user parameters." },
-            new string[] { "find", "find user by parameter.", "The 'find' command find user by parameter." },
+            new string[] { "create", "create new record.", "The 'create' command create new record." },
+            new string[] { "list", "returned list of created records.", "The 'list' command returned list of created records." },
+            new string[] { "edit", "edit record parameters.", "The 'edit' command edit record parameters." },
+            new string[] { "find", "find record by parameter.", "The 'find' command find record by parameter." },
         };
 
         public static void Main(string[] args)
@@ -120,7 +119,13 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            GetPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory);
+            GetInputPersonParameters(
+                out string firstName,
+                out string lastName,
+                out DateTime dateOfBd,
+                out short workingHoursPerWeek,
+                out decimal annualIncome,
+                out char driverLicenseCategory);
 
             int recordId = fileCabinetService.CreateRecord(firstName, lastName, dateOfBd, workingHoursPerWeek, annualIncome, driverLicenseCategory);
             Console.WriteLine($"Record #{recordId} is created.");
@@ -137,7 +142,10 @@ namespace FileCabinetApp
 
             foreach (FileCabinetRecord record in records)
             {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
+                Console.WriteLine($"#{record.Id}," +
+                                  $" {record.FirstName}," +
+                                  $" {record.LastName}," +
+                                  $" {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
             }
         }
 
@@ -154,12 +162,19 @@ namespace FileCabinetApp
                 return;
             }
 
-            GetPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory);
+            GetInputPersonParameters(
+                out string firstName,
+                out string lastName,
+                out DateTime dateOfBd,
+                out short workingHoursPerWeek,
+                out decimal annualIncome,
+                out char driverLicenseCategory);
+
             fileCabinetService.EditRecord(id, firstName, lastName, dateOfBd, workingHoursPerWeek, annualIncome, driverLicenseCategory);
             Console.WriteLine($"Record #{id} is updated.");
         }
 
-        private static void GetPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory)
+        private static void GetInputPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory)
         {
             string[] parameterNames = { "First name", "Last name", "Date of birth", "Working Hours Per Week", "Annual Income", "Driver License Category" };
             firstName = null;
@@ -200,9 +215,15 @@ namespace FileCabinetApp
             {
                 var p when p.Equals("firstName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByFirstName(value.Trim('\"')),
                 var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByLastName(value.Trim('\"')),
-                var p when p.Equals("dateOfBirth", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByDateOfBirthName(DateTime.Parse(value.Trim('\"'), CultureInfo.CreateSpecificCulture("en-US"))),
+                var p when p.Equals("dateOfBirth", StringComparison.OrdinalIgnoreCase)
+                                && DateTime.TryParse(value.Trim('\"'), out DateTime dateOfBd) => fileCabinetService.FindByDateOfBirthName(dateOfBd),
                 _ => Array.Empty<FileCabinetRecord>()
             };
+
+            if (records.Length == 0)
+            {
+                Console.WriteLine($"No records with {parameter} - {value}.");
+            }
 
             foreach (FileCabinetRecord record in records)
             {
