@@ -27,7 +27,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(container));
             }
 
-            ValidateParameters(container);
+            this.ValidateParameters(container);
             var record = new FileCabinetRecord
             {
                 Id = this.list.Count + 1,
@@ -67,7 +67,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(container));
             }
 
-            ValidateParameters(container);
+            this.ValidateParameters(container);
 
             this.EditFirstNameDictionary(container.FirstName, record);
             this.EditLastNameDictionary(container.LastName, record);
@@ -160,7 +160,7 @@ namespace FileCabinetApp
         /// or
         /// The Driver License Category can be only - A, B, C, D.
         /// </exception>
-        private static void ValidateParameters(ParametersContainer container)
+        protected virtual void ValidateParameters(ParametersContainer container)
         {
             if (container is null)
             {

@@ -9,14 +9,15 @@ namespace FileCabinetApp
     /// </summary>
     public class ParametersContainer
     {
-        private const int MinAnnualIncome = 1000;
-        private const int MaxLengthLastName = 60;
-        private const int MinLengthLastName = 2;
-        private const int MaxLengthFirstName = 60;
-        private const int MinLengthFirstName = 2;
-        private const int MinWorkingHoursPerWeek = 0;
-        private const int MaxWorkingHoursPerWeek = 40;
-        private static readonly DateTime MinDateOfBirth = DateTime.Parse("01-Jan-1950", CultureInfo.CurrentCulture);
+        private const int MinAnnualIncome = 500;
+        private const int MaxAnnualIncome = 500;
+        private const int MaxLengthLastName = 10;
+        private const int MinLengthLastName = 5;
+        private const int MaxLengthFirstName = 10;
+        private const int MinLengthFirstName = 5;
+        private const int MinWorkingHoursPerWeek = 20;
+        private const int MaxWorkingHoursPerWeek = 30;
+        private static readonly DateTime MinDateOfBirth = DateTime.Parse("20-Dec-1970", CultureInfo.CurrentCulture);
         private static readonly DateTime MaxDateOfBirth = DateTime.Now;
 
         /// <summary>
@@ -145,7 +146,7 @@ namespace FileCabinetApp
         public bool TrySetAnnualIncome(string value)
         {
             if (decimal.TryParse(value, out decimal annualIncome)
-                && annualIncome >= MinAnnualIncome)
+                && annualIncome >= MinAnnualIncome && annualIncome <= MaxAnnualIncome)
             {
                 this.AnnualIncome = annualIncome;
                 return true;
