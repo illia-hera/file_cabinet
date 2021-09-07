@@ -18,7 +18,7 @@ namespace FileCabinetApp
 
         private static bool isRunning = true;
 
-        private static FileCabinetService fileCabinetService = default;
+        private static FileCabinetService fileCabinetService;
 
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
@@ -52,7 +52,7 @@ namespace FileCabinetApp
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
 
-            if (args.Length == 0)
+            if (args?.Length == 0)
             {
                 fileCabinetService = new FileCabinetDefaultService();
             }

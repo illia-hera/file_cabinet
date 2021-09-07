@@ -27,7 +27,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(container));
             }
 
-            this.ValidateParameters(container);
+            this.CreateValidator().ValidateParameters(container);
             var record = new FileCabinetRecord
             {
                 Id = this.list.Count + 1,
@@ -67,7 +67,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(container));
             }
 
-            this.ValidateParameters(container);
+            this.CreateValidator().ValidateParameters(container);
 
             this.EditFirstNameDictionary(container.FirstName, record);
             this.EditLastNameDictionary(container.LastName, record);
@@ -137,84 +137,12 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Validates the parameters.
+        /// Creates the validator.
         /// </summary>
-        /// <param name="container">The container of parameters.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// container
-        /// or
-        /// container
-        /// or
-        /// container.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// First name must to have from 2 to 60 characters.
-        /// or
-        /// Last name must to have from 2 to 60 characters.
-        /// or
-        /// The minimum date is January 01, 1950, the maximum date is the current one.
-        /// or
-        /// The minimum hours is 1 hour, the maximum hours is the 40 according to the Labor Code of the RB.
-        /// or
-        /// The Annual income must be bigger than 0.
-        /// or
-        /// The Driver License Category can be only - A, B, C, D.
-        /// </exception>
-        protected virtual void ValidateParameters(ParametersContainer container)
+        /// <returns>Return validator.</returns>
+        protected virtual IRecordValidator CreateValidator()
         {
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
-
-            if (container.FirstName is null)
-            {
-                throw new ArgumentNullException(nameof(container), $"{container.FirstName}can not be null");
-            }
-
-            const int maxLengthFirstName = 60;
-            const int minLengthFirstName = 2;
-            if (container.FirstName.Length < minLengthFirstName || container.FirstName.Length > maxLengthFirstName)
-            {
-                throw new ArgumentException("First name must to have from 2 to 60 characters.");
-            }
-
-            if (container.LastName is null)
-            {
-                throw new ArgumentNullException(nameof(container), $"{container.LastName}can not be null");
-            }
-
-            const int maxLengthLastName = 60;
-            const int minLengthLastName = 2;
-            if (container.LastName.Length < minLengthLastName || container.LastName.Length > maxLengthLastName)
-            {
-                throw new ArgumentException("Last name must to have from 2 to 60 characters.");
-            }
-
-            if (container.DateOfBirthday < DateTime.Parse("01-Jan-1950", CultureInfo.CurrentCulture) || container.DateOfBirthday > DateTime.Now)
-            {
-                throw new ArgumentException("The minimum date is January 01, 1950, the maximum date is the current one.");
-            }
-
-            const int minWorkingHoursPerWeek = 0;
-            const int maxWorkingHoursPerWeek = 40;
-            if (container.WorkingHoursPerWeek > maxWorkingHoursPerWeek || container.WorkingHoursPerWeek < minWorkingHoursPerWeek)
-            {
-                throw new ArgumentException("The minimum hours is 1 hour, the maximum hours is the 40 according to the Labor Code of the RB.");
-            }
-
-            const int minAnnualIncome = 1000;
-            if (container.AnnualIncome < minAnnualIncome)
-            {
-                throw new ArgumentException("The Annual income must be bigger than 0.");
-            }
-
-            var driverLicenseCategoryUpper = char.ToUpper(container.DriverLicenseCategory, CultureInfo.CurrentCulture);
-
-            if (!(driverLicenseCategoryUpper == 'A' || driverLicenseCategoryUpper == 'B' || driverLicenseCategoryUpper == 'C' || driverLicenseCategoryUpper == 'D'))
-            {
-                throw new ArgumentException("The Driver License Category can be only - A, B, C, D.");
-            }
+            return new DefaultValidator();
         }
 
         private void AddRecordToFirstNameDict(string firstName, FileCabinetRecord record)

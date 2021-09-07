@@ -13,12 +13,14 @@ namespace FileCabinetApp
     public class FileCabinetDefaultService : FileCabinetService
     {
         /// <summary>
-        /// Validates the parameters.
+        /// Creates the validator.
         /// </summary>
-        /// <param name="container">The container of parameters.</param>
-        protected override void ValidateParameters(ParametersContainer container)
+        /// <returns>
+        /// Return validator.
+        /// </returns>
+        protected override IRecordValidator CreateValidator()
         {
-            base.ValidateParameters(container);
+            return base.CreateValidator();
         }
     }
 }

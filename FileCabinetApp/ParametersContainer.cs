@@ -10,7 +10,7 @@ namespace FileCabinetApp
     public class ParametersContainer
     {
         private const int MinAnnualIncome = 500;
-        private const int MaxAnnualIncome = 500;
+        private const int MaxAnnualIncome = 1500;
         private const int MaxLengthLastName = 10;
         private const int MinLengthLastName = 5;
         private const int MaxLengthFirstName = 10;

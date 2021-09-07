@@ -4,17 +4,83 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.CustomValidator">
+            <summary>
+            Custom validator for person parameters.
+            </summary>
+            <seealso cref="T:FileCabinetApp.IRecordValidator" />
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.ParametersContainer)">
+            <summary>
+            Validates the parameters.
+            </summary>
+            <param name="container">The container.</param>
+            <exception cref="T:System.ArgumentNullException">
+            container
+            or
+            container
+            or
+            container.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            First name must to have from {minLengthFirstName} to {maxLengthFirstName} characters.
+            or
+            Last name must to have from {minLengthLastName} to {maxLengthLastName} characters.
+            or
+            The minimum date is {minDateOfBirth}, the maximum date is {maxDateOfBirth}.
+            or
+            The minimum hours is {minWorkingHoursPerWeek} hour, the maximum hours is the {maxWorkingHoursPerWeek}.
+            or
+            The Annual income min value - {minAnnualIncome}, max value - {maxAnnualIncome}.
+            or
+            The Driver License Category can be only - A, B.
+            </exception>
+        </member>
+        <member name="T:FileCabinetApp.DefaultValidator">
+            <summary>
+            Default validator for person parameters.
+            </summary>
+            <seealso cref="T:FileCabinetApp.IRecordValidator" />
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.ParametersContainer)">
+            <summary>
+            Validates the parameters.
+            </summary>
+            <param name="container">The container.</param>
+            <exception cref="T:System.ArgumentNullException">
+            container
+            or
+            container
+            or
+            container.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            First name must to have from {minLengthFirstName} to {maxLengthFirstName} characters.
+            or
+            Last name must to have from {minLengthLastName} to {maxLengthLastName} characters.
+            or
+            The minimum date is {minDateOfBirth}, the maximum date is the current one.
+            or
+            The minimum hours is {minWorkingHoursPerWeek} hour, the maximum hours is the {maxWorkingHoursPerWeek}.
+            or
+            The Annual income must be bigger than {minAnnualIncome}.
+            or
+            The Driver License Category can be only - A, B, C, D.
+            </exception>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetCustomService">
             <summary>
             Class <c>FileCabinetCustomService</c> validate parameters by specified rules.
             </summary>
             <seealso cref="T:FileCabinetApp.FileCabinetService" />
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.ValidateParameters(FileCabinetApp.ParametersContainer)">
+        <member name="M:FileCabinetApp.FileCabinetCustomService.CreateValidator">
             <summary>
-            Validates the parameters.
+            Creates the validator.
             </summary>
-            <param name="container">The container of parameters.</param>
+            <returns>
+            Return validator.
+            </returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetDefaultService">
             <summary>
@@ -22,11 +88,13 @@
             </summary>
             <seealso cref="T:FileCabinetApp.FileCabinetService" />
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.ValidateParameters(FileCabinetApp.ParametersContainer)">
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.CreateValidator">
             <summary>
-            Validates the parameters.
+            Creates the validator.
             </summary>
-            <param name="container">The container of parameters.</param>
+            <returns>
+            Return validator.
+            </returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
@@ -143,31 +211,22 @@
             <param name="dateOfBirth">The date of birthday.</param>
             <returns>Return array of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.ValidateParameters(FileCabinetApp.ParametersContainer)">
+        <member name="M:FileCabinetApp.FileCabinetService.CreateValidator">
+            <summary>
+            Creates the validator.
+            </summary>
+            <returns>Return validator.</returns>
+        </member>
+        <member name="T:FileCabinetApp.IRecordValidator">
+            <summary>
+            Interface <c>IRecordValidator</c>.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.ParametersContainer)">
             <summary>
             Validates the parameters.
             </summary>
-            <param name="container">The container of parameters.</param>
-            <exception cref="T:System.ArgumentNullException">
-            container
-            or
-            container
-            or
-            container.
-            </exception>
-            <exception cref="T:System.ArgumentException">
-            First name must to have from 2 to 60 characters.
-            or
-            Last name must to have from 2 to 60 characters.
-            or
-            The minimum date is January 01, 1950, the maximum date is the current one.
-            or
-            The minimum hours is 1 hour, the maximum hours is the 40 according to the Labor Code of the RB.
-            or
-            The Annual income must be bigger than 0.
-            or
-            The Driver License Category can be only - A, B, C, D.
-            </exception>
+            <param name="container">The container.</param>
         </member>
         <member name="T:FileCabinetApp.ParametersContainer">
             <summary>
