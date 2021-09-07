@@ -269,10 +269,11 @@
             Class <c>Program</c> - initial class.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Program.Main">
+        <member name="M:FileCabinetApp.Program.Main(System.String[])">
             <summary>
             Defines the entry point of the application.
             </summary>
+            <param name="args">The arguments.</param>
         </member>
     </members>
 </doc>

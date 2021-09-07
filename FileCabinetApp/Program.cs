@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 
@@ -17,7 +18,7 @@ namespace FileCabinetApp
 
         private static bool isRunning = true;
 
-        private static FileCabinetService fileCabinetService = new FileCabinetCustomService();
+        private static FileCabinetService fileCabinetService = default;
 
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
@@ -44,11 +45,40 @@ namespace FileCabinetApp
         /// <summary>
         /// Defines the entry point of the application.
         /// </summary>
-        public static void Main()
+        /// <param name="args">The arguments.</param>
+        public static void Main(string[] args)
         {
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
+
+            if (args.Length == 0)
+            {
+                fileCabinetService = new FileCabinetDefaultService();
+            }
+            else
+            {
+                const int initialCommandIndex = 0;
+                const int initialCommandValueIndex = 1;
+                string parameter = args[initialCommandIndex];
+                var parameterValue = args.Length > 1 ? args[initialCommandValueIndex] : string.Empty;
+                if (string.IsNullOrEmpty(parameterValue))
+                {
+                    string[] splitedParameter = parameter.Split('=', 2);
+                    parameter = splitedParameter[initialCommandIndex];
+                    parameterValue = splitedParameter[initialCommandValueIndex];
+                }
+
+                if (parameter.Equals("-v") || parameter.Equals("--validation-rules"))
+                {
+                    fileCabinetService = parameterValue switch
+                    {
+                        var p when p.Equals("default", StringComparison.OrdinalIgnoreCase) => new FileCabinetDefaultService(),
+                        var p when p.Equals("custom", StringComparison.OrdinalIgnoreCase) => new FileCabinetCustomService(),
+                        _ => new FileCabinetDefaultService()
+                    };
+                }
+            }
 
             do
             {
