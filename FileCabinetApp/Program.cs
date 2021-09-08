@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 
@@ -156,11 +155,11 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            var propertiesContainer = new ParametersContainer();
+            IRecordValidator validator = GetValidator();
 
-            InitInputParameters(propertiesContainer);
+            ParametersContainer container = GetValidInputParameters(validator);
 
-            int recordId = fileCabinetService.CreateRecord(propertiesContainer);
+            int recordId = fileCabinetService.CreateRecord(container);
             Console.WriteLine($"Record #{recordId} is created.");
         }
 
@@ -195,35 +194,11 @@ namespace FileCabinetApp
                 return;
             }
 
-            var parametersContainer = new ParametersContainer();
+            IRecordValidator validator = GetValidator();
+            ParametersContainer container = GetValidInputParameters(validator);
 
-            InitInputParameters(parametersContainer);
-
-            fileCabinetService.EditRecord(id, parametersContainer);
+            fileCabinetService.EditRecord(id, container);
             Console.WriteLine($"Record #{id} is updated.");
-        }
-
-        private static void InitInputParameters(ParametersContainer parametersContainer)
-        {
-            string[] parameterNames = { "First name", "Last name", "Date of birth", "Working Hours Per Week", "Annual Income", "Driver License Category" };
-
-            for (int i = 0; i < parameterNames.Length;)
-            {
-                Console.Write($"{parameterNames[i]}: ");
-                string personParameter = Console.ReadLine();
-                bool isParsed = parameterNames[i] switch
-                {
-                    var name when name == "First name" => parametersContainer.TrySetFirstName(personParameter),
-                    var name when name == "Last name" => parametersContainer.TrySetLastName(personParameter),
-                    var name when name == "Working Hours Per Week" => parametersContainer.TrySetWorkingHoursPerWeek(personParameter),
-                    var name when name == "Driver License Category" => parametersContainer.TrySetDriverLicenseCategory(personParameter),
-                    var name when name == "Annual Income" => parametersContainer.TrySetAnnualIncome(personParameter),
-                    var name when name == "Date of birth" => parametersContainer.TrySetDateTimeOfBd(personParameter),
-                    _ => false
-                };
-
-                i = isParsed ? i + 1 : i;
-            }
         }
 
         private static void Find(string parameters)
@@ -236,7 +211,7 @@ namespace FileCabinetApp
 
             IReadOnlyCollection<FileCabinetRecord> recordsCollection = parameter switch
             {
-                var p when p.Equals("firstName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByFirstName(value.Trim('\"')),
+                var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByFirstName(value.Trim('\"')),
                 var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByLastName(value.Trim('\"')),
                 var p when p.Equals("dateOfBirth", StringComparison.OrdinalIgnoreCase)
                                 && DateTime.TryParse(value.Trim('\"'), out DateTime dateOfBd) => fileCabinetService.FindByDateOfBirthName(dateOfBd),
@@ -252,6 +227,114 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
             }
+        }
+
+        private static ParametersContainer GetValidInputParameters(IRecordValidator validator)
+        {
+            var container = new ParametersContainer();
+
+            Console.Write("First name: ");
+            container.FirstName = ReadInput(StringConverter, validator.FirstNameValidator);
+
+            Console.Write("Last name: ");
+            container.LastName = ReadInput(StringConverter, validator.LastNameValidator);
+
+            Console.Write("Date of birth: ");
+            container.DateOfBirthday = ReadInput(DateConverter, validator.DateOfBirthValidator);
+
+            Console.Write("Working Hours Per Week: ");
+            container.WorkingHoursPerWeek = ReadInput(ShortConverter, validator.WorkingHoursValidator);
+
+            Console.Write("Annual Income: ");
+            container.AnnualIncome = ReadInput(DecimalConverter, validator.AnnualIncomeValidator);
+
+            Console.Write("Driver License Category: ");
+            container.DriverLicenseCategory = ReadInput(CharConverter, validator.DriverLicenseCategoryValidator);
+
+            return container;
+        }
+
+        private static IRecordValidator GetValidator()
+        {
+            IRecordValidator validator;
+            switch (fileCabinetService)
+            {
+                case FileCabinetCustomService car:
+                    validator = new CustomValidator();
+                    break;
+                default:
+                    validator = new DefaultValidator();
+                    break;
+            }
+
+            return validator;
+        }
+
+        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        {
+            do
+            {
+                T value;
+
+                var input = Console.ReadLine();
+                var conversionResult = converter(input);
+
+                if (!conversionResult.Item1)
+                {
+                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                value = conversionResult.Item3;
+
+                var validationResult = validator(value);
+                if (!validationResult.Item1)
+                {
+                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                return value;
+            }
+            while (true);
+        }
+
+        private static Tuple<bool, string, string> StringConverter(string input)
+        {
+            bool isConverted = !string.IsNullOrWhiteSpace(input);
+
+            return new Tuple<bool, string, string>(isConverted, input, input);
+        }
+
+        private static Tuple<bool, string, DateTime> DateConverter(string input)
+        {
+            string format = "MM/dd/yyyy";
+            CultureInfo formatProvider = CultureInfo.CreateSpecificCulture("en-US");
+            DateTimeStyles style = DateTimeStyles.None;
+            bool isConverted = DateTime.TryParseExact(input, format, formatProvider, style, out DateTime dateTimeValue);
+
+            return new Tuple<bool, string, DateTime>(isConverted, input, dateTimeValue);
+        }
+
+        private static Tuple<bool, string, short> ShortConverter(string input)
+        {
+            bool isConverted = short.TryParse(input, out short shortValue);
+
+            return new Tuple<bool, string, short>(isConverted, input, shortValue);
+        }
+
+        private static Tuple<bool, string, char> CharConverter(string input)
+        {
+            bool isConverted = char.TryParse(input, out char charValue);
+
+            return new Tuple<bool, string, char>(isConverted, input, charValue);
+        }
+
+        private static Tuple<bool, string, decimal> DecimalConverter(string input)
+        {
+            bool isConverted = decimal.TryParse(input, out decimal decimalValue);
+
+            return new Tuple<bool, string, decimal>(isConverted, input, decimalValue);
         }
     }
 }
