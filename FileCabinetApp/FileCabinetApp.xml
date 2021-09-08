@@ -79,14 +79,6 @@
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetCustomService"/> class.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.CreateValidator">
-            <summary>
-            Creates the validator.
-            </summary>
-            <returns>
-            Return validator.
-            </returns>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetDefaultService">
             <summary>
             Class <c>FileCabinetDefaultService</c> validate parameters by default method.
@@ -97,14 +89,6 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetDefaultService"/> class.
             </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.CreateValidator">
-            <summary>
-            Creates the validator.
-            </summary>
-            <returns>
-            Return validator.
-            </returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
@@ -226,12 +210,6 @@
             </summary>
             <param name="dateOfBirth">The date of birthday.</param>
             <returns>Return array of records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateValidator">
-            <summary>
-            Creates the validator.
-            </summary>
-            <returns>Return validator.</returns>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>

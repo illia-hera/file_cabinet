@@ -8,7 +8,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Class <c>FileCabinetService</c> with File Cabinet.
     /// </summary>
-    public class FileCabinetService
+    public class FileCabinetService : IFileCabinetService
     {
         private readonly IRecordValidator validator;
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
