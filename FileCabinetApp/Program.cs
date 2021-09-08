@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Class <c>Program</c> - initial class.
+    /// </summary>
     public static class Program
     {
         private const string DeveloperName = "Ilya Gerasimchik";
@@ -15,7 +18,7 @@ namespace FileCabinetApp
 
         private static bool isRunning = true;
 
-        private static FileCabinetService fileCabinetService = new FileCabinetService();
+        private static IFileCabinetService fileCabinetService;
 
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
@@ -33,17 +36,49 @@ namespace FileCabinetApp
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "prints counts of records.", "The 'stat' command prints counts of records." },
-            new string[] { "create", "create new user.", "The 'create' command create new user." },
-            new string[] { "list", "returned list of created users.", "The 'list' command returned list of created users." },
-            new string[] { "edit", "edit user parameters.", "The 'edit' command edit user parameters." },
-            new string[] { "find", "find user by parameter.", "The 'find' command find user by parameter." },
+            new string[] { "create", "create new record.", "The 'create' command create new record." },
+            new string[] { "list", "returned list of created records.", "The 'list' command returned list of created records." },
+            new string[] { "edit", "edit record parameters.", "The 'edit' command edit record parameters." },
+            new string[] { "find", "find record by parameter.", "The 'find' command find record by parameter." },
         };
 
+        /// <summary>
+        /// Defines the entry point of the application.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
         public static void Main(string[] args)
         {
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
+
+            if (args?.Length == 0)
+            {
+                fileCabinetService = new FileCabinetDefaultService();
+            }
+            else
+            {
+                const int initialCommandIndex = 0;
+                const int initialCommandValueIndex = 1;
+                string parameter = args[initialCommandIndex];
+                var parameterValue = args.Length > 1 ? args[initialCommandValueIndex] : string.Empty;
+                if (string.IsNullOrEmpty(parameterValue))
+                {
+                    string[] splitedParameter = parameter.Split('=', 2);
+                    parameter = splitedParameter[initialCommandIndex];
+                    parameterValue = splitedParameter[initialCommandValueIndex];
+                }
+
+                if (parameter.Equals("-v") || parameter.Equals("--validation-rules"))
+                {
+                    fileCabinetService = parameterValue switch
+                    {
+                        var p when p.Equals("default", StringComparison.OrdinalIgnoreCase) => new FileCabinetDefaultService(),
+                        var p when p.Equals("custom", StringComparison.OrdinalIgnoreCase) => new FileCabinetCustomService(),
+                        _ => new FileCabinetDefaultService()
+                    };
+                }
+            }
 
             do
             {
@@ -120,24 +155,29 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            GetPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory);
+            IRecordValidator validator = GetValidator();
 
-            int recordId = fileCabinetService.CreateRecord(firstName, lastName, dateOfBd, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            ParametersContainer container = GetValidInputParameters(validator);
+
+            int recordId = fileCabinetService.CreateRecord(container);
             Console.WriteLine($"Record #{recordId} is created.");
         }
 
         private static void List(string parameters)
         {
-            FileCabinetRecord[] records = fileCabinetService.GetRecords();
-            if (records.Length == 0)
+            IReadOnlyCollection<FileCabinetRecord> recordsCollection = fileCabinetService.GetRecords();
+            if (recordsCollection.Count == 0)
             {
                 Console.WriteLine("No records yet.");
                 return;
             }
 
-            foreach (FileCabinetRecord record in records)
+            foreach (FileCabinetRecord record in recordsCollection)
             {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
+                Console.WriteLine($"#{record.Id}," +
+                                  $" {record.FirstName}," +
+                                  $" {record.LastName}," +
+                                  $" {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
             }
         }
 
@@ -145,8 +185,8 @@ namespace FileCabinetApp
         {
             bool isParsedId = int.TryParse(parameters, out int id);
 
-            FileCabinetRecord[] records = fileCabinetService.GetRecords();
-            var record = records.FirstOrDefault(r => r.Id == id);
+            IReadOnlyCollection<FileCabinetRecord> recordsCollection = fileCabinetService.GetRecords();
+            var record = recordsCollection.FirstOrDefault(r => r.Id == id);
 
             if (!isParsedId || record is null)
             {
@@ -154,38 +194,11 @@ namespace FileCabinetApp
                 return;
             }
 
-            GetPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory);
-            fileCabinetService.EditRecord(id, firstName, lastName, dateOfBd, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            IRecordValidator validator = GetValidator();
+            ParametersContainer container = GetValidInputParameters(validator);
+
+            fileCabinetService.EditRecord(id, container);
             Console.WriteLine($"Record #{id} is updated.");
-        }
-
-        private static void GetPersonParameters(out string firstName, out string lastName, out DateTime dateOfBd, out short workingHoursPerWeek, out decimal annualIncome, out char driverLicenseCategory)
-        {
-            string[] parameterNames = { "First name", "Last name", "Date of birth", "Working Hours Per Week", "Annual Income", "Driver License Category" };
-            firstName = null;
-            lastName = null;
-            dateOfBd = default;
-            annualIncome = default;
-            driverLicenseCategory = default;
-            workingHoursPerWeek = default;
-
-            for (int i = 0; i < parameterNames.Length;)
-            {
-                Console.Write($"{parameterNames[i]}: ");
-                string personParameter = Console.ReadLine();
-                bool isParsed = parameterNames[i] switch
-                {
-                    var name when name == "First name" => Validator.TryGetValidFirstName(personParameter, out firstName),
-                    var name when name == "Last name" => Validator.TryGetValidLastName(personParameter, out lastName),
-                    var name when name == "Working Hours Per Week" => Validator.TryGetValidWorkingHoursPerWeek(personParameter, out workingHoursPerWeek),
-                    var name when name == "Driver License Category" => Validator.TryGetValidDriverLicenseCategory(personParameter, out driverLicenseCategory),
-                    var name when name == "Annual Income" => Validator.TryGetValidAnnualIncome(personParameter, out annualIncome),
-                    var name when name == "Date of birth" => Validator.TryGetValidDateTimeOfBd(personParameter, out dateOfBd),
-                    _ => false
-                };
-
-                i = isParsed ? i + 1 : i;
-            }
         }
 
         private static void Find(string parameters)
@@ -196,18 +209,132 @@ namespace FileCabinetApp
             string parameter = inputs[parameterIndex];
             string value = inputs.Length > 1 ? inputs[valueIndex] : string.Empty;
 
-            FileCabinetRecord[] records = parameter switch
+            IReadOnlyCollection<FileCabinetRecord> recordsCollection = parameter switch
             {
-                var p when p.Equals("firstName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByFirstName(value.Trim('\"')),
+                var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByFirstName(value.Trim('\"')),
                 var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByLastName(value.Trim('\"')),
-                var p when p.Equals("dateOfBirth", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByDateOfBirthName(DateTime.Parse(value.Trim('\"'), CultureInfo.CreateSpecificCulture("en-US"))),
+                var p when p.Equals("dateOfBirth", StringComparison.OrdinalIgnoreCase)
+                                && DateTime.TryParse(value.Trim('\"'), out DateTime dateOfBd) => fileCabinetService.FindByDateOfBirthName(dateOfBd),
                 _ => Array.Empty<FileCabinetRecord>()
             };
 
-            foreach (FileCabinetRecord record in records)
+            if (recordsCollection.Count == 0)
+            {
+                Console.WriteLine($"No records with {parameter} - {value}.");
+            }
+
+            foreach (FileCabinetRecord record in recordsCollection)
             {
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
             }
+        }
+
+        private static ParametersContainer GetValidInputParameters(IRecordValidator validator)
+        {
+            var container = new ParametersContainer();
+
+            Console.Write("First name: ");
+            container.FirstName = ReadInput(StringConverter, validator.FirstNameValidator);
+
+            Console.Write("Last name: ");
+            container.LastName = ReadInput(StringConverter, validator.LastNameValidator);
+
+            Console.Write("Date of birth: ");
+            container.DateOfBirthday = ReadInput(DateConverter, validator.DateOfBirthValidator);
+
+            Console.Write("Working Hours Per Week: ");
+            container.WorkingHoursPerWeek = ReadInput(ShortConverter, validator.WorkingHoursValidator);
+
+            Console.Write("Annual Income: ");
+            container.AnnualIncome = ReadInput(DecimalConverter, validator.AnnualIncomeValidator);
+
+            Console.Write("Driver License Category: ");
+            container.DriverLicenseCategory = ReadInput(CharConverter, validator.DriverLicenseCategoryValidator);
+
+            return container;
+        }
+
+        private static IRecordValidator GetValidator()
+        {
+            IRecordValidator validator;
+            switch (fileCabinetService)
+            {
+                case FileCabinetCustomService car:
+                    validator = new CustomValidator();
+                    break;
+                default:
+                    validator = new DefaultValidator();
+                    break;
+            }
+
+            return validator;
+        }
+
+        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        {
+            do
+            {
+                T value;
+
+                var input = Console.ReadLine();
+                var conversionResult = converter(input);
+
+                if (!conversionResult.Item1)
+                {
+                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                value = conversionResult.Item3;
+
+                var validationResult = validator(value);
+                if (!validationResult.Item1)
+                {
+                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                return value;
+            }
+            while (true);
+        }
+
+        private static Tuple<bool, string, string> StringConverter(string input)
+        {
+            bool isConverted = !string.IsNullOrWhiteSpace(input);
+
+            return new Tuple<bool, string, string>(isConverted, input, input);
+        }
+
+        private static Tuple<bool, string, DateTime> DateConverter(string input)
+        {
+            string format = "MM/dd/yyyy";
+            CultureInfo formatProvider = CultureInfo.CreateSpecificCulture("en-US");
+            DateTimeStyles style = DateTimeStyles.None;
+            bool isConverted = DateTime.TryParseExact(input, format, formatProvider, style, out DateTime dateTimeValue);
+
+            return new Tuple<bool, string, DateTime>(isConverted, input, dateTimeValue);
+        }
+
+        private static Tuple<bool, string, short> ShortConverter(string input)
+        {
+            bool isConverted = short.TryParse(input, out short shortValue);
+
+            return new Tuple<bool, string, short>(isConverted, input, shortValue);
+        }
+
+        private static Tuple<bool, string, char> CharConverter(string input)
+        {
+            bool isConverted = char.TryParse(input, out char charValue);
+
+            return new Tuple<bool, string, char>(isConverted, input, charValue);
+        }
+
+        private static Tuple<bool, string, decimal> DecimalConverter(string input)
+        {
+            bool isConverted = decimal.TryParse(input, out decimal decimalValue);
+
+            return new Tuple<bool, string, decimal>(isConverted, input, decimalValue);
         }
     }
 }

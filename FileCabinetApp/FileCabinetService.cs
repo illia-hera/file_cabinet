@@ -1,40 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace FileCabinetApp
 {
-    public class FileCabinetService
+    /// <summary>
+    /// Class <c>FileCabinetService</c> with File Cabinet.
+    /// </summary>
+    public class FileCabinetService : IFileCabinetService
     {
+        private readonly IRecordValidator validator;
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
-        public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+        /// </summary>
+        /// <param name="validator">The validator.</param>
+        public FileCabinetService(IRecordValidator validator)
         {
-            ValidateParameters(firstName, lastName, dateOfBirth, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            this.validator = validator;
+        }
+
+        /// <summary>
+        /// Creates the record.
+        /// </summary>
+        /// <param name="container">The container of parameters.</param>
+        /// <returns>Return Id of created record.</returns>
+        public int CreateRecord(ParametersContainer container)
+        {
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            this.validator.ValidateParameters(container);
             var record = new FileCabinetRecord
             {
                 Id = this.list.Count + 1,
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                WorkingHoursPerWeek = workingHoursPerWeek,
-                AnnualIncome = annualIncome,
-                DriverLicenseCategory = driverLicenseCategory,
+                FirstName = container.FirstName,
+                LastName = container.LastName,
+                DateOfBirth = container.DateOfBirthday,
+                WorkingHoursPerWeek = container.WorkingHoursPerWeek,
+                AnnualIncome = container.AnnualIncome,
+                DriverLicenseCategory = container.DriverLicenseCategory,
             };
 
             this.list.Add(record);
-            this.AddRecordToFirstNameDict(firstName, record);
-            this.AddRecordToLastNameDict(lastName, record);
-            this.AddRecordToDateOfBirthDict(dateOfBirth, record);
+            this.AddRecordToFirstNameDict(container.FirstName, record);
+            this.AddRecordToLastNameDict(container.LastName, record);
+            this.AddRecordToDateOfBirthDict(container.DateOfBirthday, record);
 
             return record.Id;
         }
 
-        public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
+        /// <summary>
+        /// Edits the record.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="container">The container of parameters.</param>
+        /// <exception cref="System.ArgumentException">#{id} record is not found.</exception>
+        /// <exception cref="System.ArgumentNullException">container.</exception>
+        public void EditRecord(int id, ParametersContainer container)
         {
             var record = this.list.FirstOrDefault(r => r.Id == id);
             if (record == null)
@@ -42,95 +71,78 @@ namespace FileCabinetApp
                 throw new ArgumentException($"#{id} record is not found.");
             }
 
-            ValidateParameters(firstName, lastName, dateOfBirth, workingHoursPerWeek, annualIncome, driverLicenseCategory);
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
 
-            this.EditFirstNameDictionary(firstName, record);
-            this.EditLastNameDictionary(lastName, record);
-            this.EditDateOfBirthDictionary(dateOfBirth, record);
+            this.validator.ValidateParameters(container);
 
-            record.FirstName = firstName;
-            record.LastName = lastName;
-            record.AnnualIncome = annualIncome;
-            record.DateOfBirth = dateOfBirth;
-            record.DriverLicenseCategory = driverLicenseCategory;
-            record.WorkingHoursPerWeek = workingHoursPerWeek;
+            this.EditFirstNameDictionary(container.FirstName, record);
+            this.EditLastNameDictionary(container.LastName, record);
+            this.EditDateOfBirthDictionary(container.DateOfBirthday, record);
+
+            record.FirstName = container.FirstName;
+            record.LastName = container.LastName;
+            record.AnnualIncome = container.AnnualIncome;
+            record.DateOfBirth = container.DateOfBirthday;
+            record.DriverLicenseCategory = container.DriverLicenseCategory;
+            record.WorkingHoursPerWeek = container.WorkingHoursPerWeek;
         }
 
-        public FileCabinetRecord[] GetRecords()
+        /// <summary>
+        /// Gets all records in File Cabinet.
+        /// </summary>
+        /// <returns>Return array of <c>FileCabinetRecord</c>.</returns>
+        public IReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            FileCabinetRecord[] resultArray = this.list.ToArray();
-            return resultArray;
+            IReadOnlyCollection<FileCabinetRecord> recordsCollection = this.list.ToArray();
+            return recordsCollection;
         }
 
+        /// <summary>
+        /// Gets the stat of users.
+        /// </summary>
+        /// <returns>Return count of records in File Cabinet.</returns>
         public int GetStat()
         {
             return this.list.Count;
         }
 
-        public FileCabinetRecord[] FindByFirstName(string firstName)
+        /// <summary>
+        /// Finds the records by the first name.
+        /// </summary>
+        /// <param name="firstName">The first name.</param>
+        /// <returns>Return array of records.</returns>
+        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            FileCabinetRecord[] resultArray = this.firstNameDictionary.ContainsKey(firstName) ? this.firstNameDictionary[firstName].ToArray() : Array.Empty<FileCabinetRecord>();
+            IReadOnlyCollection<FileCabinetRecord> recordsCollection = this.firstNameDictionary.ContainsKey(firstName) ? this.firstNameDictionary[firstName].ToArray() : Array.Empty<FileCabinetRecord>();
 
-            return resultArray;
+            return recordsCollection;
         }
 
-        public FileCabinetRecord[] FindByLastName(string lastName)
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="lastName">The last name.</param>
+        /// <returns>Return array of records.</returns>
+        public IReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
-            FileCabinetRecord[] resultArray = this.lastNameDictionary.ContainsKey(lastName) ? this.lastNameDictionary[lastName].ToArray() : Array.Empty<FileCabinetRecord>();
+            IReadOnlyCollection<FileCabinetRecord> recordsCollection = this.lastNameDictionary.ContainsKey(lastName) ? this.lastNameDictionary[lastName].ToArray() : Array.Empty<FileCabinetRecord>();
 
-            return resultArray;
+            return recordsCollection;
         }
 
-        public FileCabinetRecord[] FindByDateOfBirthName(DateTime dateOfBirth)
+        /// <summary>
+        /// Finds the records by date of birthday.
+        /// </summary>
+        /// <param name="dateOfBirth">The date of birthday.</param>
+        /// <returns>Return array of records.</returns>
+        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthName(DateTime dateOfBirth)
         {
-            FileCabinetRecord[] resultArray = this.list.Where(r => dateOfBirth.Equals(r.DateOfBirth)).ToArray();
+            IReadOnlyCollection<FileCabinetRecord> recordsCollection = this.dateOfBirthDictionary.ContainsKey(dateOfBirth) ? this.dateOfBirthDictionary[dateOfBirth].ToArray() : Array.Empty<FileCabinetRecord>();
 
-            return resultArray;
-        }
-
-        private static void ValidateParameters(string firstName, string lastName, DateTime dateOfBirth, short workingHoursPerWeek, decimal annualIncome, char driverLicenseCategory)
-        {
-            if (firstName is null)
-            {
-                throw new ArgumentNullException(nameof(firstName), "can not be null");
-            }
-
-            if (firstName.Length < 2 || firstName.Length > 60)
-            {
-                throw new ArgumentException("First name must to have from 2 to 60 characters.");
-            }
-
-            if (lastName is null)
-            {
-                throw new ArgumentNullException(nameof(lastName), "can not be null");
-            }
-
-            if (lastName.Length < 2 || lastName.Length > 60)
-            {
-                throw new ArgumentException("Last name must to have from 2 to 60 characters.");
-            }
-
-            if (dateOfBirth < DateTime.Parse("01-Jan-1950", CultureInfo.CurrentCulture) || dateOfBirth > DateTime.Now)
-            {
-                throw new ArgumentException("The minimum date is January 01, 1950, the maximum date is the current one.");
-            }
-
-            if (workingHoursPerWeek > 40 || workingHoursPerWeek < 0)
-            {
-                throw new ArgumentException("The minimum hours is 1 hour, the maximum hours is the 40 according to the Labor Code of the RB.");
-            }
-
-            if (annualIncome < 0)
-            {
-                throw new ArgumentException("The Annual income must be bigger than 0.");
-            }
-
-            var driverLicenseCategoryUpper = char.ToUpper(driverLicenseCategory, CultureInfo.CurrentCulture);
-
-            if (!(driverLicenseCategoryUpper == 'A' || driverLicenseCategoryUpper == 'B' || driverLicenseCategoryUpper == 'C' || driverLicenseCategoryUpper == 'D'))
-            {
-                throw new ArgumentException("The Driver License Category can be only - A, B, C, D.");
-            }
+            return recordsCollection;
         }
 
         private void AddRecordToFirstNameDict(string firstName, FileCabinetRecord record)
@@ -201,10 +213,10 @@ namespace FileCabinetApp
         {
             if (dateOfBirth != record.DateOfBirth)
             {
-                this.dateOfBirthDictionary[dateOfBirth].Remove(record);
-                if (this.dateOfBirthDictionary[dateOfBirth].Count == 0)
+                this.dateOfBirthDictionary[record.DateOfBirth].Remove(record);
+                if (this.dateOfBirthDictionary[record.DateOfBirth].Count == 0)
                 {
-                    this.dateOfBirthDictionary.Remove(dateOfBirth);
+                    this.dateOfBirthDictionary.Remove(record.DateOfBirth);
                 }
 
                 this.AddRecordToDateOfBirthDict(dateOfBirth, record);
