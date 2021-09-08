@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -165,14 +166,14 @@ namespace FileCabinetApp
 
         private static void List(string parameters)
         {
-            FileCabinetRecord[] records = fileCabinetService.GetRecords();
-            if (records.Length == 0)
+            IReadOnlyCollection<FileCabinetRecord> recordsCollection = fileCabinetService.GetRecords();
+            if (recordsCollection.Count == 0)
             {
                 Console.WriteLine("No records yet.");
                 return;
             }
 
-            foreach (FileCabinetRecord record in records)
+            foreach (FileCabinetRecord record in recordsCollection)
             {
                 Console.WriteLine($"#{record.Id}," +
                                   $" {record.FirstName}," +
@@ -185,8 +186,8 @@ namespace FileCabinetApp
         {
             bool isParsedId = int.TryParse(parameters, out int id);
 
-            FileCabinetRecord[] records = fileCabinetService.GetRecords();
-            var record = records.FirstOrDefault(r => r.Id == id);
+            IReadOnlyCollection<FileCabinetRecord> recordsCollection = fileCabinetService.GetRecords();
+            var record = recordsCollection.FirstOrDefault(r => r.Id == id);
 
             if (!isParsedId || record is null)
             {
@@ -233,7 +234,7 @@ namespace FileCabinetApp
             string parameter = inputs[parameterIndex];
             string value = inputs.Length > 1 ? inputs[valueIndex] : string.Empty;
 
-            FileCabinetRecord[] records = parameter switch
+            IReadOnlyCollection<FileCabinetRecord> recordsCollection = parameter switch
             {
                 var p when p.Equals("firstName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByFirstName(value.Trim('\"')),
                 var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByLastName(value.Trim('\"')),
@@ -242,12 +243,12 @@ namespace FileCabinetApp
                 _ => Array.Empty<FileCabinetRecord>()
             };
 
-            if (records.Length == 0)
+            if (recordsCollection.Count == 0)
             {
                 Console.WriteLine($"No records with {parameter} - {value}.");
             }
 
-            foreach (FileCabinetRecord record in records)
+            foreach (FileCabinetRecord record in recordsCollection)
             {
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
             }
