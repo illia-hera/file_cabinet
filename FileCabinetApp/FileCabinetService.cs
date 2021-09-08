@@ -37,7 +37,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(container));
             }
 
-            this.CreateValidator().ValidateParameters(container);
+            this.validator.ValidateParameters(container);
             var record = new FileCabinetRecord
             {
                 Id = this.list.Count + 1,
@@ -77,7 +77,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(container));
             }
 
-            this.CreateValidator().ValidateParameters(container);
+            this.validator.ValidateParameters(container);
 
             this.EditFirstNameDictionary(container.FirstName, record);
             this.EditLastNameDictionary(container.LastName, record);
@@ -144,15 +144,6 @@ namespace FileCabinetApp
             FileCabinetRecord[] resultArray = this.dateOfBirthDictionary.ContainsKey(dateOfBirth) ? this.dateOfBirthDictionary[dateOfBirth].ToArray() : Array.Empty<FileCabinetRecord>();
 
             return resultArray;
-        }
-
-        /// <summary>
-        /// Creates the validator.
-        /// </summary>
-        /// <returns>Return validator.</returns>
-        protected virtual IRecordValidator CreateValidator()
-        {
-            return new DefaultValidator();
         }
 
         private void AddRecordToFirstNameDict(string firstName, FileCabinetRecord record)

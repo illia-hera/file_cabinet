@@ -20,16 +20,5 @@ namespace FileCabinetApp
             : base(new CustomValidator())
         {
         }
-
-        /// <summary>
-        /// Creates the validator.
-        /// </summary>
-        /// <returns>
-        /// Return validator.
-        /// </returns>
-        protected override IRecordValidator CreateValidator()
-        {
-            return new CustomValidator();
-        }
     }
 }
