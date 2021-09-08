@@ -74,6 +74,11 @@
             </summary>
             <seealso cref="T:FileCabinetApp.FileCabinetService" />
         </member>
+        <member name="M:FileCabinetApp.FileCabinetCustomService.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetCustomService"/> class.
+            </summary>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetCustomService.CreateValidator">
             <summary>
             Creates the validator.
@@ -87,6 +92,11 @@
             Class <c>FileCabinetDefaultService</c> validate parameters by default method.
             </summary>
             <seealso cref="T:FileCabinetApp.FileCabinetService" />
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetDefaultService"/> class.
+            </summary>
         </member>
         <member name="M:FileCabinetApp.FileCabinetDefaultService.CreateValidator">
             <summary>
@@ -161,6 +171,12 @@
             <summary>
             Class <c>FileCabinetService</c> with File Cabinet.
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
+            </summary>
+            <param name="validator">The validator.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.ParametersContainer)">
             <summary>
