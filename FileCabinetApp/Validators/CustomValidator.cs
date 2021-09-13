@@ -1,4 +1,4 @@
-﻿using FileCabinetApp.Validators.Validation_rules;
+﻿using FileCabinetApp.Validators.ValidationRules;
 
 namespace FileCabinetApp.Validators
 {

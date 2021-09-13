@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileCabinetApp.e
+namespace FileCabinetApp.Enteties
 {
     /// <summary>
     /// Class <c>FileCabinetRecord</c> describe the user of File Cabinet.

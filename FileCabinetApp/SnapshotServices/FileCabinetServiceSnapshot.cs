@@ -1,5 +1,8 @@
 ﻿using System.IO;
-using FileCabinetApp.e;
+using System.Xml;
+using FileCabinetApp.Enteties;
+using FileCabinetApp.SnapshotServices.RecordWriters;
+using FileCabinetApp.SnapshotServices.RecordWrites;
 
 namespace FileCabinetApp.SnapshotServices
 {
@@ -33,6 +36,23 @@ namespace FileCabinetApp.SnapshotServices
             {
                 fileCabinetRecordCsvWriter.Write(fileCabinetRecord);
             }
+        }
+
+        /// <summary>
+        /// Saves to XML.
+        /// </summary>
+        /// <param name="xmlWriter">The XML writer.</param>
+        public void SaveToXml(XmlWriter xmlWriter)
+        {
+            var fileCabinetRecordXmlWriter = new FileCabinetRecordXmlWriter(xmlWriter);
+            fileCabinetRecordXmlWriter.WriteStartOfDoc();
+
+            foreach (var fileCabinetRecord in this.records)
+            {
+                fileCabinetRecordXmlWriter.Write(fileCabinetRecord);
+            }
+
+            fileCabinetRecordXmlWriter.WriteEndOfDoc();
         }
     }
 }

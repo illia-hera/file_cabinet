@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using FileCabinetApp.e;
-using FileCabinetApp.Validators.Validation_rules;
+using FileCabinetApp.Enteties;
+using FileCabinetApp.Validators.ValidationRules;
 
 namespace FileCabinetApp.Validators
 {

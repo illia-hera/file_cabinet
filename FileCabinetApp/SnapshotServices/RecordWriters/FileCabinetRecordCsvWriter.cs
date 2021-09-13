@@ -1,13 +1,14 @@
 ﻿using System.Globalization;
 using System.IO;
-using FileCabinetApp.e;
+using FileCabinetApp.Enteties;
+using FileCabinetApp.SnapshotServices.RecordWriters;
 
-namespace FileCabinetApp.SnapshotServices
+namespace FileCabinetApp.SnapshotServices.RecordWrites
 {
     /// <summary>
     /// Class <c>FileCabinetRecordCsvWriter</c> write in to the file.
     /// </summary>
-    public class FileCabinetRecordCsvWriter
+    public class FileCabinetRecordCsvWriter : IFileCabinetRecordWriter
     {
         private readonly TextWriter textWriter;
 
@@ -31,7 +32,7 @@ namespace FileCabinetApp.SnapshotServices
                 this.textWriter.WriteLine($"{record.Id}," +
                                           $"{record.FirstName}," +
                                           $"{record.LastName}," +
-                                          $"{record.DateOfBirth.ToString("MM/dd/yyyy",CultureInfo.InvariantCulture)}," +
+                                          $"{record.DateOfBirth.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)}," +
                                           $"{record.WorkingHoursPerWeek}," +
                                           $"{record.AnnualIncome}," +
                                           $"{record.DriverLicenseCategory}");

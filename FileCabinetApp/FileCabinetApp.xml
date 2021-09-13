@@ -4,102 +4,12 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="T:FileCabinetApp.Converter">
-            <summary>
-            Class to convert.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Converter.StringConverter(System.String)">
-            <summary>
-            Strings the converter.
-            </summary>
-            <param name="input">The input.</param>
-            <returns>Return result of boolean conversion result and string input value and string value.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Converter.DateConverter(System.String)">
-            <summary>
-            Dates the converter.
-            </summary>
-            <param name="input">The input.</param>
-            <returns>Return result of boolean conversion result and string input value and <c>DeteTime</c> value.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Converter.ShortConverter(System.String)">
-            <summary>
-            Shorts the converter.
-            </summary>
-            <param name="input">The input.</param>
-            <returns>Return result of boolean conversion result and string input value and <c>short</c> value.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Converter.CharConverter(System.String)">
-            <summary>
-            Characters the converter.
-            </summary>
-            <param name="input">The input.</param>
-            <returns>Return result of boolean conversion result and string input value and char value.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Converter.DecimalConverter(System.String)">
-            <summary>
-            Decimals the converter.
-            </summary>
-            <param name="input">The input.</param>
-            <returns>Return result of boolean conversion result and string input value and decimal value.</returns>
-        </member>
-        <member name="T:FileCabinetApp.CustomValidator">
-            <summary>
-            Custom validator for person parameters.
-            </summary>
-            <seealso cref="T:FileCabinetApp.IRecordValidator" />
-        </member>
-        <member name="P:FileCabinetApp.CustomValidator.ValidationRules">
-            <summary>
-            Gets the validation rules.
-            </summary>
-            <value>
-            The validation rules.
-            </value>
-        </member>
-        <member name="T:FileCabinetApp.DefaultValidator">
-            <summary>
-            Default validator for person parameters.
-            </summary>
-            <seealso cref="T:FileCabinetApp.IRecordValidator" />
-        </member>
-        <member name="P:FileCabinetApp.DefaultValidator.ValidationRules">
-            <summary>
-            Gets the validation rules.
-            </summary>
-            <value>
-            The validation rules.
-            </value>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetCustomService">
-            <summary>
-            Class <c>FileCabinetCustomService</c> validate parameters by specified rules.
-            </summary>
-            <seealso cref="T:FileCabinetApp.FileCabinetService" />
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetCustomService"/> class.
-            </summary>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetDefaultService">
-            <summary>
-            Class <c>FileCabinetDefaultService</c> validate parameters by default method.
-            </summary>
-            <seealso cref="T:FileCabinetApp.FileCabinetService" />
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetDefaultService"/> class.
-            </summary>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetRecord">
+        <member name="T:FileCabinetApp.e.FileCabinetRecord">
             <summary>
             Class <c>FileCabinetRecord</c> describe the user of File Cabinet.
             </summary>
         </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.Id">
+        <member name="P:FileCabinetApp.e.FileCabinetRecord.Id">
             <summary>
             Gets or sets the identifier.
             </summary>
@@ -107,7 +17,7 @@
             The identifier.
             </value>
         </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
+        <member name="P:FileCabinetApp.e.FileCabinetRecord.FirstName">
             <summary>
             Gets or sets the first name.
             </summary>
@@ -115,7 +25,7 @@
             The first name.
             </value>
         </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.LastName">
+        <member name="P:FileCabinetApp.e.FileCabinetRecord.LastName">
             <summary>
             Gets or sets the last name.
             </summary>
@@ -123,7 +33,7 @@
             The last name.
             </value>
         </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.DateOfBirth">
+        <member name="P:FileCabinetApp.e.FileCabinetRecord.DateOfBirth">
             <summary>
             Gets or sets the date of birth.
             </summary>
@@ -131,7 +41,7 @@
             The date of birthday.
             </value>
         </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.WorkingHoursPerWeek">
+        <member name="P:FileCabinetApp.e.FileCabinetRecord.WorkingHoursPerWeek">
             <summary>
             Gets or sets the working hours per week.
             </summary>
@@ -139,7 +49,7 @@
             The working hours per week.
             </value>
         </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.AnnualIncome">
+        <member name="P:FileCabinetApp.e.FileCabinetRecord.AnnualIncome">
             <summary>
             Gets or sets the annual income.
             </summary>
@@ -147,7 +57,7 @@
             The annual income.
             </value>
         </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.DriverLicenseCategory">
+        <member name="P:FileCabinetApp.e.FileCabinetRecord.DriverLicenseCategory">
             <summary>
             Gets or sets the driver license category.
             </summary>
@@ -155,47 +65,111 @@
             The driver license category.
             </value>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+        <member name="T:FileCabinetApp.e.ParametersContainer">
             <summary>
-            Class <c>FileCabinetRecordCsvWriter</c> write in to the file.
+            Class <c>ParametersContainer</c> parsed and validate string values.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
+        <member name="P:FileCabinetApp.e.ParametersContainer.DateOfBirthday">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            Gets or sets the date of birthday.
             </summary>
-            <param name="textWriter">The text text writer.</param>
+            <value>
+            The date of birthday.
+            </value>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+        <member name="P:FileCabinetApp.e.ParametersContainer.FirstName">
             <summary>
-            Writes the specified record.
+            Gets or sets the first name.
             </summary>
-            <param name="record">The record.</param>
+            <value>
+            The first name.
+            </value>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.WriteHeader">
+        <member name="P:FileCabinetApp.e.ParametersContainer.LastName">
             <summary>
-            Writes the header.
+            Gets or sets the last name.
+            </summary>
+            <value>
+            The last name.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.e.ParametersContainer.WorkingHoursPerWeek">
+            <summary>
+            Gets or sets the working hours per week.
+            </summary>
+            <value>
+            The working hours per week.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.e.ParametersContainer.AnnualIncome">
+            <summary>
+            Gets or sets the annual income.
+            </summary>
+            <value>
+            The annual income.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.e.ParametersContainer.DriverLicenseCategory">
+            <summary>
+            Gets or sets the driver license category.
+            </summary>
+            <value>
+            The driver license category.
+            </value>
+        </member>
+        <member name="T:FileCabinetApp.Program">
+            <summary>
+            Class <c>Program</c> - initial class.
             </summary>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetService">
+        <member name="M:FileCabinetApp.Program.Main(System.String[])">
+            <summary>
+            Defines the entry point of the application.
+            </summary>
+            <param name="args">The arguments.</param>
+        </member>
+        <member name="T:FileCabinetApp.Services.FileCabinetCustomService">
+            <summary>
+            Class <c>FileCabinetCustomService</c> validate parameters by specified rules.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Services.FileCabinetService" />
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetCustomService.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetCustomService"/> class.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.Services.FileCabinetDefaultService">
+            <summary>
+            Class <c>FileCabinetDefaultService</c> validate parameters by default method.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Services.FileCabinetService" />
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetDefaultService.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetDefaultService"/> class.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.Services.FileCabinetService">
             <summary>
             Class <c>FileCabinetService</c> with File Cabinet.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
+        <member name="M:FileCabinetApp.Services.FileCabinetService.#ctor(FileCabinetApp.Validators.IRecordValidator)">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetService"/> class.
             </summary>
             <param name="validator">The validator.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.ParametersContainer)">
+        <member name="M:FileCabinetApp.Services.FileCabinetService.CreateRecord(FileCabinetApp.e.ParametersContainer)">
             <summary>
             Creates the record.
             </summary>
             <param name="container">The container of parameters.</param>
             <returns>Return Id of created record.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32,FileCabinetApp.ParametersContainer)">
+        <member name="M:FileCabinetApp.Services.FileCabinetService.EditRecord(System.Int32,FileCabinetApp.e.ParametersContainer)">
             <summary>
             Edits the record.
             </summary>
@@ -204,138 +178,224 @@
             <exception cref="T:System.ArgumentException">#{id} record is not found.</exception>
             <exception cref="T:System.ArgumentNullException">container.</exception>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
+        <member name="M:FileCabinetApp.Services.FileCabinetService.GetRecords">
             <summary>
             Gets all records in File Cabinet.
             </summary>
             <returns>Return array of <c>FileCabinetRecord</c>.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
+        <member name="M:FileCabinetApp.Services.FileCabinetService.GetStat">
             <summary>
             Gets the stat of users.
             </summary>
             <returns>Return count of records in File Cabinet.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
+        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByFirstName(System.String)">
             <summary>
             Finds the records by the first name.
             </summary>
             <param name="firstName">The first name.</param>
             <returns>Return array of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
+        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByLastName(System.String)">
             <summary>
             Finds the records by the last name.
             </summary>
             <param name="lastName">The last name.</param>
             <returns>Return array of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByDateOfBirthName(System.DateTime)">
+        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByDateOfBirthName(System.DateTime)">
             <summary>
             Finds the records by date of birthday.
             </summary>
             <param name="dateOfBirth">The date of birthday.</param>
             <returns>Return array of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
+        <member name="M:FileCabinetApp.Services.FileCabinetService.MakeSnapshot">
             <summary>
             Makes the snapshot.
             </summary>
             <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
-            <summary>
-            Class <c>FileCabinetServiceSnapshot</c> make snapshot of FileCabinetService.
-            </summary>
-            <seealso cref="T:FileCabinetApp.IFileCabinetServiceSnapshot" />
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(FileCabinetApp.FileCabinetRecord[])">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
-            </summary>
-            <param name="records">The records.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
-            <summary>
-            Saves to CSV.
-            </summary>
-            <param name="streamWriter">The stream writer.</param>
-        </member>
-        <member name="T:FileCabinetApp.IFileCabinetService">
+        <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
             Interface <c>IFileCabinetService</c>.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord(FileCabinetApp.ParametersContainer)">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.CreateRecord(FileCabinetApp.e.ParametersContainer)">
             <summary>
             Creates the record.
             </summary>
             <param name="container">The container of parameters.</param>
             <returns>Return Id of created record.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(System.Int32,FileCabinetApp.ParametersContainer)">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(System.Int32,FileCabinetApp.e.ParametersContainer)">
             <summary>
             Edits the record.
             </summary>
             <param name="id">The identifier.</param>
             <param name="container">The container of parameters.</param>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.GetRecords">
             <summary>
             Gets all records in File Cabinet.
             </summary>
             <returns>Return array of <c>FileCabinetRecord</c>.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.GetStat">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.GetStat">
             <summary>
             Gets the stat of users.
             </summary>
             <returns>Return count of records in File Cabinet.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
             Finds the records by the first name.
             </summary>
             <param name="firstName">The first name.</param>
             <returns>Return array of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByLastName(System.String)">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)">
             <summary>
             Finds the records by the last name.
             </summary>
             <param name="lastName">The last name.</param>
             <returns>Return array of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirthName(System.DateTime)">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirthName(System.DateTime)">
             <summary>
             Finds the records by date of birthday.
             </summary>
             <param name="dateOfBirth">The date of birthday.</param>
             <returns>Return array of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot">
             <summary>
             Makes the snapshot.
             </summary>
             <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
         </member>
-        <member name="T:FileCabinetApp.IFileCabinetServiceSnapshot">
+        <member name="T:FileCabinetApp.SnapshotServices.FileCabinetServiceSnapshot">
             <summary>
-            Interface service snapshot.
+            Class <c>FileCabinetServiceSnapshot</c> make snapshot of FileCabinetService.
             </summary>
+            <seealso cref="T:FileCabinetApp.SnapshotServices.IFileCabinetServiceSnapshot" />
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+        <member name="M:FileCabinetApp.SnapshotServices.FileCabinetServiceSnapshot.#ctor(FileCabinetApp.e.FileCabinetRecord[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.SnapshotServices.FileCabinetServiceSnapshot"/> class.
+            </summary>
+            <param name="records">The records.</param>
+        </member>
+        <member name="M:FileCabinetApp.SnapshotServices.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
             Saves to CSV.
             </summary>
             <param name="streamWriter">The stream writer.</param>
         </member>
-        <member name="T:FileCabinetApp.IRecordValidator">
+        <member name="M:FileCabinetApp.SnapshotServices.FileCabinetServiceSnapshot.SaveToXml(System.Xml.XmlWriter)">
             <summary>
-            Interface <c>IRecordValidator</c>.
+            Saves to XML.
+            </summary>
+            <param name="xmlWriter">The XML writer.</param>
+        </member>
+        <member name="T:FileCabinetApp.SnapshotServices.IFileCabinetServiceSnapshot">
+            <summary>
+            Interface service snapshot.
             </summary>
         </member>
-        <member name="P:FileCabinetApp.IRecordValidator.ValidationRules">
+        <member name="M:FileCabinetApp.SnapshotServices.IFileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Saves to CSV.
+            </summary>
+            <param name="streamWriter">The stream writer.</param>
+        </member>
+        <member name="M:FileCabinetApp.SnapshotServices.IFileCabinetServiceSnapshot.SaveToXml(System.Xml.XmlWriter)">
+            <summary>
+            Saves to XML.
+            </summary>
+            <param name="xmlWriter">The XML writer.</param>
+        </member>
+        <member name="T:FileCabinetApp.SnapshotServices.RecordWrites.FileCabinetRecordCsvWriter">
+            <summary>
+            Class <c>FileCabinetRecordCsvWriter</c> write in to the file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.SnapshotServices.RecordWrites.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.SnapshotServices.RecordWrites.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="textWriter">The text text writer.</param>
+        </member>
+        <member name="M:FileCabinetApp.SnapshotServices.RecordWrites.FileCabinetRecordCsvWriter.Write(FileCabinetApp.e.FileCabinetRecord)">
+            <summary>
+            Writes the specified record.
+            </summary>
+            <param name="record">The record.</param>
+        </member>
+        <member name="M:FileCabinetApp.SnapshotServices.RecordWrites.FileCabinetRecordCsvWriter.WriteHeader">
+            <summary>
+            Writes the header.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.SnapshotServices.RecordWriters.IFileCabinetRecordWriter">
+            <summary>
+            Interface <c>FileCabinetRecordCsvWriter</c> write record in to the file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.SnapshotServices.RecordWriters.IFileCabinetRecordWriter.Write(FileCabinetApp.e.FileCabinetRecord)">
+            <summary>
+            Writes record in to the file.
+            </summary>
+            <param name="record">The record.</param>
+        </member>
+        <member name="T:FileCabinetApp.Utils.Converter">
+            <summary>
+            Class to convert.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Utils.Converter.StringConverter(System.String)">
+            <summary>
+            Strings the converter.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Return result of boolean conversion result and string input value and string value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Utils.Converter.DateConverter(System.String)">
+            <summary>
+            Dates the converter.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Return result of boolean conversion result and string input value and <c>DeteTime</c> value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Utils.Converter.ShortConverter(System.String)">
+            <summary>
+            Shorts the converter.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Return result of boolean conversion result and string input value and <c>short</c> value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Utils.Converter.CharConverter(System.String)">
+            <summary>
+            Characters the converter.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Return result of boolean conversion result and string input value and char value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Utils.Converter.DecimalConverter(System.String)">
+            <summary>
+            Decimals the converter.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Return result of boolean conversion result and string input value and decimal value.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Validators.CustomValidator">
+            <summary>
+            Custom validator for person parameters.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
+        </member>
+        <member name="P:FileCabinetApp.Validators.CustomValidator.ValidationRules">
             <summary>
             Gets the validation rules.
             </summary>
@@ -343,7 +403,34 @@
             The validation rules.
             </value>
         </member>
-        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.ParametersContainer)">
+        <member name="T:FileCabinetApp.Validators.DefaultValidator">
+            <summary>
+            Default validator for person parameters.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
+        </member>
+        <member name="P:FileCabinetApp.Validators.DefaultValidator.ValidationRules">
+            <summary>
+            Gets the validation rules.
+            </summary>
+            <value>
+            The validation rules.
+            </value>
+        </member>
+        <member name="T:FileCabinetApp.Validators.IRecordValidator">
+            <summary>
+            Interface <c>IRecordValidator</c>.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.Validators.IRecordValidator.ValidationRules">
+            <summary>
+            Gets the validation rules.
+            </summary>
+            <value>
+            The validation rules.
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.Validators.IRecordValidator.ValidateParameters(FileCabinetApp.e.ParametersContainer)">
             <summary>Validates the parameters.</summary>
             <param name="container">The container.</param>
             <exception cref="T:System.ArgumentNullException">container
@@ -365,257 +452,193 @@
             The Driver License Category can be only - {this.ValidationRules.ActualCategories}.
             </exception>
         </member>
-        <member name="M:FileCabinetApp.IRecordValidator.FirstNameValidator(System.String)">
+        <member name="M:FileCabinetApp.Validators.IRecordValidator.FirstNameValidator(System.String)">
             <summary>Firsts name validator.</summary>
             <param name="firstName">The first name.</param>
             <returns>
               Return the result of validation an value.
             </returns>
         </member>
-        <member name="M:FileCabinetApp.IRecordValidator.LastNameValidator(System.String)">
+        <member name="M:FileCabinetApp.Validators.IRecordValidator.LastNameValidator(System.String)">
             <summary>
             Lasts the name validator.
             </summary>
             <param name="lastName">The last name.</param>
             <returns>Return the result of validation an value.</returns>
         </member>
-        <member name="M:FileCabinetApp.IRecordValidator.AnnualIncomeValidator(System.Decimal)">
+        <member name="M:FileCabinetApp.Validators.IRecordValidator.AnnualIncomeValidator(System.Decimal)">
             <summary>
             Annuals the income validator.
             </summary>
             <param name="annualIncome">The annual income.</param>
             <returns>Return the result of validation an value.</returns>
         </member>
-        <member name="M:FileCabinetApp.IRecordValidator.WorkingHoursValidator(System.Int16)">
+        <member name="M:FileCabinetApp.Validators.IRecordValidator.WorkingHoursValidator(System.Int16)">
             <summary>
             Workings the hours validator.
             </summary>
             <param name="workingHours">The working hours.</param>
             <returns>Return the result of validation an value.</returns>
         </member>
-        <member name="M:FileCabinetApp.IRecordValidator.DriverLicenseCategoryValidator(System.Char)">
+        <member name="M:FileCabinetApp.Validators.IRecordValidator.DriverLicenseCategoryValidator(System.Char)">
             <summary>
             Drivers the license category validator.
             </summary>
             <param name="category">The category.</param>
             <returns>Return the result of validation an value.</returns>
         </member>
-        <member name="M:FileCabinetApp.IRecordValidator.DateOfBirthValidator(System.DateTime)">
+        <member name="M:FileCabinetApp.Validators.IRecordValidator.DateOfBirthValidator(System.DateTime)">
             <summary>
             Dates the of birth validator.
             </summary>
             <param name="dateOfBirth">The date of birth.</param>
             <returns>Return the result of validation an value.</returns>
         </member>
-        <member name="T:FileCabinetApp.ParametersContainer">
-            <summary>
-            Class <c>ParametersContainer</c> parsed and validate string values.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.ParametersContainer.DateOfBirthday">
-            <summary>
-            Gets or sets the date of birthday.
-            </summary>
-            <value>
-            The date of birthday.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.ParametersContainer.FirstName">
-            <summary>
-            Gets or sets the first name.
-            </summary>
-            <value>
-            The first name.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.ParametersContainer.LastName">
-            <summary>
-            Gets or sets the last name.
-            </summary>
-            <value>
-            The last name.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.ParametersContainer.WorkingHoursPerWeek">
-            <summary>
-            Gets or sets the working hours per week.
-            </summary>
-            <value>
-            The working hours per week.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.ParametersContainer.AnnualIncome">
-            <summary>
-            Gets or sets the annual income.
-            </summary>
-            <value>
-            The annual income.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.ParametersContainer.DriverLicenseCategory">
-            <summary>
-            Gets or sets the driver license category.
-            </summary>
-            <value>
-            The driver license category.
-            </value>
-        </member>
-        <member name="T:FileCabinetApp.Program">
-            <summary>
-            Class <c>Program</c> - initial class.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Program.Main(System.String[])">
-            <summary>
-            Defines the entry point of the application.
-            </summary>
-            <param name="args">The arguments.</param>
-        </member>
-        <member name="T:FileCabinetApp.ValidationCustomRules">
+        <member name="T:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules">
             <summary>
               Custom validation rules.
             </summary>
         </member>
-        <member name="P:FileCabinetApp.ValidationCustomRules.MinAnnualIncome">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules.MinAnnualIncome">
             <summary>Gets the minimum annual income.</summary>
             <value>The minimum annual income.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationCustomRules.MaxAnnualIncome">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules.MaxAnnualIncome">
             <summary>Gets the maximum annual income.</summary>
             <value>The maximum annual income.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationCustomRules.MaxLengthLastName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules.MaxLengthLastName">
             <summary>Gets the maximum name of the length last.</summary>
             <value>The maximum name of the length last.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationCustomRules.MinLengthLastName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules.MinLengthLastName">
             <summary>Gets the minimum name of the length last.</summary>
             <value>The minimum name of the length last.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationCustomRules.MaxLengthFirstName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules.MaxLengthFirstName">
             <summary>Gets the maximum name of the length first.</summary>
             <value>The maximum name of the length first.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationCustomRules.MinLengthFirstName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules.MinLengthFirstName">
             <summary>Gets the minimum name of the length first.</summary>
             <value>The minimum name of the length first.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationCustomRules.MinWorkingHoursPerWeek">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules.MinWorkingHoursPerWeek">
             <summary>Gets the minimum working hours per week.</summary>
             <value>The minimum working hours per week.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationCustomRules.MaxWorkingHoursPerWeek">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules.MaxWorkingHoursPerWeek">
             <summary>Gets the maximum working hours per week.</summary>
             <value>The maximum working hours per week.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationCustomRules.MinDateOfBirth">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules.MinDateOfBirth">
             <summary>Gets the minimum date of birth.</summary>
             <value>The minimum date of birth.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationCustomRules.MaxDateOfBirth">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules.MaxDateOfBirth">
             <summary>Gets the maximum date of birth.</summary>
             <value>The maximum date of birth.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationCustomRules.ActualCategories">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationCustomRules.ActualCategories">
             <summary>Gets the actual categories.</summary>
             <value>The actual categories.</value>
         </member>
-        <member name="T:FileCabinetApp.ValidationDefaultRules">
+        <member name="T:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules">
             <summary>
             Default validation rules.
             </summary>
-            <seealso cref="T:FileCabinetApp.ValidationRules" />
+            <seealso cref="T:FileCabinetApp.Validators.Validation_rules.ValidationRules" />
         </member>
-        <member name="P:FileCabinetApp.ValidationDefaultRules.MinAnnualIncome">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules.MinAnnualIncome">
             <summary>Gets the minimum annual income.</summary>
             <value>The minimum annual income.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationDefaultRules.MaxAnnualIncome">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules.MaxAnnualIncome">
             <summary>Gets the maximum annual income.</summary>
             <value>The maximum annual income.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationDefaultRules.MaxLengthLastName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules.MaxLengthLastName">
             <summary>Gets the maximum name of the length last.</summary>
             <value>The maximum name of the length last.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationDefaultRules.MinLengthLastName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules.MinLengthLastName">
             <summary>Gets the minimum name of the length last.</summary>
             <value>The minimum name of the length last.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationDefaultRules.MaxLengthFirstName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules.MaxLengthFirstName">
             <summary>Gets the maximum name of the length first.</summary>
             <value>The maximum name of the length first.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationDefaultRules.MinLengthFirstName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules.MinLengthFirstName">
             <summary>Gets the minimum name of the length first.</summary>
             <value>The minimum name of the length first.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationDefaultRules.MinWorkingHoursPerWeek">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules.MinWorkingHoursPerWeek">
             <summary>Gets the minimum working hours per week.</summary>
             <value>The minimum working hours per week.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationDefaultRules.MaxWorkingHoursPerWeek">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules.MaxWorkingHoursPerWeek">
             <summary>Gets the maximum working hours per week.</summary>
             <value>The maximum working hours per week.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationDefaultRules.MinDateOfBirth">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules.MinDateOfBirth">
             <summary>Gets the minimum date of birth.</summary>
             <value>The minimum date of birth.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationDefaultRules.MaxDateOfBirth">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules.MaxDateOfBirth">
             <summary>Gets the maximum date of birth.</summary>
             <value>The maximum date of birth.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationDefaultRules.ActualCategories">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationDefaultRules.ActualCategories">
             <summary>Gets the actual categories.</summary>
             <value>The actual categories.</value>
         </member>
-        <member name="T:FileCabinetApp.ValidationRules">
+        <member name="T:FileCabinetApp.Validators.Validation_rules.ValidationRules">
             <summary>
             Abstract validation rules.
             </summary>
         </member>
-        <member name="P:FileCabinetApp.ValidationRules.MinAnnualIncome">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationRules.MinAnnualIncome">
             <summary>Gets the minimum annual income.</summary>
             <value>The minimum annual income.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationRules.MaxAnnualIncome">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationRules.MaxAnnualIncome">
             <summary>Gets the maximum annual income.</summary>
             <value>The maximum annual income.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationRules.MaxLengthLastName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationRules.MaxLengthLastName">
             <summary>Gets the maximum name of the length last.</summary>
             <value>The maximum name of the length last.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationRules.MinLengthLastName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationRules.MinLengthLastName">
             <summary>Gets the minimum name of the length last.</summary>
             <value>The minimum name of the length last.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationRules.MaxLengthFirstName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationRules.MaxLengthFirstName">
             <summary>Gets the maximum name of the length first.</summary>
             <value>The maximum name of the length first.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationRules.MinLengthFirstName">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationRules.MinLengthFirstName">
             <summary>Gets the minimum name of the length first.</summary>
             <value>The minimum name of the length first.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationRules.MinWorkingHoursPerWeek">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationRules.MinWorkingHoursPerWeek">
             <summary>Gets the minimum working hours per week.</summary>
             <value>The minimum working hours per week.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationRules.MaxWorkingHoursPerWeek">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationRules.MaxWorkingHoursPerWeek">
             <summary>Gets the maximum working hours per week.</summary>
             <value>The maximum working hours per week.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationRules.MinDateOfBirth">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationRules.MinDateOfBirth">
             <summary>Gets the minimum date of birth.</summary>
             <value>The minimum date of birth.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationRules.MaxDateOfBirth">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationRules.MaxDateOfBirth">
             <summary>Gets the maximum date of birth.</summary>
             <value>The maximum date of birth.</value>
         </member>
-        <member name="P:FileCabinetApp.ValidationRules.ActualCategories">
+        <member name="P:FileCabinetApp.Validators.Validation_rules.ValidationRules.ActualCategories">
             <summary>Gets the actual categories.</summary>
             <value>The actual categories.</value>
         </member>

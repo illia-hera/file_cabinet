@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using FileCabinetApp.e;
+using System.Xml;
+using FileCabinetApp.Enteties;
 using FileCabinetApp.Services;
 using FileCabinetApp.SnapshotServices;
 using FileCabinetApp.Utils;
@@ -333,18 +334,24 @@ namespace FileCabinetApp
                 }
             }
 
-            using StreamWriter streamWriter = new StreamWriter(filePath);
             IFileCabinetServiceSnapshot snapshot = fileCabinetService.MakeSnapshot();
             if (fileFormat.Equals("csv", StringComparison.OrdinalIgnoreCase))
             {
+                using StreamWriter streamWriter = new StreamWriter(filePath);
                 snapshot.SaveToCsv(streamWriter);
+                streamWriter.Close();
+            }
+            else if (fileFormat.Equals("xml", StringComparison.OrdinalIgnoreCase))
+            {
+                using XmlWriter xmlWriter = XmlWriter.Create(filePath);
+                snapshot.SaveToXml(xmlWriter);
+                xmlWriter.Close();
             }
             else
             {
                 return;
             }
 
-            streamWriter.Close();
             Console.WriteLine($"All records are exported to file {filePath!.Split('\\')[^1]}");
         }
     }

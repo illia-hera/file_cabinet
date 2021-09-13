@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileCabinetApp.e
+namespace FileCabinetApp.Enteties
 {
     /// <summary>
     /// Class <c>ParametersContainer</c> parsed and validate string values.

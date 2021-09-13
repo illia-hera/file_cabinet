@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using FileCabinetApp.e;
+using FileCabinetApp.Enteties;
 using FileCabinetApp.SnapshotServices;
 
 namespace FileCabinetApp.Services
