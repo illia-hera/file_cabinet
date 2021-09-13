@@ -1,9 +1,11 @@
-﻿namespace FileCabinetApp
+﻿using FileCabinetApp.Validators;
+
+namespace FileCabinetApp.Services
 {
     /// <summary>
     /// Class <c>FileCabinetCustomService</c> validate parameters by specified rules.
     /// </summary>
-    /// <seealso cref="FileCabinetApp.FileCabinetService" />
+    /// <seealso cref="FileCabinetService" />
     public class FileCabinetCustomService : FileCabinetService
     {
         /// <summary>

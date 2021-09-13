@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Validators.ValidationRules
 {
     /// <summary>
     /// Abstract validation rules.

@@ -1,7 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Xml;
+using FileCabinetApp.Enteties;
+using FileCabinetApp.Services;
+using FileCabinetApp.SnapshotServices;
+using FileCabinetApp.Utils;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetApp
 {
@@ -29,6 +36,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
+            new Tuple<string, Action<string>>("export", Export),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -40,6 +48,7 @@ namespace FileCabinetApp
             new string[] { "list", "returned list of created records.", "The 'list' command returned list of created records." },
             new string[] { "edit", "edit record parameters.", "The 'edit' command edit record parameters." },
             new string[] { "find", "find record by parameter.", "The 'find' command find record by parameter." },
+            new string[] { "export csv", "export records to csv file.", "The 'export csv' command export records to csv file." },
         };
 
         /// <summary>
@@ -234,22 +243,22 @@ namespace FileCabinetApp
             var container = new ParametersContainer();
 
             Console.Write("First name: ");
-            container.FirstName = ReadInput(StringConverter, validator.FirstNameValidator);
+            container.FirstName = ReadInput(Converter.StringConverter, validator.FirstNameValidator);
 
             Console.Write("Last name: ");
-            container.LastName = ReadInput(StringConverter, validator.LastNameValidator);
+            container.LastName = ReadInput(Converter.StringConverter, validator.LastNameValidator);
 
             Console.Write("Date of birth: ");
-            container.DateOfBirthday = ReadInput(DateConverter, validator.DateOfBirthValidator);
+            container.DateOfBirthday = ReadInput(Converter.DateConverter, validator.DateOfBirthValidator);
 
             Console.Write("Working Hours Per Week: ");
-            container.WorkingHoursPerWeek = ReadInput(ShortConverter, validator.WorkingHoursValidator);
+            container.WorkingHoursPerWeek = ReadInput(Converter.ShortConverter, validator.WorkingHoursValidator);
 
             Console.Write("Annual Income: ");
-            container.AnnualIncome = ReadInput(DecimalConverter, validator.AnnualIncomeValidator);
+            container.AnnualIncome = ReadInput(Converter.DecimalConverter, validator.AnnualIncomeValidator);
 
             Console.Write("Driver License Category: ");
-            container.DriverLicenseCategory = ReadInput(CharConverter, validator.DriverLicenseCategoryValidator);
+            container.DriverLicenseCategory = ReadInput(Converter.CharConverter, validator.DriverLicenseCategoryValidator);
 
             return container;
         }
@@ -299,42 +308,51 @@ namespace FileCabinetApp
             while (true);
         }
 
-        private static Tuple<bool, string, string> StringConverter(string input)
+        private static void Export(string parameters)
         {
-            bool isConverted = !string.IsNullOrWhiteSpace(input);
+            string[] inputs = parameters.Split(' ', 2);
+            const int parameterIndex = 0;
+            const int valueIndex = 1;
+            string fileFormat = inputs[parameterIndex];
+            string filePath = inputs.Length > 1 ? inputs[valueIndex] : string.Empty;
+            int lastIndexOfBackSlash = filePath.LastIndexOf("\\", StringComparison.OrdinalIgnoreCase);
+            string fileDirection = lastIndexOfBackSlash > 0 ? filePath[..lastIndexOfBackSlash] : string.Empty;
 
-            return new Tuple<bool, string, string>(isConverted, input, input);
-        }
+            if (string.IsNullOrWhiteSpace(filePath) || (!string.IsNullOrEmpty(fileDirection) && (!Directory.Exists(fileDirection) || string.IsNullOrEmpty(filePath))))
+            {
+                Console.WriteLine($"Export failed: can't open file {filePath}.");
+                return;
+            }
 
-        private static Tuple<bool, string, DateTime> DateConverter(string input)
-        {
-            string format = "MM/dd/yyyy";
-            CultureInfo formatProvider = CultureInfo.CreateSpecificCulture("en-US");
-            DateTimeStyles style = DateTimeStyles.None;
-            bool isConverted = DateTime.TryParseExact(input, format, formatProvider, style, out DateTime dateTimeValue);
+            if (File.Exists(filePath))
+            {
+                Console.Write($"File is exist - rewrite {filePath}? [Y/n] ");
+                string answer = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(answer) || !answer.Equals("y", StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+            }
 
-            return new Tuple<bool, string, DateTime>(isConverted, input, dateTimeValue);
-        }
+            IFileCabinetServiceSnapshot snapshot = fileCabinetService.MakeSnapshot();
+            if (fileFormat.Equals("csv", StringComparison.OrdinalIgnoreCase))
+            {
+                using StreamWriter streamWriter = new StreamWriter(filePath);
+                snapshot.SaveToCsv(streamWriter);
+                streamWriter.Close();
+            }
+            else if (fileFormat.Equals("xml", StringComparison.OrdinalIgnoreCase))
+            {
+                using XmlWriter xmlWriter = XmlWriter.Create(filePath);
+                snapshot.SaveToXml(xmlWriter);
+                xmlWriter.Close();
+            }
+            else
+            {
+                return;
+            }
 
-        private static Tuple<bool, string, short> ShortConverter(string input)
-        {
-            bool isConverted = short.TryParse(input, out short shortValue);
-
-            return new Tuple<bool, string, short>(isConverted, input, shortValue);
-        }
-
-        private static Tuple<bool, string, char> CharConverter(string input)
-        {
-            bool isConverted = char.TryParse(input, out char charValue);
-
-            return new Tuple<bool, string, char>(isConverted, input, charValue);
-        }
-
-        private static Tuple<bool, string, decimal> DecimalConverter(string input)
-        {
-            bool isConverted = decimal.TryParse(input, out decimal decimalValue);
-
-            return new Tuple<bool, string, decimal>(isConverted, input, decimalValue);
+            Console.WriteLine($"All records are exported to file {filePath!.Split('\\')[^1]}");
         }
     }
 }

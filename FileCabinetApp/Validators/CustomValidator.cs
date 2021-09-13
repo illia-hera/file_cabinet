@@ -1,9 +1,11 @@
-﻿namespace FileCabinetApp
+﻿using FileCabinetApp.Validators.ValidationRules;
+
+namespace FileCabinetApp.Validators
 {
     /// <summary>
     /// Custom validator for person parameters.
     /// </summary>
-    /// <seealso cref="FileCabinetApp.IRecordValidator" />
+    /// <seealso cref="IRecordValidator" />
     public class CustomValidator : IRecordValidator
     {
         /// <summary>
