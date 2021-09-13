@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using FileCabinetApp.e;
+using FileCabinetApp.Validators.Validation_rules;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Validators
 {
     /// <summary>
     /// Interface <c>IRecordValidator</c>.

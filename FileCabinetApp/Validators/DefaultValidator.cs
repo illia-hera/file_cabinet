@@ -1,9 +1,11 @@
-﻿namespace FileCabinetApp
+﻿using FileCabinetApp.Validators.Validation_rules;
+
+namespace FileCabinetApp.Validators
 {
     /// <summary>
     /// Default validator for person parameters.
     /// </summary>
-    /// <seealso cref="FileCabinetApp.IRecordValidator" />
+    /// <seealso cref="IRecordValidator" />
     public class DefaultValidator : IRecordValidator
     {
         /// <summary>

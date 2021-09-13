@@ -4,6 +4,46 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.Converter">
+            <summary>
+            Class to convert.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Converter.StringConverter(System.String)">
+            <summary>
+            Strings the converter.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Return result of boolean conversion result and string input value and string value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.DateConverter(System.String)">
+            <summary>
+            Dates the converter.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Return result of boolean conversion result and string input value and <c>DeteTime</c> value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.ShortConverter(System.String)">
+            <summary>
+            Shorts the converter.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Return result of boolean conversion result and string input value and <c>short</c> value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.CharConverter(System.String)">
+            <summary>
+            Characters the converter.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Return result of boolean conversion result and string input value and char value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.DecimalConverter(System.String)">
+            <summary>
+            Decimals the converter.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Return result of boolean conversion result and string input value and decimal value.</returns>
+        </member>
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>
             Custom validator for person parameters.
@@ -115,6 +155,28 @@
             The driver license category.
             </value>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            Class <c>FileCabinetRecordCsvWriter</c> write in to the file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="textWriter">The text text writer.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Writes the specified record.
+            </summary>
+            <param name="record">The record.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.WriteHeader">
+            <summary>
+            Writes the header.
+            </summary>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
             Class <c>FileCabinetService</c> with File Cabinet.
@@ -175,6 +237,30 @@
             <param name="dateOfBirth">The date of birthday.</param>
             <returns>Return array of records.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
+            <summary>
+            Makes the snapshot.
+            </summary>
+            <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
+            <summary>
+            Class <c>FileCabinetServiceSnapshot</c> make snapshot of FileCabinetService.
+            </summary>
+            <seealso cref="T:FileCabinetApp.IFileCabinetServiceSnapshot" />
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
+            <param name="records">The records.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Saves to CSV.
+            </summary>
+            <param name="streamWriter">The stream writer.</param>
+        </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
             Interface <c>IFileCabinetService</c>.
@@ -226,6 +312,23 @@
             </summary>
             <param name="dateOfBirth">The date of birthday.</param>
             <returns>Return array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
+            <summary>
+            Makes the snapshot.
+            </summary>
+            <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.IFileCabinetServiceSnapshot">
+            <summary>
+            Interface service snapshot.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Saves to CSV.
+            </summary>
+            <param name="streamWriter">The stream writer.</param>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>

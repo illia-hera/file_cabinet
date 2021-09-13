@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using FileCabinetApp.e;
+using FileCabinetApp.SnapshotServices;
+using FileCabinetApp.Validators;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Services
 {
     /// <summary>
     /// Class <c>FileCabinetService</c> with File Cabinet.
@@ -45,7 +49,7 @@ namespace FileCabinetApp
                 DateOfBirth = container.DateOfBirthday,
                 WorkingHoursPerWeek = container.WorkingHoursPerWeek,
                 AnnualIncome = container.AnnualIncome,
-                DriverLicenseCategory = container.DriverLicenseCategory,
+                DriverLicenseCategory = char.ToUpper(container.DriverLicenseCategory, CultureInfo.InvariantCulture),
             };
 
             this.list.Add(record);
@@ -143,6 +147,17 @@ namespace FileCabinetApp
             IReadOnlyCollection<FileCabinetRecord> recordsCollection = this.dateOfBirthDictionary.ContainsKey(dateOfBirth) ? this.dateOfBirthDictionary[dateOfBirth].ToArray() : Array.Empty<FileCabinetRecord>();
 
             return recordsCollection;
+        }
+
+        /// <summary>
+        /// Makes the snapshot.
+        /// </summary>
+        /// <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
+        public IFileCabinetServiceSnapshot MakeSnapshot()
+        {
+            var snapshot = new FileCabinetServiceSnapshot(this.list.ToArray());
+
+            return snapshot;
         }
 
         private void AddRecordToFirstNameDict(string firstName, FileCabinetRecord record)

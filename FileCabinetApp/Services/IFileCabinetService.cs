@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using FileCabinetApp.e;
+using FileCabinetApp.SnapshotServices;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Services
 {
     /// <summary>
     /// Interface <c>IFileCabinetService</c>.
@@ -54,5 +56,11 @@ namespace FileCabinetApp
         /// <param name="dateOfBirth">The date of birthday.</param>
         /// <returns>Return array of records.</returns>
         public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthName(DateTime dateOfBirth);
+
+        /// <summary>
+        /// Makes the snapshot.
+        /// </summary>
+        /// <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
+        public IFileCabinetServiceSnapshot MakeSnapshot();
     }
 }

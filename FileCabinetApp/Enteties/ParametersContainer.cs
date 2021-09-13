@@ -1,19 +1,19 @@
 ﻿using System;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.e
 {
     /// <summary>
-    /// Class <c>FileCabinetRecord</c> describe the user of File Cabinet.
+    /// Class <c>ParametersContainer</c> parsed and validate string values.
     /// </summary>
-    public class FileCabinetRecord
+    public class ParametersContainer
     {
         /// <summary>
-        /// Gets or sets the identifier.
+        /// Gets or sets the date of birthday.
         /// </summary>
         /// <value>
-        /// The identifier.
+        /// The date of birthday.
         /// </value>
-        public int Id { get; set; }
+        public DateTime DateOfBirthday { get; set; }
 
         /// <summary>
         /// Gets or sets the first name.
@@ -30,14 +30,6 @@ namespace FileCabinetApp
         /// The last name.
         /// </value>
         public string LastName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the date of birth.
-        /// </summary>
-        /// <value>
-        /// The date of birthday.
-        /// </value>
-        public DateTime DateOfBirth { get; set; }
 
         /// <summary>
         /// Gets or sets the working hours per week.
