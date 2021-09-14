@@ -155,14 +155,6 @@
             Return Id of created record.
             </returns>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.EditRecord(System.Int32,FileCabinetApp.Enteties.ParametersContainer)">
-            <summary>
-            Edits the record.
-            </summary>
-            <param name="id">The identifier.</param>
-            <param name="container">The container of parameters.</param>
-            <exception cref="T:System.NotImplementedException">Not implemented.</exception>
-        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetRecords">
             <summary>
             Gets all records in File Cabinet.
@@ -170,6 +162,14 @@
             <returns>
             Return array of <c>FileCabinetRecord</c>.
             </returns>
+            <exception cref="T:System.NotImplementedException">Not implemented.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.EditRecord(System.Int32,FileCabinetApp.Enteties.ParametersContainer)">
+            <summary>
+            Edits the record.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="container">The container of parameters.</param>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetStat">

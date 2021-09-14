@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FileCabinetApp.Enteties;
 using FileCabinetApp.SnapshotServices;
 using FileCabinetApp.Utils;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetApp.Services
 {
@@ -17,10 +18,9 @@ namespace FileCabinetApp.Services
     /// <seealso cref="FileCabinetApp.Services.IFileCabinetService" />
     public class FileCabinetFilesystemService : IFileCabinetService
     {
-        /// <summary>
-        /// The file stream.
-        /// </summary>
         private readonly FileStream fileStream;
+
+        private readonly IRecordValidator validator = new DefaultValidator();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
@@ -40,45 +40,15 @@ namespace FileCabinetApp.Services
         /// </returns>
         public int CreateRecord(ParametersContainer container)
         {
+            this.validator.ValidateParameters(container);
             var offset = this.fileStream.Length;
             var id = (int)(offset / 278) + 1;
             if (container != null)
             {
-                this.fileStream.Seek(offset, SeekOrigin.Begin);
-                this.fileStream.Write(BitConverter.GetBytes(short.MinValue)); // status
-                this.fileStream.Seek(offset + 2, SeekOrigin.Begin);
-                this.fileStream.Write(BitConverter.GetBytes(id)); // Id
-                this.fileStream.Seek(offset + 6, SeekOrigin.Begin);
-                this.fileStream.Write(Encoding.GetEncoding("UTF-8").GetBytes(container.FirstName.ToCharArray())); // first name
-                this.fileStream.Seek(offset + 126, SeekOrigin.Begin);
-                this.fileStream.Write(Encoding.GetEncoding("UTF-8").GetBytes(container.LastName.ToCharArray())); // last name
-                this.fileStream.Seek(offset + 246, SeekOrigin.Begin);
-                this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Year)); // year
-                this.fileStream.Seek(offset + 250, SeekOrigin.Begin);
-                this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Month)); // month
-                this.fileStream.Seek(offset + 254, SeekOrigin.Begin);
-                this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Day)); // day
-                this.fileStream.Seek(offset + 258, SeekOrigin.Begin);
-                this.fileStream.Write(BitConverter.GetBytes(container.WorkingHoursPerWeek)); // working hours
-                this.fileStream.Seek(offset + 260, SeekOrigin.Begin);
-                this.fileStream.Write(ByteConverter.GetBytes(container.AnnualIncome)); // annual income
-                this.fileStream.Seek(offset + 276, SeekOrigin.Begin);
-                this.fileStream.Write(BitConverter.GetBytes(container.DriverLicenseCategory)); // Driver license category
-                this.fileStream.Seek(offset + 278, SeekOrigin.Begin);
+                this.WriteRecord(offset, id, container);
             }
 
             return id;
-        }
-
-        /// <summary>
-        /// Edits the record.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="container">The container of parameters.</param>
-        /// <exception cref="System.NotImplementedException">Not implemented.</exception>
-        public void EditRecord(int id, ParametersContainer container)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -112,6 +82,28 @@ namespace FileCabinetApp.Services
             }
 
             return resultArray;
+        }
+
+        /// <summary>
+        /// Edits the record.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="container">The container of parameters.</param>
+        /// <exception cref="System.NotImplementedException">Not implemented.</exception>
+        public void EditRecord(int id, ParametersContainer container)
+        {
+            this.validator.ValidateParameters(container);
+
+            long offset = 278 * (id - 1);
+            byte[] buffer = new byte[278];
+
+            this.fileStream.Seek(offset, SeekOrigin.Begin);
+            this.fileStream.Write(buffer);
+
+            if (container != null)
+            {
+                this.WriteRecord(offset, id, container);
+            }
         }
 
         /// <summary>
@@ -178,6 +170,31 @@ namespace FileCabinetApp.Services
         public IFileCabinetServiceSnapshot MakeSnapshot()
         {
             throw new NotImplementedException();
+        }
+
+        private void WriteRecord(long offset, int id, ParametersContainer container)
+        {
+            this.fileStream.Seek(offset, SeekOrigin.Begin);
+            this.fileStream.Write(BitConverter.GetBytes(short.MinValue)); // status
+            this.fileStream.Seek(offset + 2, SeekOrigin.Begin);
+            this.fileStream.Write(BitConverter.GetBytes(id)); // Id
+            this.fileStream.Seek(offset + 6, SeekOrigin.Begin);
+            this.fileStream.Write(Encoding.GetEncoding("UTF-8").GetBytes(container.FirstName.ToCharArray())); // first name
+            this.fileStream.Seek(offset + 126, SeekOrigin.Begin);
+            this.fileStream.Write(Encoding.GetEncoding("UTF-8").GetBytes(container.LastName.ToCharArray())); // last name
+            this.fileStream.Seek(offset + 246, SeekOrigin.Begin);
+            this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Year)); // year
+            this.fileStream.Seek(offset + 250, SeekOrigin.Begin);
+            this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Month)); // month
+            this.fileStream.Seek(offset + 254, SeekOrigin.Begin);
+            this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Day)); // day
+            this.fileStream.Seek(offset + 258, SeekOrigin.Begin);
+            this.fileStream.Write(BitConverter.GetBytes(container.WorkingHoursPerWeek)); // working hours
+            this.fileStream.Seek(offset + 260, SeekOrigin.Begin);
+            this.fileStream.Write(ByteConverter.GetBytes(container.AnnualIncome)); // annual income
+            this.fileStream.Seek(offset + 276, SeekOrigin.Begin);
+            this.fileStream.Write(BitConverter.GetBytes(container.DriverLicenseCategory)); // Driver license category
+            this.fileStream.Seek(offset + 278, SeekOrigin.Begin);
         }
     }
 }
