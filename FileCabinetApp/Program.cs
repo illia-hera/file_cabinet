@@ -63,7 +63,7 @@ namespace FileCabinetApp
 
             if (args?.Length == 0)
             {
-                fileCabinetService = new FileCabinetDefaultService();
+                fileCabinetService = new FileCabinetMemoryDefaultService();
             }
             else
             {
@@ -82,9 +82,9 @@ namespace FileCabinetApp
                 {
                     fileCabinetService = parameterValue switch
                     {
-                        var p when p.Equals("default", StringComparison.OrdinalIgnoreCase) => new FileCabinetDefaultService(),
-                        var p when p.Equals("custom", StringComparison.OrdinalIgnoreCase) => new FileCabinetCustomService(),
-                        _ => new FileCabinetDefaultService()
+                        var p when p.Equals("default", StringComparison.OrdinalIgnoreCase) => new FileCabinetMemoryDefaultService(),
+                        var p when p.Equals("custom", StringComparison.OrdinalIgnoreCase) => new FileCabinetMemoryCustomService(),
+                        _ => new FileCabinetMemoryDefaultService()
                     };
                 }
             }
@@ -268,7 +268,7 @@ namespace FileCabinetApp
             IRecordValidator validator;
             switch (fileCabinetService)
             {
-                case FileCabinetCustomService car:
+                case FileCabinetMemoryCustomService car:
                     validator = new CustomValidator();
                     break;
                 default:

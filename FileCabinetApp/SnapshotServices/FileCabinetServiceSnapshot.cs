@@ -7,7 +7,7 @@ using FileCabinetApp.SnapshotServices.RecordWrites;
 namespace FileCabinetApp.SnapshotServices
 {
     /// <summary>
-    /// Class <c>FileCabinetServiceSnapshot</c> make snapshot of FileCabinetService.
+    /// Class <c>FileCabinetServiceSnapshot</c> make snapshot of FileCabinetMemoryService.
     /// </summary>
     /// <seealso cref="IFileCabinetServiceSnapshot" />
     public class FileCabinetServiceSnapshot : IFileCabinetServiceSnapshot

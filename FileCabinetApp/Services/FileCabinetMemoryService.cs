@@ -9,9 +9,9 @@ using FileCabinetApp.Validators;
 namespace FileCabinetApp.Services
 {
     /// <summary>
-    /// Class <c>FileCabinetService</c> with File Cabinet.
+    /// Class <c>FileCabinetMemoryService</c> with File Cabinet.
     /// </summary>
-    public class FileCabinetService : IFileCabinetService
+    public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly IRecordValidator validator;
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
@@ -20,10 +20,10 @@ namespace FileCabinetApp.Services
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
         /// <param name="validator">The validator.</param>
-        public FileCabinetService(IRecordValidator validator)
+        public FileCabinetMemoryService(IRecordValidator validator)
         {
             this.validator = validator;
         }
