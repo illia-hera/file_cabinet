@@ -468,6 +468,33 @@
             </summary>
             <param name="record">The record.</param>
         </member>
+        <member name="T:FileCabinetApp.Utils.ByteConverter">
+            <summary>
+            Class <c>ByteConverter</c>.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ByteConverter.GetBytes(System.Decimal)">
+            <summary>
+            Convert <c>decimal</c> to <c>byte[]</c>.
+            </summary>
+            <param name="dec">The decimal.</param>
+            <returns>Byte array.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ByteConverter.ToDecimal(System.Byte[])">
+            <summary>
+            Converts byte[] to decimal.
+            </summary>
+            <param name="bytes">The bytes.</param>
+            <returns>Return decimal value.</returns>
+            <exception cref="T:System.ArgumentException">A decimal must be created from exactly 16 bytes.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ByteConverter.ToDateTime(System.Byte[])">
+            <summary>
+            Converts to datetime. Split byte array on 3 int numbers and parsed there.
+            </summary>
+            <param name="bytes">The bytes.</param>
+            <returns>Return datetime.</returns>
+        </member>
         <member name="T:FileCabinetApp.Utils.Converter">
             <summary>
             Class to convert.

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -40,13 +41,13 @@ namespace FileCabinetApp.Services
         public int CreateRecord(ParametersContainer container)
         {
             var offset = this.fileStream.Length;
-            var count = offset / 278;
+            var id = (int)(offset / 278) + 1;
             if (container != null)
             {
                 this.fileStream.Seek(offset, SeekOrigin.Begin);
                 this.fileStream.Write(BitConverter.GetBytes(short.MinValue)); // status
                 this.fileStream.Seek(offset + 2, SeekOrigin.Begin);
-                this.fileStream.Write(BitConverter.GetBytes(count + 1)); // Id
+                this.fileStream.Write(BitConverter.GetBytes(id)); // Id
                 this.fileStream.Seek(offset + 6, SeekOrigin.Begin);
                 this.fileStream.Write(Encoding.GetEncoding("UTF-8").GetBytes(container.FirstName.ToCharArray())); // first name
                 this.fileStream.Seek(offset + 126, SeekOrigin.Begin);
@@ -66,8 +67,7 @@ namespace FileCabinetApp.Services
                 this.fileStream.Seek(offset + 278, SeekOrigin.Begin);
             }
 
-            this.fileStream.Dispose();
-            return 1;
+            return id;
         }
 
         /// <summary>
@@ -90,7 +90,28 @@ namespace FileCabinetApp.Services
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
         public IReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            throw new NotImplementedException();
+            var offset = this.fileStream.Length;
+            var count = (int)(offset / 278);
+            var resultArray = count == 0 ? Array.Empty<FileCabinetRecord>() : new FileCabinetRecord[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                byte[] buffer = new byte[278];
+                this.fileStream.Seek(278 * i, SeekOrigin.Begin);
+                this.fileStream.Read(buffer);
+                resultArray[i] = new FileCabinetRecord
+                {
+                    Id = BitConverter.ToInt32(buffer.AsSpan()[2..6]),
+                    FirstName = Encoding.Default.GetString(buffer[6..126]),
+                    LastName = Encoding.Default.GetString(buffer[126..246]),
+                    DateOfBirth = ByteConverter.ToDateTime(buffer[246..258]),
+                    WorkingHoursPerWeek = BitConverter.ToInt16(buffer.AsSpan()[258..260]),
+                    AnnualIncome = ByteConverter.ToDecimal(buffer[260..276]),
+                    DriverLicenseCategory = BitConverter.ToChar(buffer.AsSpan()[276..278]),
+                };
+            }
+
+            return resultArray;
         }
 
         /// <summary>
