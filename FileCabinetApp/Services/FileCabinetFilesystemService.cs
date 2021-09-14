@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FileCabinetApp.Enteties;
 using FileCabinetApp.SnapshotServices;
+using FileCabinetApp.Utils;
 
 namespace FileCabinetApp.Services
 {
@@ -38,7 +39,35 @@ namespace FileCabinetApp.Services
         /// </returns>
         public int CreateRecord(ParametersContainer container)
         {
-            throw new NotImplementedException();
+            var offset = this.fileStream.Length;
+            var count = offset / 278;
+            if (container != null)
+            {
+                this.fileStream.Seek(offset, SeekOrigin.Begin);
+                this.fileStream.Write(BitConverter.GetBytes(short.MinValue)); // status
+                this.fileStream.Seek(offset + 2, SeekOrigin.Begin);
+                this.fileStream.Write(BitConverter.GetBytes(count + 1)); // Id
+                this.fileStream.Seek(offset + 6, SeekOrigin.Begin);
+                this.fileStream.Write(Encoding.GetEncoding("UTF-8").GetBytes(container.FirstName.ToCharArray())); // first name
+                this.fileStream.Seek(offset + 126, SeekOrigin.Begin);
+                this.fileStream.Write(Encoding.GetEncoding("UTF-8").GetBytes(container.LastName.ToCharArray())); // last name
+                this.fileStream.Seek(offset + 246, SeekOrigin.Begin);
+                this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Year)); // year
+                this.fileStream.Seek(offset + 250, SeekOrigin.Begin);
+                this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Month)); // month
+                this.fileStream.Seek(offset + 254, SeekOrigin.Begin);
+                this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Day)); // day
+                this.fileStream.Seek(offset + 258, SeekOrigin.Begin);
+                this.fileStream.Write(BitConverter.GetBytes(container.WorkingHoursPerWeek)); // working hours
+                this.fileStream.Seek(offset + 260, SeekOrigin.Begin);
+                this.fileStream.Write(ByteConverter.GetBytes(container.AnnualIncome)); // annual income
+                this.fileStream.Seek(offset + 276, SeekOrigin.Begin);
+                this.fileStream.Write(BitConverter.GetBytes(container.DriverLicenseCategory)); // Driver license category
+                this.fileStream.Seek(offset + 278, SeekOrigin.Begin);
+            }
+
+            this.fileStream.Dispose();
+            return 1;
         }
 
         /// <summary>
