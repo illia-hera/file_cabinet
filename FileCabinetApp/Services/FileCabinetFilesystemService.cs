@@ -123,7 +123,10 @@ namespace FileCabinetApp.Services
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
         public int GetStat()
         {
-            throw new NotImplementedException();
+            var offset = this.fileStream.Length;
+            var count = (int)(offset / 278);
+
+            return count;
         }
 
         /// <summary>
