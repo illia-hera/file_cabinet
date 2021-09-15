@@ -131,7 +131,11 @@ namespace FileCabinetApp.Services
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
         public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            throw new NotImplementedException();
+            var records = this.GetRecords();
+            var filteredRecords = records.Where(record =>
+                firstName.Equals(record.FirstName, StringComparison.OrdinalIgnoreCase)).ToArray();
+
+            return filteredRecords;
         }
 
         /// <summary>
@@ -144,7 +148,11 @@ namespace FileCabinetApp.Services
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
         public IReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
-            throw new NotImplementedException();
+            var records = this.GetRecords();
+            var filteredRecords = records.Where(record =>
+                lastName.Equals(record.LastName, StringComparison.OrdinalIgnoreCase)).ToArray();
+
+            return filteredRecords;
         }
 
         /// <summary>
@@ -157,7 +165,10 @@ namespace FileCabinetApp.Services
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
         public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthName(DateTime dateOfBirth)
         {
-            throw new NotImplementedException();
+            var records = this.GetRecords();
+            var filteredRecords = records.Where(record => dateOfBirth == record.DateOfBirth).ToArray();
+
+            return filteredRecords;
         }
 
         /// <summary>
