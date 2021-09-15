@@ -180,7 +180,9 @@ namespace FileCabinetApp.Services
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
         public IFileCabinetServiceSnapshot MakeSnapshot()
         {
-            throw new NotImplementedException();
+            var snapshot = new FileCabinetServiceSnapshot(this.GetRecords().ToArray());
+
+            return snapshot;
         }
 
         private void WriteRecord(long offset, int id, ParametersContainer container)
