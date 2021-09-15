@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using FileCabinetApp.Enteties;
-using FileCabinetApp.Validators.ValidationRules;
+using FileCabinetApp.Validators.ValidationRule;
 
 namespace FileCabinetApp.Validators
 {
@@ -93,7 +93,7 @@ namespace FileCabinetApp.Validators
         /// </returns>
         public Tuple<bool, string> FirstNameValidator(string firstName)
         {
-            bool isValid = firstName?.Length >= this.ValidationRules.MinLengthFirstName && firstName.Length <= this.ValidationRules.MaxLengthFirstName;
+            bool isValid = firstName?.Length >= this.ValidationRules.MinLengthFirstName && firstName?.Length <= this.ValidationRules.MaxLengthFirstName;
 
             return new Tuple<bool, string>(isValid, firstName);
         }
@@ -105,7 +105,7 @@ namespace FileCabinetApp.Validators
         /// <returns>Return the result of validation an value.</returns>
         public Tuple<bool, string> LastNameValidator(string lastName)
         {
-            bool isValid = lastName?.Length >= this.ValidationRules.MinLengthLastName && lastName.Length <= this.ValidationRules.MaxLengthLastName;
+            bool isValid = lastName?.Length >= this.ValidationRules.MinLengthLastName && lastName?.Length <= this.ValidationRules.MaxLengthLastName;
 
             return new Tuple<bool, string>(isValid, lastName);
         }

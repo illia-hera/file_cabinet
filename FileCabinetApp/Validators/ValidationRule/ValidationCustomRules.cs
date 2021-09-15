@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace FileCabinetApp.Validators.ValidationRules
+namespace FileCabinetApp.Validators.ValidationRule
 {
     /// <summary>
     ///   Custom validation rules.

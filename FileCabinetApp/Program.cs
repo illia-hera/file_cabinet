@@ -61,33 +61,7 @@ namespace FileCabinetApp
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
 
-            if (args?.Length == 0)
-            {
-                fileCabinetService = new FileCabinetDefaultService();
-            }
-            else
-            {
-                const int initialCommandIndex = 0;
-                const int initialCommandValueIndex = 1;
-                string parameter = args[initialCommandIndex];
-                var parameterValue = args.Length > 1 ? args[initialCommandValueIndex] : string.Empty;
-                if (string.IsNullOrEmpty(parameterValue))
-                {
-                    string[] splitedParameter = parameter.Split('=', 2);
-                    parameter = splitedParameter[initialCommandIndex];
-                    parameterValue = splitedParameter[initialCommandValueIndex];
-                }
-
-                if (parameter.Equals("-v") || parameter.Equals("--validation-rules"))
-                {
-                    fileCabinetService = parameterValue switch
-                    {
-                        var p when p.Equals("default", StringComparison.OrdinalIgnoreCase) => new FileCabinetDefaultService(),
-                        var p when p.Equals("custom", StringComparison.OrdinalIgnoreCase) => new FileCabinetCustomService(),
-                        _ => new FileCabinetDefaultService()
-                    };
-                }
-            }
+            fileCabinetService = InitFileCabinetService(args);
 
             do
             {
@@ -115,6 +89,44 @@ namespace FileCabinetApp
                 }
             }
             while (isRunning);
+        }
+
+        private static IFileCabinetService InitFileCabinetService(string[] args)
+        {
+            if (args?.Length != 0)
+            {
+                const int initialCommandIndex = 0;
+                const int initialCommandValueIndex = 1;
+                string parameter = args![initialCommandIndex];
+                var parameterValue = args.Length > 1 ? args[initialCommandValueIndex] : string.Empty;
+                if (string.IsNullOrEmpty(parameterValue))
+                {
+                    string[] splitParameter = parameter.Split('=', 2);
+                    parameter = splitParameter[initialCommandIndex];
+                    parameterValue = splitParameter[initialCommandValueIndex];
+                }
+
+                if (parameter.Equals("-v") || parameter.Equals("--validation-rules"))
+                {
+                    return parameterValue switch
+                    {
+                        var p when p.Equals("custom", StringComparison.OrdinalIgnoreCase) => new FileCabinetMemoryCustomService(),
+                        _ => new FileCabinetMemoryDefaultService()
+                    };
+                }
+
+                if (parameter.Equals("-s") || parameter.Equals("--storage"))
+                {
+                    return parameterValue switch
+                    {
+                        var p when p.Equals("file", StringComparison.OrdinalIgnoreCase) => new FileCabinetFilesystemService(File.Open("cabinet-records.db", FileMode.OpenOrCreate)),
+                        var p when p.Equals("memory", StringComparison.OrdinalIgnoreCase) => new FileCabinetMemoryDefaultService(),
+                        _ => new FileCabinetMemoryDefaultService()
+                    };
+                }
+            }
+
+            return new FileCabinetMemoryDefaultService();
         }
 
         private static void PrintMissedCommandInfo(string command)
@@ -268,7 +280,7 @@ namespace FileCabinetApp
             IRecordValidator validator;
             switch (fileCabinetService)
             {
-                case FileCabinetCustomService car:
+                case FileCabinetMemoryCustomService car:
                     validator = new CustomValidator();
                     break;
                 default:
