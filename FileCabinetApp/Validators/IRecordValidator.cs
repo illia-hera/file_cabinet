@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using FileCabinetApp.Enteties;
+using FileCabinetApp.Entities;
 using FileCabinetApp.Validators.ValidationRule;
 
 namespace FileCabinetApp.Validators

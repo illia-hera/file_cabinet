@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using FileCabinetApp.Enteties;
+using System.Xml.Serialization;
+using FileCabinetApp.Entities;
+using FileCabinetApp.Entities.XmlSerialization;
 
-namespace FileCabinetApp.SnapshotServices.RecordWriters
+namespace FileCabinetApp.RecordWriters
 {
     /// <summary>
     /// Class <c>FileCabinetRecordXmlWriter</c> write record in to the file.
     /// </summary>
-    /// <seealso cref="FileCabinetApp.SnapshotServices.RecordWriters.IFileCabinetRecordWriter" />
+    /// <seealso cref="IFileCabinetRecordWriter" />
     public class FileCabinetRecordXmlWriter : IFileCabinetRecordWriter
     {
         private readonly XmlWriter xmlWriter;
@@ -59,6 +57,40 @@ namespace FileCabinetApp.SnapshotServices.RecordWriters
                 this.xmlWriter.WriteEndElement();
 
                 this.xmlWriter.WriteEndElement();
+            }
+        }
+
+        /// <summary>
+        /// Writes the specified records.
+        /// </summary>
+        /// <param name="records">The records.</param>
+        public void Write(IReadOnlyCollection<FileCabinetRecord> records)
+        {
+            if (records == null)
+            {
+                return;
+            }
+
+            RecordsGroup recordsGroup = new RecordsGroup(new List<Record>(records.Count));
+
+            foreach (var record in records)
+            {
+                recordsGroup.Record.Add(
+                    new Record()
+                    {
+                        DriverLicenseCategory = record.DriverLicenseCategory,
+                        AnnualIncome = record.AnnualIncome,
+                        WorkingHoursPerWeek = record.WorkingHoursPerWeek,
+                        DateOfBirth = record.DateOfBirth,
+                        Id = record.Id,
+                        Name = new Name() { FirstName = record.FirstName, LastName = record.LastName, },
+                    });
+            }
+
+            XmlSerializer serializer = new XmlSerializer(typeof(RecordsGroup));
+            using (XmlWriter xw = XmlWriter.Create(this.xmlWriter, new XmlWriterSettings { Indent = true, IndentChars = "\t", }))
+            {
+                serializer.Serialize(xw, recordsGroup, new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty, }));
             }
         }
 

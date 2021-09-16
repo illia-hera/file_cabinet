@@ -1,12 +1,123 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using CommandLine;
 
 namespace FileCabinetGenerator
 {
-    class Program
+    /// <summary>
+    /// Class Program.
+    /// </summary>
+    public static class Program
     {
-        static void Main(string[] args)
+        private static string outputPath;
+
+        private static string outputType;
+
+        private static int recordsAmount;
+
+        private static int startIndex;
+
+        /// <summary>
+        /// Defines the entry point of the application.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            ParseArgs(args);
+
+            var records = RandomRecordsGenerator.Generate(recordsAmount, startIndex);
+            var writer = new RecordsWriter(records);
+
+            if (IsWriteFile())
+            {
+                writer.WriteRecords(outputPath, outputType);
+                Console.WriteLine($"All records are exported to file {outputPath?.Split('\\')[^1]}");
+            }
+        }
+
+        private static void ParseArgs(IEnumerable<string> args)
+        {
+            string[] arguments = args.ToArray();
+            Parser parser = Parser.Default;
+            ParserResult<Options> result = parser.ParseArguments<Options>(arguments);
+            try
+            {
+                result.WithParsed(
+                        o =>
+                        {
+                            outputType = o.OutputType;
+                            outputPath = o.Output;
+                            recordsAmount = o.RecordsAmount;
+                            startIndex = o.StartId;
+                        })
+                    .WithNotParsed(errs => DisplayHelp(result.ToString()));
+
+                Validate();
+            }
+            catch (ArgumentException ex)
+            {
+                DisplayHelp(ex.Message);
+            }
+        }
+
+        private static void Validate()
+        {
+            if ((outputType != null) && (!outputType.Equals("csv", StringComparison.InvariantCultureIgnoreCase) && !outputType.Equals("xml", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                throw new ArgumentException("The output type has to be xml or csv. (Parameter: -t, --output-type)");
+            }
+
+            int lastIndexOfBackSlash = outputPath.LastIndexOf("\\", StringComparison.OrdinalIgnoreCase);
+            string fileDirection = lastIndexOfBackSlash > 0 ? outputPath[..lastIndexOfBackSlash] : string.Empty;
+
+            if (string.IsNullOrWhiteSpace(outputPath) || (!string.IsNullOrEmpty(fileDirection) && (!Directory.Exists(fileDirection) || string.IsNullOrEmpty(outputPath))))
+            {
+                throw new ArgumentException($"Export failed: can't open file {outputPath}. (Parameter: -o, --output).");
+            }
+
+            if (recordsAmount <= 0)
+            {
+                throw new ArgumentException("Value should be greater than zero. (Parameter: -a, --records-amount)");
+            }
+
+            if (startIndex < 0)
+            {
+                throw new ArgumentException("Value should be greater than zero. (Parameter: -i, --start-id)");
+            }
+        }
+
+        private static bool IsWriteFile()
+        {
+            if (File.Exists(outputPath))
+            {
+                Console.Write($"File is exist - rewrite {outputPath}? [Y/n] ");
+                string answer = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(answer) || !answer.Equals("y", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static void DisplayHelp(string errorMessage)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine(errorMessage);
+            sb.AppendLine();
+            sb.AppendLine("Please enter the arguments as follows:");
+            sb.AppendLine();
+            sb.AppendLine("--output-type=\"file type\" --output=\"file path\" --records-amount=\"number\" --start-id=\"number\" (without quotes),");
+            sb.AppendLine("or");
+            sb.AppendLine("-t \"file type\" -o \"file path\" -a \"number\" -i \"number\" (without quotes),");
+            sb.AppendLine();
+
+            Console.WriteLine(sb.ToString());
         }
     }
 }

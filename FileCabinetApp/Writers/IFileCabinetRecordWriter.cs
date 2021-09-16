@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FileCabinetApp.Enteties;
+﻿using FileCabinetApp.Entities;
 
-namespace FileCabinetApp.SnapshotServices.RecordWriters
+namespace FileCabinetApp.RecordWriters
 {
     /// <summary>
     /// Interface <c>IFileCabinetRecordWriter</c> write record in to the file.

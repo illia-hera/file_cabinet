@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using FileCabinetApp.Enteties;
-using FileCabinetApp.SnapshotServices;
+using FileCabinetApp.Entities;
+using FileCabinetApp.Services.SnapshotServices;
 
 namespace FileCabinetApp.Services
 {

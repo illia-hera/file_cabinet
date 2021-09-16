@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using FileCabinetApp.Enteties;
-using FileCabinetApp.SnapshotServices;
+using FileCabinetApp.Entities;
+using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utils;
 using FileCabinetApp.Validators;
 
-namespace FileCabinetApp.Services
+namespace FileCabinetApp.Services.FileService
 {
     /// <summary>
     /// Class <c>FileCabinetFilesystemService</c>.
@@ -18,6 +16,18 @@ namespace FileCabinetApp.Services
     /// <seealso cref="FileCabinetApp.Services.IFileCabinetService" />
     public class FileCabinetFilesystemService : IFileCabinetService
     {
+        private const int NameSizes = 120;
+
+        private const int StringsInFile = 2;
+
+        private const int Recordsize = sizeof(int) // id
+                                       + (NameSizes * 2) // First name + Last name
+                                       + (sizeof(int) * 3)
+                                       + sizeof(short) // balance
+                                       + sizeof(decimal) // money
+                                       + sizeof(char) // account type
+                                       + StringsInFile; // String's count because the number in front of each string tell how many bytes are necessary to store the string in binary file
+
         private readonly FileStream fileStream;
 
         private readonly IRecordValidator validator = new DefaultValidator();
@@ -61,19 +71,19 @@ namespace FileCabinetApp.Services
         public IReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
             var offset = this.fileStream.Length;
-            var count = (int)(offset / 278);
+            var count = (int)(offset / Recordsize);
             var resultArray = count == 0 ? Array.Empty<FileCabinetRecord>() : new FileCabinetRecord[count];
 
             for (int i = 0; i < count; i++)
             {
-                byte[] buffer = new byte[278];
-                this.fileStream.Seek(278 * i, SeekOrigin.Begin);
+                byte[] buffer = new byte[Recordsize];
+                this.fileStream.Seek(Recordsize * i, SeekOrigin.Begin);
                 this.fileStream.Read(buffer);
                 resultArray[i] = new FileCabinetRecord
                 {
                     Id = BitConverter.ToInt32(buffer.AsSpan()[2..6]),
-                    FirstName = Encoding.Default.GetString(buffer[6..126]),
-                    LastName = Encoding.Default.GetString(buffer[126..246]),
+                    FirstName = ByteConverter.ToString(buffer[6..126]),
+                    LastName = ByteConverter.ToString(buffer[126..246]),
                     DateOfBirth = ByteConverter.ToDateTime(buffer[246..258]),
                     WorkingHoursPerWeek = BitConverter.ToInt16(buffer.AsSpan()[258..260]),
                     AnnualIncome = ByteConverter.ToDecimal(buffer[260..276]),
@@ -94,8 +104,8 @@ namespace FileCabinetApp.Services
         {
             this.validator.ValidateParameters(container);
 
-            long offset = 278 * (id - 1);
-            byte[] buffer = new byte[278];
+            long offset = Recordsize * (id - 1);
+            byte[] buffer = new byte[Recordsize];
 
             this.fileStream.Seek(offset, SeekOrigin.Begin);
             this.fileStream.Write(buffer);
@@ -116,7 +126,7 @@ namespace FileCabinetApp.Services
         public int GetStat()
         {
             var offset = this.fileStream.Length;
-            var count = (int)(offset / 278);
+            var count = (int)(offset / Recordsize);
 
             return count;
         }
@@ -188,7 +198,7 @@ namespace FileCabinetApp.Services
         private void WriteRecord(long offset, int id, ParametersContainer container)
         {
             this.fileStream.Seek(offset, SeekOrigin.Begin);
-            this.fileStream.Write(BitConverter.GetBytes(short.MinValue)); // status
+            this.fileStream.Write(BitConverter.GetBytes(id - 1)); // status
             this.fileStream.Seek(offset + 2, SeekOrigin.Begin);
             this.fileStream.Write(BitConverter.GetBytes(id)); // Id
             this.fileStream.Seek(offset + 6, SeekOrigin.Begin);

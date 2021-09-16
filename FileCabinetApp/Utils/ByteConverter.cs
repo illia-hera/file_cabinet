@@ -13,6 +13,27 @@ namespace FileCabinetApp.Utils
     public static class ByteConverter
     {
         /// <summary>
+        /// Converts to string.
+        /// </summary>
+        /// <param name="bytes">The bytes.</param>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
+        public static string ToString(byte[] bytes)
+        {
+            string resultString = Encoding.UTF8.GetString(bytes);
+
+            int startTrim = resultString.IndexOf("\0", StringComparison.OrdinalIgnoreCase);
+
+            if (startTrim > 0)
+            {
+                resultString = resultString.Remove(startTrim);
+            }
+
+            return resultString;
+        }
+
+        /// <summary>
         /// Convert <c>decimal</c> to <c>byte[]</c>.
         /// </summary>
         /// <param name="dec">The decimal.</param>
@@ -61,8 +82,7 @@ namespace FileCabinetApp.Utils
             int year = BitConverter.ToInt32(bytes.AsSpan()[0 .. 4]);
             int month = BitConverter.ToInt32(bytes.AsSpan()[4 .. 8]);
             int day = BitConverter.ToInt32(bytes.AsSpan()[8 .. 12]);
-            string stringDate = $"{year}{month}{day}";
-            DateTime.TryParseExact(stringDate, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateOfBirth);
+            DateTime dateOfBirth = new DateTime(year, month, day);
 
             return dateOfBirth;
         }

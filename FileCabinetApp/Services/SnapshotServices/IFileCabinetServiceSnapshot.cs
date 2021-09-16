@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Xml;
 
-namespace FileCabinetApp.SnapshotServices
+namespace FileCabinetApp.Services.SnapshotServices
 {
     /// <summary>
     /// Interface service snapshot.

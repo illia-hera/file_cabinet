@@ -1,12 +1,38 @@
 ﻿using System;
 
-namespace FileCabinetApp.Enteties
+namespace FileCabinetApp.Entities
 {
     /// <summary>
     /// Class <c>ParametersContainer</c> parsed and validate string values.
     /// </summary>
     public class ParametersContainer
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParametersContainer"/> class.
+        /// </summary>
+        public ParametersContainer()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParametersContainer"/> class.
+        /// </summary>
+        /// <param name="firstName">The first name.</param>
+        /// <param name="lastName">The last name.</param>
+        /// <param name="birthDay">The birth day.</param>
+        /// <param name="workingHours">The working hours.</param>
+        /// <param name="annualIncome">The annual income.</param>
+        /// <param name="driverLicense">The driver license.</param>
+        public ParametersContainer(string firstName, string lastName, DateTime birthDay, short workingHours, decimal annualIncome, char driverLicense)
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.DateOfBirthday = birthDay;
+            this.WorkingHoursPerWeek = workingHours;
+            this.AnnualIncome = annualIncome;
+            this.DriverLicenseCategory = driverLicense;
+        }
+
         /// <summary>
         /// Gets or sets the date of birthday.
         /// </summary>

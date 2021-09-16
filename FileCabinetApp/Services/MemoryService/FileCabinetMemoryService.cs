@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using FileCabinetApp.Enteties;
-using FileCabinetApp.SnapshotServices;
+using FileCabinetApp.Entities;
+using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Validators;
 
-namespace FileCabinetApp.Services
+namespace FileCabinetApp.Services.MemoryService
 {
     /// <summary>
     /// Class <c>FileCabinetMemoryService</c> with File Cabinet.

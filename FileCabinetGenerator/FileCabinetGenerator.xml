@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FileCabinetGenerator</name>
+    </assembly>
+    <members>
+        <member name="T:FileCabinetGenerator.Options">
+            <summary>
+            Class Option.
+            </summary>
+        </member>
+        <member name="P:FileCabinetGenerator.Options.OutputType">
+            <summary>
+            Gets or sets the type of the output.
+            </summary>
+            <value>
+            The type of the output.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Options.Output">
+            <summary>
+            Gets or sets the output.
+            </summary>
+            <value>
+            The output.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Options.RecordsAmount">
+            <summary>
+            Gets or sets the records amount.
+            </summary>
+            <value>
+            The records amount.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Options.StartId">
+            <summary>
+            Gets or sets the start identifier.
+            </summary>
+            <value>
+            The start identifier.
+            </value>
+        </member>
+        <member name="T:FileCabinetGenerator.Program">
+            <summary>
+            Class Program.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.Main(System.String[])">
+            <summary>
+            Defines the entry point of the application.
+            </summary>
+            <param name="args">The arguments.</param>
+        </member>
+        <member name="T:FileCabinetGenerator.RandomRecordsGenerator">
+            <summary>
+            Generate random value.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.RandomRecordsGenerator.Generate(System.Int32,System.Int32)">
+            <summary>
+            Generates the specified records amount.
+            </summary>
+            <param name="recordsAmount">The records amount.</param>
+            <param name="startId">The start identifier.</param>
+            <returns>Return FileCabinetRecords.</returns>
+        </member>
+        <member name="T:FileCabinetGenerator.RecordsWriter">
+            <summary>
+            Class <c>RecordsWrite</c>.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.RecordsWriter.#ctor(System.Collections.Generic.List{FileCabinetApp.Entities.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetGenerator.RecordsWriter"/> class.
+            </summary>
+            <param name="records">The records.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.RecordsWriter.WriteRecords(System.String,System.String)">
+            <summary>
+            Writes the records.
+            </summary>
+            <param name="filePath">The file path.</param>
+            <param name="fileFormat">The file format.</param>
+        </member>
+    </members>
+</doc>

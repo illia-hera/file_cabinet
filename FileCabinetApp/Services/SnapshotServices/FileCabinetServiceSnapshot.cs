@@ -1,10 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml;
-using FileCabinetApp.Enteties;
-using FileCabinetApp.SnapshotServices.RecordWriters;
-using FileCabinetApp.SnapshotServices.RecordWrites;
+using FileCabinetApp.Entities;
+using FileCabinetApp.RecordWriters;
 
-namespace FileCabinetApp.SnapshotServices
+namespace FileCabinetApp.Services.SnapshotServices
 {
     /// <summary>
     /// Class <c>FileCabinetServiceSnapshot</c> make snapshot of FileCabinetMemoryService.
@@ -29,6 +29,11 @@ namespace FileCabinetApp.SnapshotServices
         /// <param name="streamWriter">The stream writer.</param>
         public void SaveToCsv(StreamWriter streamWriter)
         {
+            if (streamWriter is null)
+            {
+                throw new ArgumentNullException(nameof(streamWriter));
+            }
+
             var fileCabinetRecordCsvWriter = new FileCabinetRecordCsvWriter(streamWriter);
             fileCabinetRecordCsvWriter.WriteHeader();
 
@@ -44,15 +49,14 @@ namespace FileCabinetApp.SnapshotServices
         /// <param name="xmlWriter">The XML writer.</param>
         public void SaveToXml(XmlWriter xmlWriter)
         {
-            var fileCabinetRecordXmlWriter = new FileCabinetRecordXmlWriter(xmlWriter);
-            fileCabinetRecordXmlWriter.WriteStartOfDoc();
-
-            foreach (var fileCabinetRecord in this.records)
+            if (xmlWriter is null)
             {
-                fileCabinetRecordXmlWriter.Write(fileCabinetRecord);
+                throw new ArgumentNullException(nameof(xmlWriter));
             }
 
-            fileCabinetRecordXmlWriter.WriteEndOfDoc();
+            var fileCabinetRecordXmlWriter = new FileCabinetRecordXmlWriter(xmlWriter);
+
+            fileCabinetRecordXmlWriter.Write(this.records);
         }
     }
 }
