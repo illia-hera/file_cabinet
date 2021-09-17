@@ -190,9 +190,19 @@ namespace FileCabinetApp.Services.FileService
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
         public IFileCabinetServiceSnapshot MakeSnapshot()
         {
-            var snapshot = new FileCabinetServiceSnapshot(this.GetRecords().ToArray());
+            var snapshot = new FileCabinetServiceSnapshot(this.GetRecords().ToArray(), this.validator);
 
             return snapshot;
+        }
+
+        /// <summary>
+        /// Restores this instance.
+        /// </summary>
+        /// <param name="snapshot">IFileCabinetServiceSnapshot.</param>
+        /// <exception cref="System.NotImplementedException">Not implemented.</exception>
+        public void Restore(IFileCabinetServiceSnapshot snapshot)
+        {
+            throw new NotImplementedException();
         }
 
         private void WriteRecord(long offset, int id, ParametersContainer container)

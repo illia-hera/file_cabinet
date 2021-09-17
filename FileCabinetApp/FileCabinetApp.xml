@@ -288,6 +288,30 @@
             </summary>
             <param name="args">The arguments.</param>
         </member>
+        <member name="T:FileCabinetApp.Readers.FileCabinetRecordCsvReader">
+            <summary>
+            Class FileCabinetRecordCsvReader.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Readers.FileCabinetRecordCsvReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Readers.FileCabinetRecordCsvReader"/> class.
+            </summary>
+            <param name="reader">The reader.</param>
+        </member>
+        <member name="M:FileCabinetApp.Readers.FileCabinetRecordCsvReader.#ctor(System.IO.StreamReader,FileCabinetApp.Validators.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Readers.FileCabinetRecordCsvReader"/> class.
+            </summary>
+            <param name="reader">The reader.</param>
+            <param name="inputValidator">The input validator.</param>
+        </member>
+        <member name="M:FileCabinetApp.Readers.FileCabinetRecordCsvReader.ReadAll">
+            <summary>
+            Reads all.
+            </summary>
+            <returns>Return List of FileCabinetRecords.</returns>
+        </member>
         <member name="T:FileCabinetApp.Services.FileService.FileCabinetFilesystemService">
             <summary>
             Class <c>FileCabinetFilesystemService</c>.
@@ -374,6 +398,13 @@
             </returns>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
+        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.Restore(FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot)">
+            <summary>
+            Restores this instance.
+            </summary>
+            <param name="snapshot">IFileCabinetServiceSnapshot.</param>
+            <exception cref="T:System.NotImplementedException">Not implemented.</exception>
+        </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
             Interface <c>IFileCabinetService</c>.
@@ -431,6 +462,12 @@
             Makes the snapshot.
             </summary>
             <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot)">
+            <summary>
+            Restores the specified snapshot.
+            </summary>
+            <param name="snapshot">The snapshot.</param>
         </member>
         <member name="T:FileCabinetApp.Services.MemoryService.FileCabinetMemoryCustomService">
             <summary>
@@ -520,17 +557,39 @@
             </summary>
             <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
         </member>
+        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.Restore(FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot)">
+            <summary>
+            Restores the specified snapshot.
+            </summary>
+            <param name="snapshot">The snapshot.</param>
+            <exception cref="T:System.ArgumentException">Snapshot can't be null.</exception>
+        </member>
         <member name="T:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot">
             <summary>
             Class <c>FileCabinetServiceSnapshot</c> make snapshot of FileCabinetMemoryService.
             </summary>
             <seealso cref="T:FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot" />
         </member>
-        <member name="M:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot.#ctor(FileCabinetApp.Entities.FileCabinetRecord[])">
+        <member name="M:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot.#ctor(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.Entities.FileCabinetRecord})">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot"/> class.
             </summary>
             <param name="records">The records.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot.#ctor(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.Entities.FileCabinetRecord},FileCabinetApp.Validators.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot"/> class.
+            </summary>
+            <param name="records">The records.</param>
+            <param name="inputValidator">The input validator.</param>
+        </member>
+        <member name="P:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot.Records">
+            <summary>
+            Gets the records.
+            </summary>
+            <value>
+            The records.
+            </value>
         </member>
         <member name="M:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
@@ -544,10 +603,23 @@
             </summary>
             <param name="xmlWriter">The XML writer.</param>
         </member>
+        <member name="M:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot.LoadFromCsv(System.IO.StreamReader)">
+            <summary>Loads from CSV.</summary>
+            <param name="streamReader">The stream reader.</param>
+            <exception cref="T:System.ArgumentNullException">streamReader is null.</exception>
+        </member>
         <member name="T:FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot">
             <summary>
             Interface service snapshot.
             </summary>
+        </member>
+        <member name="P:FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot.Records">
+            <summary>
+            Gets the records.
+            </summary>
+            <value>
+            The records.
+            </value>
         </member>
         <member name="M:FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
@@ -560,6 +632,12 @@
             Saves to XML.
             </summary>
             <param name="xmlWriter">The XML writer.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot.LoadFromCsv(System.IO.StreamReader)">
+            <summary>
+            Loads from CSV.
+            </summary>
+            <param name="streamReader">The stream reader.</param>
         </member>
         <member name="T:FileCabinetApp.Utils.ByteConverter">
             <summary>
