@@ -376,7 +376,7 @@ namespace FileCabinetApp
                 return;
             }
 
-            Console.WriteLine($"All records are exported to file {parametersTuple.Item2!.Split('\\')[^1]}");
+            Console.WriteLine($"{snapshot.Records.Count} records were imported from file {parametersTuple.Item2!.Split('\\')[^1]}");
         }
 
         private static Tuple<bool, string, string> ValidateImportExportParameters(string parameters)

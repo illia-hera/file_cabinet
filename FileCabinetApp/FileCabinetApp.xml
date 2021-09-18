@@ -112,6 +112,12 @@
             Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.ParametersContainer"/> class.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.Entities.ParametersContainer.#ctor(FileCabinetApp.Entities.FileCabinetRecord)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.ParametersContainer"/> class.
+            </summary>
+            <param name="record">The record.</param>
+        </member>
         <member name="M:FileCabinetApp.Entities.ParametersContainer.#ctor(System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.ParametersContainer"/> class.
@@ -328,7 +334,7 @@
             <summary>
             Creates the record.
             </summary>
-            <param name="container">The container of parameters.</param>
+            <param name="container">The record of parameters.</param>
             <returns>
             Return Id of created record.
             </returns>
@@ -347,7 +353,7 @@
             Edits the record.
             </summary>
             <param name="id">The identifier.</param>
-            <param name="container">The container of parameters.</param>
+            <param name="container">The record of parameters.</param>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
         <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.GetStat">

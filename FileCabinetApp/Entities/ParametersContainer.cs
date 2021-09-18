@@ -17,6 +17,25 @@ namespace FileCabinetApp.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="ParametersContainer"/> class.
         /// </summary>
+        /// <param name="record">The record.</param>
+        public ParametersContainer(FileCabinetRecord record)
+        {
+            if (record is null)
+            {
+                throw new ArgumentNullException(nameof(record));
+            }
+
+            this.FirstName = record.FirstName;
+            this.LastName = record.LastName;
+            this.DateOfBirthday = record.DateOfBirth;
+            this.WorkingHoursPerWeek = record.WorkingHoursPerWeek;
+            this.AnnualIncome = record.AnnualIncome;
+            this.DriverLicenseCategory = record.DriverLicenseCategory;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParametersContainer"/> class.
+        /// </summary>
         /// <param name="firstName">The first name.</param>
         /// <param name="lastName">The last name.</param>
         /// <param name="birthDay">The birth day.</param>

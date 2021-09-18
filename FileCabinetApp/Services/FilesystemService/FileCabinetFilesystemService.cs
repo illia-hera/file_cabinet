@@ -20,7 +20,7 @@ namespace FileCabinetApp.Services.FileService
 
         private const int StringsInFile = 2;
 
-        private const int Recordsize = sizeof(int) // id
+        private const int RecordSize = sizeof(int) // id
                                        + (NameSizes * 2) // First name + Last name
                                        + (sizeof(int) * 3)
                                        + sizeof(short) // balance
@@ -32,6 +32,8 @@ namespace FileCabinetApp.Services.FileService
 
         private readonly IRecordValidator validator = new DefaultValidator();
 
+        private int recordsCount;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
         /// </summary>
@@ -39,12 +41,19 @@ namespace FileCabinetApp.Services.FileService
         public FileCabinetFilesystemService(FileStream fileStream)
         {
             this.fileStream = fileStream;
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+
+            this.BinaryReader = new BinaryReader(fileStream);
+            short asa = this.BinaryReader.ReadInt16();
+            this.recordsCount = this.fileStream.Length > 0 ? asa : 0;
         }
+
+        private BinaryReader BinaryReader { get; set; }
 
         /// <summary>
         /// Creates the record.
         /// </summary>
-        /// <param name="container">The container of parameters.</param>
+        /// <param name="container">The record of parameters.</param>
         /// <returns>
         /// Return Id of created record.
         /// </returns>
@@ -52,10 +61,12 @@ namespace FileCabinetApp.Services.FileService
         {
             this.validator.ValidateParameters(container);
             var offset = this.fileStream.Length;
-            var id = (int)(offset / 278) + 1;
+            this.recordsCount += 1;
+            var id = this.recordsCount;
+
             if (container != null)
             {
-                this.WriteRecord(offset, id, container);
+                this.WriteRecord(offset, new FileCabinetRecord(container, id));
             }
 
             return id;
@@ -70,14 +81,12 @@ namespace FileCabinetApp.Services.FileService
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
         public IReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            var offset = this.fileStream.Length;
-            var count = (int)(offset / Recordsize);
-            var resultArray = count == 0 ? Array.Empty<FileCabinetRecord>() : new FileCabinetRecord[count];
+            var resultArray = this.recordsCount == 0 ? Array.Empty<FileCabinetRecord>() : new FileCabinetRecord[this.recordsCount];
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < this.recordsCount; i++)
             {
-                byte[] buffer = new byte[Recordsize];
-                this.fileStream.Seek(Recordsize * i, SeekOrigin.Begin);
+                byte[] buffer = new byte[RecordSize];
+                this.fileStream.Seek(RecordSize * i, SeekOrigin.Begin);
                 this.fileStream.Read(buffer);
                 resultArray[i] = new FileCabinetRecord
                 {
@@ -98,21 +107,21 @@ namespace FileCabinetApp.Services.FileService
         /// Edits the record.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <param name="container">The container of parameters.</param>
+        /// <param name="container">The record of parameters.</param>
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
         public void EditRecord(int id, ParametersContainer container)
         {
             this.validator.ValidateParameters(container);
 
-            long offset = Recordsize * (id - 1);
-            byte[] buffer = new byte[Recordsize];
+            long offset = RecordSize * (id - 1);
+            byte[] buffer = new byte[RecordSize];
 
             this.fileStream.Seek(offset, SeekOrigin.Begin);
             this.fileStream.Write(buffer);
 
             if (container != null)
             {
-                this.WriteRecord(offset, id, container);
+                this.WriteRecord(offset, new FileCabinetRecord(container, id));
             }
         }
 
@@ -125,10 +134,7 @@ namespace FileCabinetApp.Services.FileService
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
         public int GetStat()
         {
-            var offset = this.fileStream.Length;
-            var count = (int)(offset / Recordsize);
-
-            return count;
+            return this.recordsCount;
         }
 
         /// <summary>
@@ -202,31 +208,48 @@ namespace FileCabinetApp.Services.FileService
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
         public void Restore(IFileCabinetServiceSnapshot snapshot)
         {
-            throw new NotImplementedException();
+            if (snapshot == null)
+            {
+                throw new ArgumentException("Snapshot can't be null");
+            }
+
+            if (this.fileStream != null)
+            {
+                List<FileCabinetRecord> snapShotRecords = snapshot.Records.ToList();
+                this.recordsCount = snapShotRecords.Count;
+                byte[] buffer = new byte[this.recordsCount * RecordSize];
+
+                this.fileStream.Seek(0, SeekOrigin.Begin);
+                this.fileStream.Write(buffer);
+                foreach (var record in snapShotRecords)
+                {
+                    this.WriteRecord((record.Id - 1) * RecordSize, record);
+                }
+            }
         }
 
-        private void WriteRecord(long offset, int id, ParametersContainer container)
+        private void WriteRecord(long offset,  FileCabinetRecord record)
         {
             this.fileStream.Seek(offset, SeekOrigin.Begin);
-            this.fileStream.Write(BitConverter.GetBytes(id - 1)); // status
+            this.fileStream.Write(BitConverter.GetBytes(this.recordsCount)); // status
             this.fileStream.Seek(offset + 2, SeekOrigin.Begin);
-            this.fileStream.Write(BitConverter.GetBytes(id)); // Id
+            this.fileStream.Write(BitConverter.GetBytes(record.Id)); // Id
             this.fileStream.Seek(offset + 6, SeekOrigin.Begin);
-            this.fileStream.Write(Encoding.GetEncoding("UTF-8").GetBytes(container.FirstName.ToCharArray())); // first name
+            this.fileStream.Write(Encoding.GetEncoding("UTF-8").GetBytes(record.FirstName.ToCharArray())); // first name
             this.fileStream.Seek(offset + 126, SeekOrigin.Begin);
-            this.fileStream.Write(Encoding.GetEncoding("UTF-8").GetBytes(container.LastName.ToCharArray())); // last name
+            this.fileStream.Write(Encoding.GetEncoding("UTF-8").GetBytes(record.LastName.ToCharArray())); // last name
             this.fileStream.Seek(offset + 246, SeekOrigin.Begin);
-            this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Year)); // year
+            this.fileStream.Write(BitConverter.GetBytes(record.DateOfBirth.Year)); // year
             this.fileStream.Seek(offset + 250, SeekOrigin.Begin);
-            this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Month)); // month
+            this.fileStream.Write(BitConverter.GetBytes(record.DateOfBirth.Month)); // month
             this.fileStream.Seek(offset + 254, SeekOrigin.Begin);
-            this.fileStream.Write(BitConverter.GetBytes(container.DateOfBirthday.Day)); // day
+            this.fileStream.Write(BitConverter.GetBytes(record.DateOfBirth.Day)); // day
             this.fileStream.Seek(offset + 258, SeekOrigin.Begin);
-            this.fileStream.Write(BitConverter.GetBytes(container.WorkingHoursPerWeek)); // working hours
+            this.fileStream.Write(BitConverter.GetBytes(record.WorkingHoursPerWeek)); // working hours
             this.fileStream.Seek(offset + 260, SeekOrigin.Begin);
-            this.fileStream.Write(ByteConverter.GetBytes(container.AnnualIncome)); // annual income
+            this.fileStream.Write(ByteConverter.GetBytes(record.AnnualIncome)); // annual income
             this.fileStream.Seek(offset + 276, SeekOrigin.Begin);
-            this.fileStream.Write(BitConverter.GetBytes(container.DriverLicenseCategory)); // Driver license category
+            this.fileStream.Write(BitConverter.GetBytes(record.DriverLicenseCategory)); // Driver license category
             this.fileStream.Seek(offset + 278, SeekOrigin.Begin);
         }
     }
