@@ -367,8 +367,14 @@ namespace FileCabinetApp
             IFileCabinetServiceSnapshot snapshot = fileCabinetService.MakeSnapshot();
             if (parametersTuple.Item1 && parametersTuple.Item3.Equals("csv", StringComparison.OrdinalIgnoreCase))
             {
-                using StreamReader streamWriter = new StreamReader(fs);
-                snapshot.LoadFromCsv(streamWriter);
+                using StreamReader streamReader = new StreamReader(fs);
+                snapshot.LoadFromCsv(streamReader);
+                fileCabinetService.Restore(snapshot);
+            }
+            else if (parametersTuple.Item1 && parametersTuple.Item3.Equals("xml", StringComparison.OrdinalIgnoreCase))
+            {
+                using StreamReader streamReader = new StreamReader(fs);
+                snapshot.LoadFromXml(streamReader);
                 fileCabinetService.Restore(snapshot);
             }
             else

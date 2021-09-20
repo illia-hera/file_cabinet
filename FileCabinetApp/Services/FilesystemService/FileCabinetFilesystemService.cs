@@ -41,11 +41,10 @@ namespace FileCabinetApp.Services.FileService
         public FileCabinetFilesystemService(FileStream fileStream)
         {
             this.fileStream = fileStream;
-            this.fileStream.Seek(0, SeekOrigin.Begin);
 
+            this.fileStream.Seek(0, SeekOrigin.Begin);
             this.BinaryReader = new BinaryReader(fileStream);
-            short asa = this.BinaryReader.ReadInt16();
-            this.recordsCount = this.fileStream.Length > 0 ? asa : 0;
+            this.recordsCount = this.fileStream.Length > 0 ? this.BinaryReader.ReadInt16() : 0;
         }
 
         private BinaryReader BinaryReader { get; set; }

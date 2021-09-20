@@ -82,9 +82,11 @@ namespace FileCabinetApp.Services.SnapshotServices
             fileCabinetRecordXmlWriter.Write(this.Records);
         }
 
-        /// <summary>Loads from CSV.</summary>
+        /// <summary>
+        /// Loads from CSV.
+        /// </summary>
         /// <param name="streamReader">The stream reader.</param>
-        /// <exception cref="ArgumentNullException">streamReader is null.</exception>
+        /// <exception cref="System.ArgumentNullException">streamReader.</exception>
         public void LoadFromCsv(StreamReader streamReader)
         {
             if (streamReader == null)
@@ -95,6 +97,23 @@ namespace FileCabinetApp.Services.SnapshotServices
             var csvReader = new FileCabinetRecordCsvReader(streamReader, this.inputValidator);
 
             this.Records = csvReader.ReadAll().ToList();
+        }
+
+        /// <summary>
+        /// Loads from XML.
+        /// </summary>
+        /// <param name="streamReader">The stream reader.</param>
+        /// <exception cref="System.ArgumentNullException">streamReader.</exception>
+        public void LoadFromXml(StreamReader streamReader)
+        {
+            if (streamReader == null)
+            {
+                throw new ArgumentNullException(nameof(streamReader));
+            }
+
+            var xmlReader = new FileCabinetRecordXmlReader(streamReader, this.inputValidator);
+
+            this.Records = xmlReader.ReadAll().ToList();
         }
     }
 }

@@ -71,7 +71,7 @@ namespace FileCabinetApp.RecordWriters
                 return;
             }
 
-            RecordsGroup recordsGroup = new RecordsGroup(new List<Record>(records.Count));
+            RecordsGroup recordsGroup = new RecordsGroup() { Record = new List<Record>(records.Count) };
 
             foreach (var record in records)
             {

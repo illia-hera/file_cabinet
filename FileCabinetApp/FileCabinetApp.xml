@@ -181,28 +181,26 @@
             <summary>Full name with first name and last name.</summary>
         </member>
         <member name="P:FileCabinetApp.Entities.XmlSerialization.Name.FirstName">
-            <summary>Gets or sets the first name.</summary>
-            <value>The first name.</value>
+            <summary>
+            Gets or sets the first name.
+            </summary>
+            <value>
+            The first name.
+            </value>
         </member>
         <member name="P:FileCabinetApp.Entities.XmlSerialization.Name.LastName">
-            <summary>Gets or sets the last name.</summary>
-            <value>The last name.</value>
+            <summary>
+            Gets or sets the last name.
+            </summary>
+            <value>
+            The last name.
+            </value>
         </member>
         <member name="T:FileCabinetApp.Entities.XmlSerialization.Record">
             <summary>File cabinet record.</summary>
         </member>
         <member name="M:FileCabinetApp.Entities.XmlSerialization.Record.#ctor(System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char)">
             <summary>Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.XmlSerialization.Record"/> class.</summary>
-            <param name="firstName">The first name.</param>
-            <param name="lastName">The last name.</param>
-            <param name="dateOfBirth">The date of birth.</param>
-            <param name="workingHours">The workingHours.</param>
-            <param name="annualIncome">The annualIncome.</param>
-            <param name="driverCategory">Type of the account.</param>
-        </member>
-        <member name="M:FileCabinetApp.Entities.XmlSerialization.Record.#ctor(System.Int32,System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char)">
-            <summary>Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.XmlSerialization.Record"/> class.</summary>
-            <param name="id">The identifier.</param>
             <param name="firstName">The first name.</param>
             <param name="lastName">The last name.</param>
             <param name="dateOfBirth">The date of birth.</param>
@@ -264,20 +262,9 @@
         <member name="T:FileCabinetApp.Entities.XmlSerialization.RecordsGroup">
             <summary>XML export model.</summary>
         </member>
-        <member name="M:FileCabinetApp.Entities.XmlSerialization.RecordsGroup.#ctor(System.Collections.Generic.List{FileCabinetApp.Entities.XmlSerialization.Record})">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.XmlSerialization.RecordsGroup" /> class.
-            </summary>
-            <param name="records">The records.</param>
-        </member>
-        <member name="M:FileCabinetApp.Entities.XmlSerialization.RecordsGroup.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.XmlSerialization.RecordsGroup"/> class.
-            </summary>
-        </member>
         <member name="P:FileCabinetApp.Entities.XmlSerialization.RecordsGroup.Record">
             <summary>
-            Gets the record.
+            Gets or sets the record.
             </summary>
             <value>
             The record.
@@ -317,6 +304,30 @@
             Reads all.
             </summary>
             <returns>Return List of FileCabinetRecords.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Readers.FileCabinetRecordXmlReader">
+            <summary>
+            Class <c>FileCabinetRecordXmlReader</c> to deserialize xml records.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Readers.FileCabinetRecordXmlReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Readers.FileCabinetRecordXmlReader"/> class.
+            </summary>
+            <param name="reader">The reader.</param>
+        </member>
+        <member name="M:FileCabinetApp.Readers.FileCabinetRecordXmlReader.#ctor(System.IO.StreamReader,FileCabinetApp.Validators.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Readers.FileCabinetRecordXmlReader"/> class.
+            </summary>
+            <param name="reader">The reader.</param>
+            <param name="inputValidator">The input validator.</param>
+        </member>
+        <member name="M:FileCabinetApp.Readers.FileCabinetRecordXmlReader.ReadAll">
+            <summary>
+            Reads all.
+            </summary>
+            <returns>Return list of Records.</returns>
         </member>
         <member name="T:FileCabinetApp.Services.FileService.FileCabinetFilesystemService">
             <summary>
@@ -610,9 +621,18 @@
             <param name="xmlWriter">The XML writer.</param>
         </member>
         <member name="M:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot.LoadFromCsv(System.IO.StreamReader)">
-            <summary>Loads from CSV.</summary>
+            <summary>
+            Loads from CSV.
+            </summary>
             <param name="streamReader">The stream reader.</param>
-            <exception cref="T:System.ArgumentNullException">streamReader is null.</exception>
+            <exception cref="T:System.ArgumentNullException">streamReader.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot.LoadFromXml(System.IO.StreamReader)">
+            <summary>
+            Loads from XML.
+            </summary>
+            <param name="streamReader">The stream reader.</param>
+            <exception cref="T:System.ArgumentNullException">streamReader.</exception>
         </member>
         <member name="T:FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot">
             <summary>
@@ -642,6 +662,12 @@
         <member name="M:FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot.LoadFromCsv(System.IO.StreamReader)">
             <summary>
             Loads from CSV.
+            </summary>
+            <param name="streamReader">The stream reader.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot.LoadFromXml(System.IO.StreamReader)">
+            <summary>
+            Loads from XML.
             </summary>
             <param name="streamReader">The stream reader.</param>
         </member>

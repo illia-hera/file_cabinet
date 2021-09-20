@@ -36,5 +36,11 @@ namespace FileCabinetApp.Services.SnapshotServices
         /// </summary>
         /// <param name="streamReader">The stream reader.</param>
         public void LoadFromCsv(StreamReader streamReader);
+
+        /// <summary>
+        /// Loads from XML.
+        /// </summary>
+        /// <param name="streamReader">The stream reader.</param>
+        public void LoadFromXml(StreamReader streamReader);
     }
 }

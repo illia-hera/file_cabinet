@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 namespace FileCabinetApp.Entities.XmlSerialization
 {
     /// <summary>File cabinet record.</summary>
+    [Serializable]
     public class Record
     {
         /// <summary>Initializes a new instance of the <see cref="Record"/> class.</summary>
@@ -24,20 +25,6 @@ namespace FileCabinetApp.Entities.XmlSerialization
             this.WorkingHoursPerWeek = workingHours;
             this.AnnualIncome = annualIncome;
             this.DriverLicenseCategory = driverCategory;
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="Record"/> class.</summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="firstName">The first name.</param>
-        /// <param name="lastName">The last name.</param>
-        /// <param name="dateOfBirth">The date of birth.</param>
-        /// <param name="workingHours">The workingHours.</param>
-        /// <param name="annualIncome">The annualIncome.</param>
-        /// <param name="driverCategory">Type of the account.</param>
-        public Record(int id, string firstName, string lastName, DateTime dateOfBirth, short workingHours, decimal annualIncome, char driverCategory)
-            : this(firstName, lastName, dateOfBirth, workingHours, annualIncome, driverCategory)
-        {
-            this.Id = id;
         }
 
         /// <summary>Initializes a new instance of the <see cref="Record"/> class.</summary>
