@@ -1,9 +1,8 @@
 ﻿using System.Globalization;
 using System.IO;
-using FileCabinetApp.Enteties;
-using FileCabinetApp.SnapshotServices.RecordWriters;
+using FileCabinetApp.Entities;
 
-namespace FileCabinetApp.SnapshotServices.RecordWrites
+namespace FileCabinetApp.RecordWriters
 {
     /// <summary>
     /// Class <c>FileCabinetRecordCsvWriter</c> write in to the file.

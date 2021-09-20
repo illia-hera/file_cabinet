@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using FileCabinetApp.Enteties;
-using FileCabinetApp.SnapshotServices;
+using FileCabinetApp.Entities;
+using FileCabinetApp.Services.SnapshotServices;
 
 namespace FileCabinetApp.Services
 {
@@ -62,5 +62,11 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
         public IFileCabinetServiceSnapshot MakeSnapshot();
+
+        /// <summary>
+        /// Restores the specified snapshot.
+        /// </summary>
+        /// <param name="snapshot">The snapshot.</param>
+        public void Restore(IFileCabinetServiceSnapshot snapshot);
     }
 }

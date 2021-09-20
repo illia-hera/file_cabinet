@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using FileCabinetApp.Enteties;
-using FileCabinetApp.SnapshotServices;
+using FileCabinetApp.Entities;
+using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Validators;
 
-namespace FileCabinetApp.Services
+namespace FileCabinetApp.Services.MemoryService
 {
     /// <summary>
     /// Class <c>FileCabinetMemoryService</c> with File Cabinet.
@@ -155,9 +155,33 @@ namespace FileCabinetApp.Services
         /// <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
         public IFileCabinetServiceSnapshot MakeSnapshot()
         {
-            var snapshot = new FileCabinetServiceSnapshot(this.list.ToArray());
+            var snapshot = new FileCabinetServiceSnapshot(this.list.ToArray(), this.validator);
 
             return snapshot;
+        }
+
+        /// <summary>
+        /// Restores the specified snapshot.
+        /// </summary>
+        /// <param name="snapshot">The snapshot.</param>
+        /// <exception cref="System.ArgumentException">Snapshot can't be null.</exception>
+        public void Restore(IFileCabinetServiceSnapshot snapshot)
+        {
+            if (snapshot == null)
+            {
+                throw new ArgumentException("Snapshot can't be null");
+            }
+
+            foreach (FileCabinetRecord record in snapshot.Records)
+            {
+                FileCabinetRecord match = this.list.Find(x => x.Id.Equals(record.Id));
+                if (match != null)
+                {
+                    this.list[this.list.IndexOf(match)] = record;
+                }
+
+                this.list.Add(record);
+            }
         }
 
         private void AddRecordToFirstNameDict(string firstName, FileCabinetRecord record)

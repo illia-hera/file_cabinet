@@ -1,6 +1,6 @@
 ﻿using FileCabinetApp.Validators;
 
-namespace FileCabinetApp.Services
+namespace FileCabinetApp.Services.MemoryService
 {
     /// <summary>
     /// Class <c>FileCabinetMemoryCustomService</c> validate parameters by specified rules.

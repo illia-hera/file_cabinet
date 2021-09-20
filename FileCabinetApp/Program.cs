@@ -4,9 +4,11 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using FileCabinetApp.Enteties;
+using FileCabinetApp.Entities;
 using FileCabinetApp.Services;
-using FileCabinetApp.SnapshotServices;
+using FileCabinetApp.Services.FileService;
+using FileCabinetApp.Services.MemoryService;
+using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utils;
 using FileCabinetApp.Validators;
 
@@ -37,6 +39,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
+            new Tuple<string, Action<string>>("import", Import),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -48,7 +51,8 @@ namespace FileCabinetApp
             new string[] { "list", "returned list of created records.", "The 'list' command returned list of created records." },
             new string[] { "edit", "edit record parameters.", "The 'edit' command edit record parameters." },
             new string[] { "find", "find record by parameter.", "The 'find' command find record by parameter." },
-            new string[] { "export csv", "export records to csv file.", "The 'export csv' command export records to csv file." },
+            new string[] { "export csv/xml", "export records to csv/xml file.", "The 'export csv/xml' command export records to csv/xml file." },
+            new string[] { "import csv", "import records from csv file.", "The 'import csv' command export records from csv file." },
         };
 
         /// <summary>
@@ -283,6 +287,7 @@ namespace FileCabinetApp
                 case FileCabinetMemoryCustomService car:
                     validator = new CustomValidator();
                     break;
+
                 default:
                     validator = new DefaultValidator();
                     break;
@@ -322,23 +327,10 @@ namespace FileCabinetApp
 
         private static void Export(string parameters)
         {
-            string[] inputs = parameters.Split(' ', 2);
-            const int parameterIndex = 0;
-            const int valueIndex = 1;
-            string fileFormat = inputs[parameterIndex];
-            string filePath = inputs.Length > 1 ? inputs[valueIndex] : string.Empty;
-            int lastIndexOfBackSlash = filePath.LastIndexOf("\\", StringComparison.OrdinalIgnoreCase);
-            string fileDirection = lastIndexOfBackSlash > 0 ? filePath[..lastIndexOfBackSlash] : string.Empty;
-
-            if (string.IsNullOrWhiteSpace(filePath) || (!string.IsNullOrEmpty(fileDirection) && (!Directory.Exists(fileDirection) || string.IsNullOrEmpty(filePath))))
+            var parametersTuple = ValidateImportExportParameters(parameters);
+            if (File.Exists(parametersTuple.Item2))
             {
-                Console.WriteLine($"Export failed: can't open file {filePath}.");
-                return;
-            }
-
-            if (File.Exists(filePath))
-            {
-                Console.Write($"File is exist - rewrite {filePath}? [Y/n] ");
+                Console.Write($"File is exist - rewrite {parametersTuple.Item2}? [Y/n] ");
                 string answer = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(answer) || !answer.Equals("y", StringComparison.OrdinalIgnoreCase))
                 {
@@ -347,15 +339,15 @@ namespace FileCabinetApp
             }
 
             IFileCabinetServiceSnapshot snapshot = fileCabinetService.MakeSnapshot();
-            if (fileFormat.Equals("csv", StringComparison.OrdinalIgnoreCase))
+            if (parametersTuple.Item1 && parametersTuple.Item3.Equals("csv", StringComparison.OrdinalIgnoreCase))
             {
-                using StreamWriter streamWriter = new StreamWriter(filePath);
+                using StreamWriter streamWriter = new StreamWriter(parametersTuple.Item2);
                 snapshot.SaveToCsv(streamWriter);
                 streamWriter.Close();
             }
-            else if (fileFormat.Equals("xml", StringComparison.OrdinalIgnoreCase))
+            else if (parametersTuple.Item1 && parametersTuple.Item3.Equals("xml", StringComparison.OrdinalIgnoreCase))
             {
-                using XmlWriter xmlWriter = XmlWriter.Create(filePath);
+                using XmlWriter xmlWriter = XmlWriter.Create(parametersTuple.Item2);
                 snapshot.SaveToXml(xmlWriter);
                 xmlWriter.Close();
             }
@@ -364,7 +356,52 @@ namespace FileCabinetApp
                 return;
             }
 
-            Console.WriteLine($"All records are exported to file {filePath!.Split('\\')[^1]}");
+            Console.WriteLine($"All records are exported to file {parametersTuple.Item2!.Split('\\')[^1]}");
+        }
+
+        private static void Import(string parameters)
+        {
+            var parametersTuple = ValidateImportExportParameters(parameters);
+
+            using var fs = new FileStream(parametersTuple.Item2, FileMode.Open, FileAccess.Read);
+            IFileCabinetServiceSnapshot snapshot = fileCabinetService.MakeSnapshot();
+            if (parametersTuple.Item1 && parametersTuple.Item3.Equals("csv", StringComparison.OrdinalIgnoreCase))
+            {
+                using StreamReader streamReader = new StreamReader(fs);
+                snapshot.LoadFromCsv(streamReader);
+                fileCabinetService.Restore(snapshot);
+            }
+            else if (parametersTuple.Item1 && parametersTuple.Item3.Equals("xml", StringComparison.OrdinalIgnoreCase))
+            {
+                using StreamReader streamReader = new StreamReader(fs);
+                snapshot.LoadFromXml(streamReader);
+                fileCabinetService.Restore(snapshot);
+            }
+            else
+            {
+                return;
+            }
+
+            Console.WriteLine($"{snapshot.Records.Count} records were imported from file {parametersTuple.Item2!.Split('\\')[^1]}");
+        }
+
+        private static Tuple<bool, string, string> ValidateImportExportParameters(string parameters)
+        {
+            string[] inputs = parameters.Split(' ', 2);
+            const int parameterIndex = 0;
+            const int valueIndex = 1;
+            string fileFormat = inputs[parameterIndex];
+            string filePath = inputs.Length > 1 ? inputs[valueIndex] : string.Empty;
+            int lastIndexOfBackSlash = filePath.LastIndexOf("\\", StringComparison.OrdinalIgnoreCase);
+            string fileDirection = lastIndexOfBackSlash > 0 ? filePath[..lastIndexOfBackSlash] : string.Empty;
+
+            if (string.IsNullOrWhiteSpace(filePath) || (!string.IsNullOrEmpty(fileDirection) && (!Directory.Exists(fileDirection))))
+            {
+                Console.WriteLine($"Export failed: can't open file {filePath}.");
+                return new Tuple<bool, string, string>(false, null, null);
+            }
+
+            return new Tuple<bool, string, string>(true, filePath, fileFormat);
         }
     }
 }
