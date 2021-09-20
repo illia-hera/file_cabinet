@@ -227,6 +227,16 @@ namespace FileCabinetApp.Services.FileService
             }
         }
 
+        /// <summary>
+        /// Removes the record from FileCabinetApp.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public void RemoveRecord(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         private void WriteRecord(long offset,  FileCabinetRecord record)
         {
             this.fileStream.Seek(offset, SeekOrigin.Begin);

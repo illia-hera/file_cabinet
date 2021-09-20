@@ -422,6 +422,13 @@
             <param name="snapshot">IFileCabinetServiceSnapshot.</param>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
+        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the record from FileCabinetApp.
+            </summary>
+            <param name="id">The identifier.</param>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
             Interface <c>IFileCabinetService</c>.
@@ -485,6 +492,12 @@
             Restores the specified snapshot.
             </summary>
             <param name="snapshot">The snapshot.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the record from FileCabinetApp.
+            </summary>
+            <param name="id">The identifier.</param>
         </member>
         <member name="T:FileCabinetApp.Services.MemoryService.FileCabinetMemoryCustomService">
             <summary>
@@ -580,6 +593,12 @@
             </summary>
             <param name="snapshot">The snapshot.</param>
             <exception cref="T:System.ArgumentException">Snapshot can't be null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the record from FileCabinetApp.
+            </summary>
+            <param name="id">The identifier.</param>
         </member>
         <member name="T:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot">
             <summary>

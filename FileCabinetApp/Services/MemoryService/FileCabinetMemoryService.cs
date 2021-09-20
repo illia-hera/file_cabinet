@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
@@ -53,9 +54,9 @@ namespace FileCabinetApp.Services.MemoryService
             };
 
             this.list.Add(record);
-            this.AddRecordToFirstNameDict(container.FirstName, record);
-            this.AddRecordToLastNameDict(container.LastName, record);
-            this.AddRecordToDateOfBirthDict(container.DateOfBirthday, record);
+            AddRecordToDict(container.FirstName, record, this.firstNameDictionary);
+            AddRecordToDict(container.LastName, record, this.lastNameDictionary);
+            AddRecordToDict(container.DateOfBirthday, record, this.dateOfBirthDictionary);
 
             return record.Id;
         }
@@ -172,6 +173,10 @@ namespace FileCabinetApp.Services.MemoryService
                 throw new ArgumentException("Snapshot can't be null");
             }
 
+            this.firstNameDictionary.Clear();
+            this.lastNameDictionary.Clear();
+            this.dateOfBirthDictionary.Clear();
+
             foreach (FileCabinetRecord record in snapshot.Records)
             {
                 FileCabinetRecord match = this.list.Find(x => x.Id.Equals(record.Id));
@@ -180,19 +185,66 @@ namespace FileCabinetApp.Services.MemoryService
                     this.list[this.list.IndexOf(match)] = record;
                 }
 
+                AddRecordToDict(record.FirstName, record, this.firstNameDictionary);
+                AddRecordToDict(record.LastName, record, this.lastNameDictionary);
+                AddRecordToDict(record.DateOfBirth, record, this.dateOfBirthDictionary);
+
                 this.list.Add(record);
             }
         }
 
-        private void AddRecordToFirstNameDict(string firstName, FileCabinetRecord record)
+        /// <summary>
+        /// Removes the record from FileCabinetApp.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        public void RemoveRecord(int id)
         {
-            if (this.firstNameDictionary.ContainsKey(firstName))
+            if (id < 1)
             {
-                this.firstNameDictionary[firstName].Add(record);
+                throw new ArgumentException("The value should be greater than zero.", nameof(id));
+            }
+
+            if (this.list.Count < 1)
+            {
+                throw new ArgumentException("There are no records.");
+            }
+
+            bool noMatch = true;
+            foreach (FileCabinetRecord record in this.list)
+            {
+                if (record.Id == id)
+                {
+                    this.list.Remove(record);
+
+                    DeleteRecordFromDictionary(record.FirstName, record, this.firstNameDictionary);
+                    DeleteRecordFromDictionary(record.LastName, record, this.lastNameDictionary);
+                    DeleteRecordFromDictionary(record.DateOfBirth, record, this.dateOfBirthDictionary);
+
+                    noMatch = false;
+                    break;
+                }
+            }
+
+            if (noMatch)
+            {
+                throw new ArgumentException($"Record #{id} doesn't exist.");
+            }
+        }
+
+        private static void DeleteRecordFromDictionary<T>(T key, FileCabinetRecord record, IDictionary<T, List<FileCabinetRecord>> dictionary)
+        {
+            dictionary[key].Remove(record);
+        }
+
+        private static void AddRecordToDict<T>(T parameter, FileCabinetRecord record, Dictionary<T, List<FileCabinetRecord>> dictionary)
+        {
+            if (dictionary.ContainsKey(parameter))
+            {
+                dictionary[parameter].Add(record);
             }
             else
             {
-                this.firstNameDictionary.Add(firstName, new List<FileCabinetRecord>() { record });
+                dictionary.Add(parameter, new List<FileCabinetRecord>() { record });
             }
         }
 
@@ -200,25 +252,16 @@ namespace FileCabinetApp.Services.MemoryService
         {
             if (!firstName.Equals(record.FirstName, StringComparison.OrdinalIgnoreCase))
             {
-                this.firstNameDictionary[record.FirstName].Remove(record);
-                if (this.firstNameDictionary[record.FirstName].Count == 0)
+                if (this.firstNameDictionary.ContainsKey(record.FirstName))
                 {
-                    this.firstNameDictionary.Remove(record.FirstName);
+                    this.firstNameDictionary[record.FirstName].Remove(record);
+                    if (this.firstNameDictionary[record.FirstName].Count == 0)
+                    {
+                        this.firstNameDictionary.Remove(record.FirstName);
+                    }
                 }
 
-                this.AddRecordToFirstNameDict(firstName, record);
-            }
-        }
-
-        private void AddRecordToLastNameDict(string lastName, FileCabinetRecord record)
-        {
-            if (this.lastNameDictionary.ContainsKey(lastName))
-            {
-                this.lastNameDictionary[lastName].Add(record);
-            }
-            else
-            {
-                this.lastNameDictionary.Add(lastName, new List<FileCabinetRecord>() { record });
+                AddRecordToDict(firstName, record, this.firstNameDictionary);
             }
         }
 
@@ -226,25 +269,17 @@ namespace FileCabinetApp.Services.MemoryService
         {
             if (!lastName.Equals(record.FirstName, StringComparison.OrdinalIgnoreCase))
             {
-                this.lastNameDictionary[record.FirstName].Remove(record);
-                if (this.lastNameDictionary[record.FirstName].Count == 0)
+                if (this.lastNameDictionary.ContainsKey(record.LastName))
                 {
-                    this.lastNameDictionary.Remove(record.FirstName);
+                    this.lastNameDictionary[record.LastName].Remove(record);
+                    if (this.lastNameDictionary[record.LastName].Count == 0)
+                    {
+                        this.lastNameDictionary.Remove(record.LastName);
+                    }
+
                 }
 
-                this.AddRecordToLastNameDict(lastName, record);
-            }
-        }
-
-        private void AddRecordToDateOfBirthDict(DateTime dateOfBirth, FileCabinetRecord record)
-        {
-            if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
-            {
-                this.dateOfBirthDictionary[dateOfBirth].Add(record);
-            }
-            else
-            {
-                this.dateOfBirthDictionary.Add(dateOfBirth, new List<FileCabinetRecord>() { record });
+                AddRecordToDict(lastName, record, this.lastNameDictionary);
             }
         }
 
@@ -252,13 +287,16 @@ namespace FileCabinetApp.Services.MemoryService
         {
             if (dateOfBirth != record.DateOfBirth)
             {
-                this.dateOfBirthDictionary[record.DateOfBirth].Remove(record);
-                if (this.dateOfBirthDictionary[record.DateOfBirth].Count == 0)
+                if (this.dateOfBirthDictionary.ContainsKey(record.DateOfBirth))
                 {
-                    this.dateOfBirthDictionary.Remove(record.DateOfBirth);
+                    this.dateOfBirthDictionary[record.DateOfBirth].Remove(record);
+                    if (this.dateOfBirthDictionary[record.DateOfBirth].Count == 0)
+                    {
+                        this.dateOfBirthDictionary.Remove(record.DateOfBirth);
+                    }
                 }
 
-                this.AddRecordToDateOfBirthDict(dateOfBirth, record);
+                AddRecordToDict(dateOfBirth, record, this.dateOfBirthDictionary);
             }
         }
     }
