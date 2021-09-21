@@ -125,7 +125,7 @@ namespace FileCabinetApp
                 {
                     return parameterValue switch
                     {
-                        var p when p.Equals("file", StringComparison.OrdinalIgnoreCase) => new FileCabinetFilesystemService(File.Open("cabinet-records.db", FileMode.OpenOrCreate)),
+                        var p when p.Equals("file", StringComparison.OrdinalIgnoreCase) => new FileCabinetFilesystemService(File.Open("cabinet-records.db", FileMode.Create)),
                         var p when p.Equals("memory", StringComparison.OrdinalIgnoreCase) => new FileCabinetMemoryDefaultService(),
                         _ => new FileCabinetMemoryDefaultService()
                     };

@@ -427,7 +427,6 @@
             Removes the record from FileCabinetApp.
             </summary>
             <param name="id">The identifier.</param>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
