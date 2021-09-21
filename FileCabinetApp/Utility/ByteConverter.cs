@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileCabinetApp.Utils
+namespace FileCabinetApp.Utility
 {
     /// <summary>
     /// Class <c>ByteConverter</c>.

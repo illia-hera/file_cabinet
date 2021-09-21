@@ -9,7 +9,7 @@ using FileCabinetApp.Services;
 using FileCabinetApp.Services.FileService;
 using FileCabinetApp.Services.MemoryService;
 using FileCabinetApp.Services.SnapshotServices;
-using FileCabinetApp.Utils;
+using FileCabinetApp.Utility;
 using FileCabinetApp.Validators;
 
 namespace FileCabinetApp
@@ -67,9 +67,11 @@ namespace FileCabinetApp
         {
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
-            Console.WriteLine();
-
             fileCabinetService = InitFileCabinetService(args);
+            Console.WriteLine(fileCabinetService is FileCabinetFilesystemService
+                ? $"Using file cabinet filesystem service"
+                : $"Using file cabinet memory service");
+            Console.WriteLine();
 
             do
             {
@@ -114,7 +116,7 @@ namespace FileCabinetApp
                     parameterValue = splitParameter[initialCommandValueIndex];
                 }
 
-                if (parameter.Equals("-v") || parameter.Equals("--validation-rules"))
+                if (parameter.Equals("-v", StringComparison.OrdinalIgnoreCase) || parameter.Equals("--validation-rules", StringComparison.OrdinalIgnoreCase))
                 {
                     return parameterValue switch
                     {
@@ -123,7 +125,7 @@ namespace FileCabinetApp
                     };
                 }
 
-                if (parameter.Equals("-s") || parameter.Equals("--storage"))
+                if (parameter.Equals("-s", StringComparison.OrdinalIgnoreCase) || parameter.Equals("--storage", StringComparison.OrdinalIgnoreCase))
                 {
                     return parameterValue switch
                     {

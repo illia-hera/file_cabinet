@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
-using FileCabinetApp.Utils;
+using FileCabinetApp.Utility;
 using FileCabinetApp.Validators;
 using Microsoft.Win32.SafeHandles;
 
@@ -286,7 +286,7 @@ namespace FileCabinetApp.Services.FileService
         }
 
         /// <summary>
-        /// Defragments the data file — removing voids in the data file formed by deleted records.
+        /// Defragmentation the data file — removing voids in the data file formed by deleted records.
         /// </summary>
         /// <returns>Return deleted Count.</returns>
         public int Purge()
