@@ -77,9 +77,8 @@ namespace FileCabinetApp.Services.FileService
         public IReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
             var resultArray = this.recordsCount == 0 ? Array.Empty<FileCabinetRecord>() : new FileCabinetRecord[this.recordsCount];
-            var count = 0;
 
-            for (int i = 0; count < this.recordsCount; i++, count++)
+            for (int i = 0, count = 0; count < this.recordsCount; i++, count++)
             {
                 byte[] buffer = new byte[RecordSize];
                 this.fileStream.Seek(RecordSize * i, SeekOrigin.Begin);
@@ -249,28 +248,31 @@ namespace FileCabinetApp.Services.FileService
 
             try
             {
-                if (this.fileStream != null)
+                if (this.fileStream == null)
                 {
-                    for (int i = 0; i < this.recordsCount; i++)
+                    return;
+                }
+
+                for (int i = 0, count = 0; count < this.recordsCount; i++, count++)
+                {
+                    byte[] buffer = new byte[RecordSize];
+                    this.fileStream.Seek(i * RecordSize, SeekOrigin.Begin);
+                    this.fileStream.Read(buffer);
+
+                    short status = BitConverter.ToInt16(buffer.AsSpan()[0..2]);
+                    if (status == 1)
                     {
-                        byte[] buffer = new byte[RecordSize];
-                        this.fileStream.Read(buffer);
+                        count--;
+                        continue;
+                    }
+
+                    var fileStrId = BitConverter.ToInt32(buffer.AsSpan()[2..6]);
+                    if (fileStrId == id)
+                    {
                         this.fileStream.Seek(i * RecordSize, SeekOrigin.Begin);
-
-                        short status = BitConverter.ToInt16(buffer.AsSpan()[0..2]);
-
-                        if (status == 1)
-                        {
-                            continue;
-                        }
-
-                        if (BitConverter.ToInt32(buffer.AsSpan()[2..6]) == id)
-                        {
-                            this.fileStream.Seek((i - 1) * RecordSize, SeekOrigin.Begin);
-                            this.fileStream.Write(BitConverter.GetBytes((short)1)); // 0 - not deleted, 1 - deleted
-                            this.recordsCount--;
-                            return;
-                        }
+                        this.fileStream.Write(BitConverter.GetBytes((short)1)); // 0 - not deleted, 1 - deleted
+                        this.recordsCount--;
+                        return;
                     }
                 }
             }
@@ -278,6 +280,41 @@ namespace FileCabinetApp.Services.FileService
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Defragments the data file — removing voids in the data file formed by deleted records.
+        /// </summary>
+        /// <returns>Return deleted Count</returns>
+        public int Purge()
+        {
+            var currentSize = this.recordsCount * RecordSize;
+            var deletedCount = (int)(this.fileStream.Length - currentSize) / RecordSize;
+            if (deletedCount == 0)
+            {
+                return 0;
+            }
+
+            try
+            {
+                if (this.fileStream != null)
+                {
+                    List<FileCabinetRecord> currentRecordsList = this.GetRecords().ToList();
+
+                    this.fileStream.SetLength(currentSize);
+
+                    for (int i = 0; i < this.recordsCount; i++)
+                    {
+                        this.WriteRecord(i * RecordSize, currentRecordsList[i]);
+                    }
+                }
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return deletedCount;
         }
 
         private void WriteRecord(long offset,  FileCabinetRecord record)

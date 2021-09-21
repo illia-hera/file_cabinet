@@ -41,6 +41,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
             new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -55,6 +56,7 @@ namespace FileCabinetApp
             new string[] { "export csv/xml", "export records to csv/xml file.", "The 'export csv/xml' command export records to csv/xml file." },
             new string[] { "import csv/xml", "import records from csv file.", "The 'import csv/xml' command import records from csv file." },
             new string[] { "remove", "remove record from FileCabinet.", "The 'remove' command remove records from FileCabinet." },
+            new string[] { "purge", "purge bites from file.", "The 'purge' command purge bites from file." },
         };
 
         /// <summary>
@@ -431,6 +433,16 @@ namespace FileCabinetApp
             }
 
             Console.WriteLine($"Record #{id} is removed.");
+        }
+
+
+        private static void Purge(string paramters)
+        {
+            if (fileCabinetService is FileCabinetFilesystemService filesystemService)
+            {
+                var deleted = filesystemService.Purge();
+                Console.WriteLine($"{deleted} records are purged");
+            }
         }
     }
 }

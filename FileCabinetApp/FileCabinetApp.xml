@@ -428,6 +428,12 @@
             </summary>
             <param name="id">The identifier.</param>
         </member>
+        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.Purge">
+            <summary>
+            Defragments the data file — removing voids in the data file formed by deleted records.
+            </summary>
+            <returns>Return deleted Count</returns>
+        </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
             Interface <c>IFileCabinetService</c>.

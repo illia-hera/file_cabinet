@@ -276,7 +276,6 @@ namespace FileCabinetApp.Services.MemoryService
                     {
                         this.lastNameDictionary.Remove(record.LastName);
                     }
-
                 }
 
                 AddRecordToDict(lastName, record, this.lastNameDictionary);
