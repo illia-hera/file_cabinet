@@ -422,6 +422,18 @@
             <param name="snapshot">IFileCabinetServiceSnapshot.</param>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
+        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the record from FileCabinetApp.
+            </summary>
+            <param name="id">The identifier.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.Purge">
+            <summary>
+            Defragmentation the data file — removing voids in the data file formed by deleted records.
+            </summary>
+            <returns>Return deleted Count.</returns>
+        </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
             Interface <c>IFileCabinetService</c>.
@@ -451,7 +463,7 @@
             <summary>
             Gets the stat of users.
             </summary>
-            <returns>Return count of records in File Cabinet.</returns>
+            <returns>Return count of records and deleted records in File Cabinet.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
@@ -485,6 +497,12 @@
             Restores the specified snapshot.
             </summary>
             <param name="snapshot">The snapshot.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the record from FileCabinetApp.
+            </summary>
+            <param name="id">The identifier.</param>
         </member>
         <member name="T:FileCabinetApp.Services.MemoryService.FileCabinetMemoryCustomService">
             <summary>
@@ -581,6 +599,12 @@
             <param name="snapshot">The snapshot.</param>
             <exception cref="T:System.ArgumentException">Snapshot can't be null.</exception>
         </member>
+        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the record from FileCabinetApp.
+            </summary>
+            <param name="id">The identifier.</param>
+        </member>
         <member name="T:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot">
             <summary>
             Class <c>FileCabinetServiceSnapshot</c> make snapshot of FileCabinetMemoryService.
@@ -671,12 +695,12 @@
             </summary>
             <param name="streamReader">The stream reader.</param>
         </member>
-        <member name="T:FileCabinetApp.Utils.ByteConverter">
+        <member name="T:FileCabinetApp.Utility.ByteConverter">
             <summary>
             Class <c>ByteConverter</c>.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Utils.ByteConverter.ToString(System.Byte[])">
+        <member name="M:FileCabinetApp.Utility.ByteConverter.ToString(System.Byte[])">
             <summary>
             Converts to string.
             </summary>
@@ -685,14 +709,14 @@
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
         </member>
-        <member name="M:FileCabinetApp.Utils.ByteConverter.GetBytes(System.Decimal)">
+        <member name="M:FileCabinetApp.Utility.ByteConverter.GetBytes(System.Decimal)">
             <summary>
             Convert <c>decimal</c> to <c>byte[]</c>.
             </summary>
             <param name="dec">The decimal.</param>
             <returns>Byte array.</returns>
         </member>
-        <member name="M:FileCabinetApp.Utils.ByteConverter.ToDecimal(System.Byte[])">
+        <member name="M:FileCabinetApp.Utility.ByteConverter.ToDecimal(System.Byte[])">
             <summary>
             Converts byte[] to decimal.
             </summary>
@@ -700,47 +724,47 @@
             <returns>Return decimal value.</returns>
             <exception cref="T:System.ArgumentException">A decimal must be created from exactly 16 bytes.</exception>
         </member>
-        <member name="M:FileCabinetApp.Utils.ByteConverter.ToDateTime(System.Byte[])">
+        <member name="M:FileCabinetApp.Utility.ByteConverter.ToDateTime(System.Byte[])">
             <summary>
             Converts to datetime. Split byte array on 3 int numbers and parsed there.
             </summary>
             <param name="bytes">The bytes.</param>
             <returns>Return datetime.</returns>
         </member>
-        <member name="T:FileCabinetApp.Utils.Converter">
+        <member name="T:FileCabinetApp.Utility.Converter">
             <summary>
             Class to convert.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Utils.Converter.StringConverter(System.String)">
+        <member name="M:FileCabinetApp.Utility.Converter.StringConverter(System.String)">
             <summary>
             Strings the converter.
             </summary>
             <param name="input">The input.</param>
             <returns>Return result of boolean conversion result and string input value and string value.</returns>
         </member>
-        <member name="M:FileCabinetApp.Utils.Converter.DateConverter(System.String)">
+        <member name="M:FileCabinetApp.Utility.Converter.DateConverter(System.String)">
             <summary>
             Dates the converter.
             </summary>
             <param name="input">The input.</param>
             <returns>Return result of boolean conversion result and string input value and <c>DeteTime</c> value.</returns>
         </member>
-        <member name="M:FileCabinetApp.Utils.Converter.ShortConverter(System.String)">
+        <member name="M:FileCabinetApp.Utility.Converter.ShortConverter(System.String)">
             <summary>
             Shorts the converter.
             </summary>
             <param name="input">The input.</param>
             <returns>Return result of boolean conversion result and string input value and <c>short</c> value.</returns>
         </member>
-        <member name="M:FileCabinetApp.Utils.Converter.CharConverter(System.String)">
+        <member name="M:FileCabinetApp.Utility.Converter.CharConverter(System.String)">
             <summary>
             Characters the converter.
             </summary>
             <param name="input">The input.</param>
             <returns>Return result of boolean conversion result and string input value and char value.</returns>
         </member>
-        <member name="M:FileCabinetApp.Utils.Converter.DecimalConverter(System.String)">
+        <member name="M:FileCabinetApp.Utility.Converter.DecimalConverter(System.String)">
             <summary>
             Decimals the converter.
             </summary>

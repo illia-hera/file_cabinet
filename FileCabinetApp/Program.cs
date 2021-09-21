@@ -9,7 +9,7 @@ using FileCabinetApp.Services;
 using FileCabinetApp.Services.FileService;
 using FileCabinetApp.Services.MemoryService;
 using FileCabinetApp.Services.SnapshotServices;
-using FileCabinetApp.Utils;
+using FileCabinetApp.Utility;
 using FileCabinetApp.Validators;
 
 namespace FileCabinetApp
@@ -40,6 +40,8 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -52,7 +54,9 @@ namespace FileCabinetApp
             new string[] { "edit", "edit record parameters.", "The 'edit' command edit record parameters." },
             new string[] { "find", "find record by parameter.", "The 'find' command find record by parameter." },
             new string[] { "export csv/xml", "export records to csv/xml file.", "The 'export csv/xml' command export records to csv/xml file." },
-            new string[] { "import csv", "import records from csv file.", "The 'import csv' command export records from csv file." },
+            new string[] { "import csv/xml", "import records from csv file.", "The 'import csv/xml' command import records from csv file." },
+            new string[] { "remove", "remove record from FileCabinet.", "The 'remove' command remove records from FileCabinet." },
+            new string[] { "purge", "purge bites from file.", "The 'purge' command purge bites from file." },
         };
 
         /// <summary>
@@ -63,9 +67,11 @@ namespace FileCabinetApp
         {
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
-            Console.WriteLine();
-
             fileCabinetService = InitFileCabinetService(args);
+            Console.WriteLine(fileCabinetService is FileCabinetFilesystemService
+                ? $"Using file cabinet filesystem service"
+                : $"Using file cabinet memory service");
+            Console.WriteLine();
 
             do
             {
@@ -110,7 +116,7 @@ namespace FileCabinetApp
                     parameterValue = splitParameter[initialCommandValueIndex];
                 }
 
-                if (parameter.Equals("-v") || parameter.Equals("--validation-rules"))
+                if (parameter.Equals("-v", StringComparison.OrdinalIgnoreCase) || parameter.Equals("--validation-rules", StringComparison.OrdinalIgnoreCase))
                 {
                     return parameterValue switch
                     {
@@ -119,11 +125,11 @@ namespace FileCabinetApp
                     };
                 }
 
-                if (parameter.Equals("-s") || parameter.Equals("--storage"))
+                if (parameter.Equals("-s", StringComparison.OrdinalIgnoreCase) || parameter.Equals("--storage", StringComparison.OrdinalIgnoreCase))
                 {
                     return parameterValue switch
                     {
-                        var p when p.Equals("file", StringComparison.OrdinalIgnoreCase) => new FileCabinetFilesystemService(File.Open("cabinet-records.db", FileMode.OpenOrCreate)),
+                        var p when p.Equals("file", StringComparison.OrdinalIgnoreCase) => new FileCabinetFilesystemService(File.Open("cabinet-records.db", FileMode.Create)),
                         var p when p.Equals("memory", StringComparison.OrdinalIgnoreCase) => new FileCabinetMemoryDefaultService(),
                         _ => new FileCabinetMemoryDefaultService()
                     };
@@ -175,7 +181,7 @@ namespace FileCabinetApp
         private static void Stat(string parameters)
         {
             var recordsCount = Program.fileCabinetService.GetStat();
-            Console.WriteLine($"{recordsCount} record(s).");
+            Console.WriteLine($"{recordsCount.Item1} record(s), {recordsCount.Item2} record(s) deleted.");
         }
 
         private static void Create(string parameters)
@@ -236,7 +242,7 @@ namespace FileCabinetApp
 
             IReadOnlyCollection<FileCabinetRecord> recordsCollection = parameter switch
             {
-                var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByFirstName(value.Trim('\"')),
+                var p when p.Equals("firstname", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByFirstName(value.Trim('\"')),
                 var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => fileCabinetService.FindByLastName(value.Trim('\"')),
                 var p when p.Equals("dateOfBirth", StringComparison.OrdinalIgnoreCase)
                                 && DateTime.TryParse(value.Trim('\"'), out DateTime dateOfBd) => fileCabinetService.FindByDateOfBirthName(dateOfBd),
@@ -402,6 +408,43 @@ namespace FileCabinetApp
             }
 
             return new Tuple<bool, string, string>(true, filePath, fileFormat);
+        }
+
+        private static void Remove(string parameters)
+        {
+            if (!int.TryParse(parameters, out var id))
+            {
+                Console.WriteLine("Please, enter the id value in format \"edit n\", where n is an integer value greater than zero. Please try again.");
+                return;
+            }
+
+            try
+            {
+                List<FileCabinetRecord> records = fileCabinetService.GetRecords().ToList();
+                if (!records.Exists(x => x.Id == id))
+                {
+                    throw new ArgumentException($"{id} id record is not found.");
+                }
+
+                fileCabinetService.RemoveRecord(id);
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
+
+            Console.WriteLine($"Record #{id} is removed.");
+        }
+
+        private static void Purge(string parameters)
+        {
+            if (fileCabinetService is FileCabinetFilesystemService filesystemService)
+            {
+                var items = fileCabinetService.GetStat();
+                var deleted = filesystemService.Purge();
+                Console.WriteLine($"Data file processing is completed: {deleted} of {items.Item1} records were purged.");
+            }
         }
     }
 }

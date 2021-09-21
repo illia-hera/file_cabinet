@@ -33,8 +33,8 @@ namespace FileCabinetApp.Services
         /// <summary>
         /// Gets the stat of users.
         /// </summary>
-        /// <returns>Return count of records in File Cabinet.</returns>
-        public int GetStat();
+        /// <returns>Return count of records and deleted records in File Cabinet.</returns>
+        public Tuple<int, int> GetStat();
 
         /// <summary>
         /// Finds the records by the first name.
@@ -68,5 +68,11 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="snapshot">The snapshot.</param>
         public void Restore(IFileCabinetServiceSnapshot snapshot);
+
+        /// <summary>
+        /// Removes the record from FileCabinetApp.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        public void RemoveRecord(int id);
     }
 }

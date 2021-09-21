@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace FileCabinetApp.Utils
+namespace FileCabinetApp.Utility
 {
     /// <summary>
     /// Class to convert.
