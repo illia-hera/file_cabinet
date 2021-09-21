@@ -33,8 +33,8 @@ namespace FileCabinetApp.Services
         /// <summary>
         /// Gets the stat of users.
         /// </summary>
-        /// <returns>Return count of records in File Cabinet.</returns>
-        public int GetStat();
+        /// <returns>Return count of records and deleted records in File Cabinet.</returns>
+        public Tuple<int, int> GetStat();
 
         /// <summary>
         /// Finds the records by the first name.

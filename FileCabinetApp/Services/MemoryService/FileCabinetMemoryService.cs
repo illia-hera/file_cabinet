@@ -109,9 +109,9 @@ namespace FileCabinetApp.Services.MemoryService
         /// Gets the stat of users.
         /// </summary>
         /// <returns>Return count of records in File Cabinet.</returns>
-        public int GetStat()
+        public Tuple<int, int> GetStat()
         {
-            return this.list.Count;
+            return new Tuple<int, int>(this.list.Count, 0);
         }
 
         /// <summary>

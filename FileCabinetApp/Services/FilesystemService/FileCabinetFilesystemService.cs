@@ -36,6 +36,8 @@ namespace FileCabinetApp.Services.FileService
 
         private int recordsCount;
 
+        private int deletedRecordsCount;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
         /// </summary>
@@ -134,9 +136,9 @@ namespace FileCabinetApp.Services.FileService
         /// Return count of records in File Cabinet.
         /// </returns>
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
-        public int GetStat()
+        public Tuple<int, int> GetStat()
         {
-            return this.recordsCount;
+            return new Tuple<int, int>(this.recordsCount, this.deletedRecordsCount);
         }
 
         /// <summary>
@@ -272,6 +274,7 @@ namespace FileCabinetApp.Services.FileService
                         this.fileStream.Seek(i * RecordSize, SeekOrigin.Begin);
                         this.fileStream.Write(BitConverter.GetBytes((short)1)); // 0 - not deleted, 1 - deleted
                         this.recordsCount--;
+                        this.deletedRecordsCount++;
                         return;
                     }
                 }
@@ -285,7 +288,7 @@ namespace FileCabinetApp.Services.FileService
         /// <summary>
         /// Defragments the data file — removing voids in the data file formed by deleted records.
         /// </summary>
-        /// <returns>Return deleted Count</returns>
+        /// <returns>Return deleted Count.</returns>
         public int Purge()
         {
             var currentSize = this.recordsCount * RecordSize;
