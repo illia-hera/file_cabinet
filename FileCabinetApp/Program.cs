@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml;
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.Entities;
+using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
 using FileCabinetApp.Services.FileService;
 using FileCabinetApp.Services.MemoryService;
@@ -100,13 +101,14 @@ namespace FileCabinetApp
         private static ICommandHandler CreateCommandHandler()
         {
             var commandHandler = new CreateCommandHandler(fileCabinetService);
+            var defaultPrinter = new DefaultRecordPrinter();
 
             commandHandler.SetNext(new HelpCommandHandler())
                 .SetNext(new StatCommandHandler(fileCabinetService))
                 .SetNext(new ExitCommandHandler(isR => isRunning = isR))
-                .SetNext(new ListCommandHandler(fileCabinetService))
+                .SetNext(new ListCommandHandler(fileCabinetService, defaultPrinter))
                 .SetNext(new EditCommandHandler(fileCabinetService))
-                .SetNext(new FindCommandHandler(fileCabinetService))
+                .SetNext(new FindCommandHandler(fileCabinetService, defaultPrinter))
                 .SetNext(new ExportCommandHandler(fileCabinetService))
                 .SetNext(new ImportCommandHandler(fileCabinetService))
                 .SetNext(new RemoveCommandHandler(fileCabinetService))

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FileCabinetApp.Entities;
+using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
 
 namespace FileCabinetApp.CommandHandlers
@@ -13,15 +14,19 @@ namespace FileCabinetApp.CommandHandlers
     /// Class <c>ListCommandHandler</c> implement List command.
     /// </summary>
     /// <seealso cref="CabinetServiceCommandHandlerBase" />
-    public class ListCommandHandler : CabinetServiceCommandHandlerBase
+    internal class ListCommandHandler : CabinetServiceCommandHandlerBase
     {
+        private readonly IRecordPrinter printer;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ListCommandHandler"/> class.
+        /// Initializes a new instance of the <see cref="ListCommandHandler" /> class.
         /// </summary>
         /// <param name="fileCabinetService">The file cabinet service.</param>
-        public ListCommandHandler(IFileCabinetService fileCabinetService)
+        /// <param name="printer">The printer.</param>
+        public ListCommandHandler(IFileCabinetService fileCabinetService, IRecordPrinter printer)
             : base(fileCabinetService)
         {
+            this.printer = printer;
         }
 
         /// <summary>
@@ -45,14 +50,7 @@ namespace FileCabinetApp.CommandHandlers
                     return;
                 }
 
-                foreach (FileCabinetRecord record in recordsCollection)
-                {
-                    Console.WriteLine($"#{record.Id}," +
-                                      $" {record.FirstName}," +
-                                      $" {record.LastName}," +
-                                      $" {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
-                }
-
+                this.printer.Print(recordsCollection);
                 return;
             }
 
