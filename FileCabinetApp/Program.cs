@@ -13,6 +13,7 @@ using FileCabinetApp.Services.MemoryService;
 using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
 using FileCabinetApp.Validators;
+using FileCabinetApp.Validators.ValidationRule;
 
 namespace FileCabinetApp
 {
@@ -28,7 +29,7 @@ namespace FileCabinetApp
 
         private static IFileCabinetService fileCabinetService;
 
-        private static IRecordValidator validator;
+        private static InputValidator validator;
 
         /// <summary>
         ///   <para>
@@ -36,14 +37,14 @@ namespace FileCabinetApp
         /// </para>
         /// </summary>
         /// <value>The validator.</value>
-        public static IRecordValidator Validator
+        public static InputValidator Validator
         {
             get
             {
                 return validator ??= fileCabinetService switch
                 {
-                    FileCabinetMemoryCustomService _ => new CustomValidator(),
-                    _ => new DefaultValidator(),
+                    FileCabinetMemoryCustomService _ => new InputValidator(new ValidationCustomRules()),
+                    _ => new InputValidator(new ValidationDefaultRules()),
                 };
             }
         }
