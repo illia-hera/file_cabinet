@@ -9,27 +9,26 @@ namespace FileCabinetApp.Validators
     /// <summary>
     /// Custom validator for person parameters.
     /// </summary>
+    /// <seealso cref="FileCabinetApp.Validators.CompositeValidator" />
     /// <seealso cref="IRecordValidator" />
-    public class CustomValidator : IRecordValidator
+    public class CustomValidator : CompositeValidator
     {
         /// <summary>
-        /// Validates the parameters.
+        /// Initializes a new instance of the <see cref="CustomValidator"/> class.
         /// </summary>
-        /// <param name="container">The container.</param>
-        /// <exception cref="System.ArgumentNullException">container.</exception>
-        public void ValidateParameters(ParametersContainer container)
-        {
-            if (container is null)
+        public CustomValidator()
+            : base(new IRecordValidator[]
             {
-                throw new ArgumentNullException(nameof(container));
-            }
-
-            new AnnualIncomeValidator(1500, 500).ValidateParameters(container);
-            new WorkingHoursValidator(30, 20).ValidateParameters(container);
-            new LastNameValidator(10, 5).ValidateParameters(container);
-            new FirstNameValidator(10, 5).ValidateParameters(container);
-            new DateOfBirthdayValidator(DateTime.Now, DateTime.Parse("10-Dec-1970", CultureInfo.CreateSpecificCulture("en-US"))).ValidateParameters(container);
-            new DriverCategoryValidator(new List<char>() { 'A', 'B' }).ValidateParameters(container);
+                new AnnualIncomeValidator(1500, 500),
+                new WorkingHoursValidator(30, 20),
+                new LastNameValidator(10, 5),
+                new FirstNameValidator(10, 5),
+                new DateOfBirthdayValidator(
+                    DateTime.Now,
+                    DateTime.Parse("10-Dec-1970", CultureInfo.CreateSpecificCulture("en-US"))),
+                new DriverCategoryValidator(new List<char>() { 'A', 'B' }),
+            })
+        {
         }
     }
 }

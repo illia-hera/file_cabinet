@@ -1097,31 +1097,47 @@
             <param name="input">The input.</param>
             <returns>Return result of boolean conversion result and string input value and decimal value.</returns>
         </member>
-        <member name="T:FileCabinetApp.Validators.CustomValidators.CustomValidator">
+        <member name="T:FileCabinetApp.Validators.CompositeValidator">
+            <summary>
+            Class composite validator.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
+        </member>
+        <member name="M:FileCabinetApp.Validators.CompositeValidator.#ctor(System.Collections.Generic.IEnumerable{FileCabinetApp.Validators.IRecordValidator})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.CompositeValidator"/> class.
+            </summary>
+            <param name="recordValidators">The record validators.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CompositeValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Validates the parameters.
+            </summary>
+            <param name="container">The container.</param>
+        </member>
+        <member name="T:FileCabinetApp.Validators.CustomValidator">
             <summary>
             Custom validator for person parameters.
             </summary>
+            <seealso cref="T:FileCabinetApp.Validators.CompositeValidator" />
             <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
         </member>
-        <member name="M:FileCabinetApp.Validators.CustomValidators.CustomValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
+        <member name="M:FileCabinetApp.Validators.CustomValidator.#ctor">
             <summary>
-            Validates the parameters.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.CustomValidator"/> class.
             </summary>
-            <param name="container">The container.</param>
-            <exception cref="T:System.ArgumentNullException">container.</exception>
         </member>
-        <member name="T:FileCabinetApp.Validators.DefaultValidators.DefaultValidator">
+        <member name="T:FileCabinetApp.Validators.DefaultValidator">
             <summary>
             Default validator for person parameters.
             </summary>
+            <seealso cref="T:FileCabinetApp.Validators.CompositeValidator" />
             <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
         </member>
-        <member name="M:FileCabinetApp.Validators.DefaultValidators.DefaultValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
+        <member name="M:FileCabinetApp.Validators.DefaultValidator.#ctor">
             <summary>
-            Validates the parameters.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.DefaultValidator"/> class.
             </summary>
-            <param name="container">The container.</param>
-            <exception cref="T:System.ArgumentNullException">container.</exception>
         </member>
         <member name="T:FileCabinetApp.Validators.InputValidator">
             <summary>

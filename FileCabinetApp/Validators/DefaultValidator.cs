@@ -9,27 +9,24 @@ namespace FileCabinetApp.Validators
     /// <summary>
     /// Default validator for person parameters.
     /// </summary>
+    /// <seealso cref="FileCabinetApp.Validators.CompositeValidator" />
     /// <seealso cref="IRecordValidator" />
-    public class DefaultValidator : IRecordValidator
+    public class DefaultValidator : CompositeValidator
     {
         /// <summary>
-        /// Validates the parameters.
+        /// Initializes a new instance of the <see cref="DefaultValidator"/> class.
         /// </summary>
-        /// <param name="container">The container.</param>
-        /// <exception cref="System.ArgumentNullException">container.</exception>
-        public void ValidateParameters(ParametersContainer container)
-        {
-            if (container is null)
+        public DefaultValidator()
+            : base(new IRecordValidator[]
             {
-                throw new ArgumentNullException(nameof(container));
-            }
-
-            new AnnualIncomeValidator(1000000, 1000).ValidateParameters(container);
-            new WorkingHoursValidator(40, 1).ValidateParameters(container);
-            new LastNameValidator(60, 2).ValidateParameters(container);
-            new FirstNameValidator(60, 2).ValidateParameters(container);
-            new DateOfBirthdayValidator(DateTime.Now, DateTime.Parse("01-Jun-1950", CultureInfo.CreateSpecificCulture("en-US"))).ValidateParameters(container);
-            new DriverCategoryValidator(new List<char>() { 'A', 'B', 'C', 'D' }).ValidateParameters(container);
+                new AnnualIncomeValidator(1000000, 1000),
+                new WorkingHoursValidator(40, 1),
+                new LastNameValidator(60, 2),
+                new FirstNameValidator(60, 2),
+                new DateOfBirthdayValidator(DateTime.Now, DateTime.Parse("01-Jun-1950", CultureInfo.CreateSpecificCulture("en-US"))),
+                new DriverCategoryValidator(new List<char>() { 'A', 'B', 'C', 'D' }),
+            })
+        {
         }
     }
 }
