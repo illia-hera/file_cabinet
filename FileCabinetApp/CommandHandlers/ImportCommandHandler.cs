@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FileCabinetApp.Services;
 using FileCabinetApp.Services.SnapshotServices;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetApp.CommandHandlers
 {
@@ -38,7 +39,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (appCommandRequest.Command.Equals("import", StringComparison.OrdinalIgnoreCase))
             {
-                var parametersTuple = Program.Validator.ValidateImportExportParameters(appCommandRequest.Parameters);
+                var parametersTuple = InputValidator.ValidateImportExportParameters(appCommandRequest.Parameters);
 
                 if (this.TryReadRecords(parametersTuple))
                 {

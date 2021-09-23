@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using FileCabinetApp.Services;
 using FileCabinetApp.Services.SnapshotServices;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetApp.CommandHandlers
 {
@@ -39,7 +40,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (appCommandRequest.Command.Equals("export", StringComparison.OrdinalIgnoreCase))
             {
-                Tuple<bool, string, string> parametersTuple = Program.Validator.ValidateImportExportParameters(appCommandRequest.Parameters);
+                Tuple<bool, string, string> parametersTuple = InputValidator.ValidateImportExportParameters(appCommandRequest.Parameters);
                 if (File.Exists(parametersTuple.Item2))
                 {
                     Console.Write($"File is exist - rewrite {parametersTuple.Item2}? [Y/n] ");

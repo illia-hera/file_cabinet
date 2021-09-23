@@ -57,6 +57,8 @@ namespace FileCabinetApp
         {
             fileCabinetService = InitFileCabinetService(args);
             var commandHandler = CreateCommandHandler();
+            Console.WriteLine(Program.HintMessage);
+            Console.WriteLine();
 
             do
             {
@@ -166,8 +168,6 @@ namespace FileCabinetApp
 
             Console.WriteLine("Using memory service");
             Console.WriteLine("Using default validation rules");
-            Console.WriteLine(Program.HintMessage);
-            Console.WriteLine();
             return new FileCabinetMemoryDefaultService();
         }
 
