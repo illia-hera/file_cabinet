@@ -101,20 +101,27 @@ namespace FileCabinetApp
         private static ICommandHandler CreateCommandHandler()
         {
             var commandHandler = new CreateCommandHandler(fileCabinetService);
-            var defaultPrinter = new DefaultRecordPrinter();
 
             commandHandler.SetNext(new HelpCommandHandler())
                 .SetNext(new StatCommandHandler(fileCabinetService))
                 .SetNext(new ExitCommandHandler(isR => isRunning = isR))
-                .SetNext(new ListCommandHandler(fileCabinetService, defaultPrinter))
+                .SetNext(new ListCommandHandler(fileCabinetService, DefaultRecordPrint))
                 .SetNext(new EditCommandHandler(fileCabinetService))
-                .SetNext(new FindCommandHandler(fileCabinetService, defaultPrinter))
+                .SetNext(new FindCommandHandler(fileCabinetService, DefaultRecordPrint))
                 .SetNext(new ExportCommandHandler(fileCabinetService))
                 .SetNext(new ImportCommandHandler(fileCabinetService))
                 .SetNext(new RemoveCommandHandler(fileCabinetService))
                 .SetNext(new PurgeCommandHandler(fileCabinetService));
 
             return commandHandler;
+        }
+
+        private static void DefaultRecordPrint(IEnumerable<FileCabinetRecord> records)
+        {
+            foreach (FileCabinetRecord record in records)
+            {
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
+            }
         }
 
         private static IFileCabinetService InitFileCabinetService(string[] args)

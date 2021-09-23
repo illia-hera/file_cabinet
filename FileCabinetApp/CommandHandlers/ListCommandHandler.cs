@@ -16,17 +16,17 @@ namespace FileCabinetApp.CommandHandlers
     /// <seealso cref="CabinetServiceCommandHandlerBase" />
     internal class ListCommandHandler : CabinetServiceCommandHandlerBase
     {
-        private readonly IRecordPrinter printer;
+        private readonly Action<IEnumerable<FileCabinetRecord>> print;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ListCommandHandler" /> class.
         /// </summary>
         /// <param name="fileCabinetService">The file cabinet service.</param>
-        /// <param name="printer">The printer.</param>
-        public ListCommandHandler(IFileCabinetService fileCabinetService, IRecordPrinter printer)
+        /// <param name="print">The print.</param>
+        public ListCommandHandler(IFileCabinetService fileCabinetService, Action<IEnumerable<FileCabinetRecord>> print)
             : base(fileCabinetService)
         {
-            this.printer = printer;
+            this.print = print;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace FileCabinetApp.CommandHandlers
                     return;
                 }
 
-                this.printer.Print(recordsCollection);
+                this.print(recordsCollection);
                 return;
             }
 

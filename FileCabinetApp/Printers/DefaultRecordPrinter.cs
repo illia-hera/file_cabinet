@@ -20,6 +20,11 @@ namespace FileCabinetApp.Printers
         /// <param name="records">The records.</param>
         public void Print(IEnumerable<FileCabinetRecord> records)
         {
+            if (records is null)
+            {
+                throw new ArgumentNullException(nameof(records));
+            }
+
             foreach (FileCabinetRecord record in records)
             {
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");

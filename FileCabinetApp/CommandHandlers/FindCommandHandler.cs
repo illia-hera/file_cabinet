@@ -16,17 +16,17 @@ namespace FileCabinetApp.CommandHandlers
     /// <seealso cref="CabinetServiceCommandHandlerBase" />
     internal class FindCommandHandler : CabinetServiceCommandHandlerBase
     {
-        private readonly IRecordPrinter printer;
+        private readonly Action<IEnumerable<FileCabinetRecord>> print;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FindCommandHandler" /> class.
         /// </summary>
         /// <param name="fileCabinetService">The file cabinet service.</param>
-        /// <param name="printer">The printer.</param>
-        public FindCommandHandler(IFileCabinetService fileCabinetService, IRecordPrinter printer)
+        /// <param name="print">The print.</param>
+        public FindCommandHandler(IFileCabinetService fileCabinetService, Action<IEnumerable<FileCabinetRecord>> print)
             : base(fileCabinetService)
         {
-            this.printer = printer;
+            this.print = print;
         }
 
         /// <summary>
@@ -63,8 +63,7 @@ namespace FileCabinetApp.CommandHandlers
                     Console.WriteLine($"No records with {parameter} - {value}.");
                 }
 
-                this.printer.Print(recordsCollection);
-
+                this.print(recordsCollection);
                 return;
             }
 
