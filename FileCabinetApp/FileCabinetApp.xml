@@ -1097,67 +1097,6 @@
             <param name="input">The input.</param>
             <returns>Return result of boolean conversion result and string input value and decimal value.</returns>
         </member>
-        <member name="T:FileCabinetApp.Validators.CustomValidators.CustomAnnualIncomeValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.CustomValidators.CustomAnnualIncomeValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
-        </member>
-        <member name="T:FileCabinetApp.Validators.CustomValidators.CustomDateOfBirthdayValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.CustomValidators.CustomDateOfBirthdayValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
-        </member>
-        <member name="T:FileCabinetApp.Validators.CustomValidators.CustomDriverCategoryValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.CustomValidators.CustomDriverCategoryValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
-            <exception cref="T:System.ArgumentException">The Driver License Category can be only - {this.ValidationRules.ActualCategories}.</exception>
-        </member>
-        <member name="T:FileCabinetApp.Validators.CustomValidators.CustomFirstNameValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.CustomValidators.CustomFirstNameValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
-        </member>
-        <member name="T:FileCabinetApp.Validators.CustomValidators.CustomLastNameValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.CustomValidators.CustomLastNameValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
-        </member>
         <member name="T:FileCabinetApp.Validators.CustomValidators.CustomValidator">
             <summary>
             Custom validator for person parameters.
@@ -1171,79 +1110,6 @@
             <param name="container">The container.</param>
             <exception cref="T:System.ArgumentNullException">container.</exception>
         </member>
-        <member name="T:FileCabinetApp.Validators.CustomValidators.CustomWorkingHoursValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.CustomValidators.CustomWorkingHoursValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
-        </member>
-        <member name="T:FileCabinetApp.Validators.DefaultValidators.DefaultAnnualIncomeValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultValidators.DefaultAnnualIncomeValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
-        </member>
-        <member name="T:FileCabinetApp.Validators.DefaultValidators.DefaultDateOfBirthdayValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultValidators.DefaultDateOfBirthdayValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
-        </member>
-        <member name="T:FileCabinetApp.Validators.DefaultValidators.DefaultDriverCategoryValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultValidators.DefaultDriverCategoryValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
-            <exception cref="T:System.ArgumentException">The Driver License Category can be only - {this.ValidationRules.ActualCategories}.</exception>
-        </member>
-        <member name="T:FileCabinetApp.Validators.DefaultValidators.DefaultFirstNameValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultValidators.DefaultFirstNameValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
-        </member>
-        <member name="T:FileCabinetApp.Validators.DefaultValidators.DefaultLastNameValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultValidators.DefaultLastNameValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
-        </member>
         <member name="T:FileCabinetApp.Validators.DefaultValidators.DefaultValidator">
             <summary>
             Default validator for person parameters.
@@ -1256,18 +1122,6 @@
             </summary>
             <param name="container">The container.</param>
             <exception cref="T:System.ArgumentNullException">container.</exception>
-        </member>
-        <member name="T:FileCabinetApp.Validators.DefaultValidators.DefaultWorkingHoursValidator">
-            <summary>
-            Validation Class.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultValidators.DefaultWorkingHoursValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Validates the parameters.
-            </summary>
-            <param name="container">The container.</param>
         </member>
         <member name="T:FileCabinetApp.Validators.InputValidator">
             <summary>
@@ -1335,6 +1189,120 @@
             </summary>
         </member>
         <member name="M:FileCabinetApp.Validators.IRecordValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Validates the parameters.
+            </summary>
+            <param name="container">The container.</param>
+        </member>
+        <member name="T:FileCabinetApp.Validators.ParametersValidators.AnnualIncomeValidator">
+            <summary>
+            Validation Class.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.AnnualIncomeValidator.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.ParametersValidators.AnnualIncomeValidator"/> class.
+            </summary>
+            <param name="max">The maximum.</param>
+            <param name="min">The minimum.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.AnnualIncomeValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Validates the parameters.
+            </summary>
+            <param name="container">The container.</param>
+        </member>
+        <member name="T:FileCabinetApp.Validators.ParametersValidators.DateOfBirthdayValidator">
+            <summary>
+            Validation Class.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.DateOfBirthdayValidator.#ctor(System.DateTime,System.DateTime)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.ParametersValidators.DateOfBirthdayValidator"/> class.
+            </summary>
+            <param name="max">The maximum.</param>
+            <param name="min">The minimum.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.DateOfBirthdayValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Validates the parameters.
+            </summary>
+            <param name="container">The container.</param>
+        </member>
+        <member name="T:FileCabinetApp.Validators.ParametersValidators.DriverCategoryValidator">
+            <summary>
+            Validation Class.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.DriverCategoryValidator.#ctor(System.Collections.Generic.IList{System.Char})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.ParametersValidators.DriverCategoryValidator"/> class.
+            </summary>
+            <param name="actualCategories">The actual categories.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.DriverCategoryValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Validates the parameters.
+            </summary>
+            <param name="container">The container.</param>
+            <exception cref="T:System.ArgumentException">The Driver License Category can be only - {this.ValidationRules.ActualCategories}.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Validators.ParametersValidators.FirstNameValidator">
+            <summary>
+            Validation Class.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.FirstNameValidator.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.ParametersValidators.FirstNameValidator"/> class.
+            </summary>
+            <param name="max">The maximum.</param>
+            <param name="min">The minimum.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.FirstNameValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Validates the parameters.
+            </summary>
+            <param name="container">The container.</param>
+        </member>
+        <member name="T:FileCabinetApp.Validators.ParametersValidators.LastNameValidator">
+            <summary>
+            Validation Class.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.LastNameValidator.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.ParametersValidators.LastNameValidator"/> class.
+            </summary>
+            <param name="max">The maximum.</param>
+            <param name="min">The minimum.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.LastNameValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Validates the parameters.
+            </summary>
+            <param name="container">The container.</param>
+        </member>
+        <member name="T:FileCabinetApp.Validators.ParametersValidators.WorkingHoursValidator">
+            <summary>
+            Validation Class.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Validators.IRecordValidator" />
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.WorkingHoursValidator.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.ParametersValidators.WorkingHoursValidator"/> class.
+            </summary>
+            <param name="max">The maximum.</param>
+            <param name="min">The minimum.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ParametersValidators.WorkingHoursValidator.ValidateParameters(FileCabinetApp.Entities.ParametersContainer)">
             <summary>
             Validates the parameters.
             </summary>

@@ -1,20 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FileCabinetApp.Entities;
-using FileCabinetApp.Validators.ValidationRule;
 
-namespace FileCabinetApp.Validators.DefaultValidators
+namespace FileCabinetApp.Validators.ParametersValidators
 {
     /// <summary>
     /// Validation Class.
     /// </summary>
     /// <seealso cref="FileCabinetApp.Validators.IRecordValidator" />
-    public class DefaultLastNameValidator : IRecordValidator
+    public class LastNameValidator : IRecordValidator
     {
-        private ValidationRules ValidationRules { get; } = new ValidationDefaultRules();
+        private readonly int min;
+
+        private readonly int max;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LastNameValidator"/> class.
+        /// </summary>
+        /// <param name="max">The maximum.</param>
+        /// <param name="min">The minimum.</param>
+        public LastNameValidator(int max, int min)
+        {
+            this.max = max;
+            this.min = min;
+        }
 
         /// <summary>
         /// Validates the parameters.
@@ -32,11 +40,11 @@ namespace FileCabinetApp.Validators.DefaultValidators
                 throw new ArgumentNullException(nameof(container), $"{container.LastName}can not be null");
             }
 
-            if (container.LastName.Length < this.ValidationRules.MinLengthLastName ||
-                container.LastName.Length > this.ValidationRules.MaxLengthLastName)
+            if (container.LastName.Length < this.min ||
+                container.LastName.Length > this.max)
             {
                 throw new ArgumentException(
-                    $"Last name must to have from {this.ValidationRules.MinLengthLastName} to {this.ValidationRules.MaxLengthLastName} characters.");
+                    $"Last name must to have from {this.min} to {this.max} characters.");
             }
         }
     }

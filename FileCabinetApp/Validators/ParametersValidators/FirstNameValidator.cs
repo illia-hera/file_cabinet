@@ -1,16 +1,28 @@
 ﻿using System;
 using FileCabinetApp.Entities;
-using FileCabinetApp.Validators.ValidationRule;
 
-namespace FileCabinetApp.Validators.CustomValidators
+namespace FileCabinetApp.Validators.ParametersValidators
 {
     /// <summary>
     /// Validation Class.
     /// </summary>
     /// <seealso cref="FileCabinetApp.Validators.IRecordValidator" />
-    public class CustomFirstNameValidator : IRecordValidator
+    public class FirstNameValidator : IRecordValidator
     {
-        private ValidationRules ValidationRules { get; } = new ValidationCustomRules();
+        private readonly int min;
+
+        private readonly int max;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FirstNameValidator"/> class.
+        /// </summary>
+        /// <param name="max">The maximum.</param>
+        /// <param name="min">The minimum.</param>
+        public FirstNameValidator(int max, int min)
+        {
+            this.max = max;
+            this.min = min;
+        }
 
         /// <summary>
         /// Validates the parameters.
@@ -28,9 +40,9 @@ namespace FileCabinetApp.Validators.CustomValidators
                 throw new ArgumentNullException(nameof(container), $"{container.FirstName}can not be null");
             }
 
-            if (container.FirstName.Length < this.ValidationRules.MinLengthFirstName || container.FirstName.Length > this.ValidationRules.MaxLengthFirstName)
+            if (container.FirstName.Length < this.min || container.FirstName.Length > this.max)
             {
-                throw new ArgumentException($"First name must to have from {this.ValidationRules.MinLengthFirstName} to {this.ValidationRules.MaxLengthFirstName} characters.");
+                throw new ArgumentException($"First name must to have from {this.min} to {this.max} characters.");
             }
         }
     }
