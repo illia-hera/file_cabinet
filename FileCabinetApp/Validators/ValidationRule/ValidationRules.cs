@@ -50,6 +50,6 @@ namespace FileCabinetApp.Validators.ValidationRule
 
         /// <summary>Gets the actual categories.</summary>
         /// <value>The actual categories.</value>
-        public abstract List<char> ActualCategories { get; }
+        public abstract IList<char> ActualCategories { get; }
     }
 }

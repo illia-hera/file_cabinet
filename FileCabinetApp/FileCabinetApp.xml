@@ -4,6 +4,293 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.CommandHandlers.AppCommandRequest">
+            <summary>
+            Class <c>AppCommandRequest</c> create request.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.AppCommandRequest.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.AppCommandRequest"/> class.
+            </summary>
+            <param name="command">The command.</param>
+            <param name="parameters">The parameters.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.AppCommandRequest.Command">
+            <summary>
+            Gets the command.
+            </summary>
+            <value>
+            The command.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.AppCommandRequest.Parameters">
+            <summary>
+            Gets the parameters.
+            </summary>
+            <value>
+            The parameters.
+            </value>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase">
+            <summary>
+            Class <c>CabinetServiceCommandHandlerBase</c>.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" /> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase.FileCabinetService">
+            <summary>
+            Gets the file cabinet service.
+            </summary>
+            <value>
+            The file cabinet service.
+            </value>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.CommandHandlerBase">
+            <summary>
+            Class <c>CommandHandlerBase</c> base of command handling.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.ICommandHandler" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.SetNext(FileCabinetApp.CommandHandlers.ICommandHandler)">
+            <summary>
+            Sets the next.
+            </summary>
+            <param name="commandHandler">The command handler.</param>
+            <returns>Return new CommandHandle.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.CreateCommandHandler">
+            <summary>
+            Class <c>CreateCommandHandler</c> create records.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.CreateCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.EditCommandHandler">
+            <summary>
+            Class <c>EditCommandHandler</c> implement edit command.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.EditCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ExitCommandHandler">
+            <summary>
+            Class <c>ExitCommandHandler</c> implement exit command.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExitCommandHandler.#ctor(System.Action{System.Boolean})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ExitCommandHandler"/> class.
+            </summary>
+            <param name="runningAction">The running action.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExitCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ExportCommandHandler">
+            <summary>
+            Class <c>ExportCommandHandler</c> implement export command.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ExportCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.FindCommandHandler">
+            <summary>
+            Class <c>FindCommandHandler</c> implement find command.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">nameof(appCommandRequest).</exception>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.HelpCommandHandler">
+            <summary>
+            Class <c>HelpCommandHandler</c> help command.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.HelpCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ICommandHandler">
+            <summary>
+            Interface <c>ICommandHandler</c>.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ICommandHandler.SetNext(FileCabinetApp.CommandHandlers.ICommandHandler)">
+            <summary>
+            Sets the next.
+            </summary>
+            <param name="commandHandler">The command handler.</param>
+            <returns>Return new StatCommandHandler.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ICommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified command request.
+            </summary>
+            <param name="appCommandRequest">The command request.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ImportCommandHandler">
+            <summary>
+            Class <c>ImportCommandHandler</c> implement import command.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ImportCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ImportCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ImportCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ListCommandHandler">
+            <summary>
+            Class <c>ListCommandHandler</c> implement List command.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ListCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.PurgeCommandHandler">
+            <summary>
+            Class <c>PurgeCommandHandler</c> implement purge command.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.PurgeCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.PurgeCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.PurgeCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler">
+            <summary>
+            Class <c>RemoveCommandHandler</c> implement remove command.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.StatCommandHandler">
+            <summary>
+            CLass <c>StatCommandHandler</c> generate File Cabinet Stat.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.StatCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.StatCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.StatCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
+        </member>
         <member name="T:FileCabinetApp.Entities.FileCabinetRecord">
             <summary>
             Class <c>FileCabinetRecord</c> describe the user of File Cabinet.
@@ -275,11 +562,25 @@
             Class <c>Program</c> - initial class.
             </summary>
         </member>
+        <member name="P:FileCabinetApp.Program.Validator">
+            <summary>
+              <para>
+            Gets the validator.
+            </para>
+            </summary>
+            <value>The validator.</value>
+        </member>
         <member name="M:FileCabinetApp.Program.Main(System.String[])">
             <summary>
             Defines the entry point of the application.
             </summary>
             <param name="args">The arguments.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.GetValidInputParameters">
+            <summary>
+            Gets the valid input parameters.
+            </summary>
+            <returns>Return container with parameters.</returns>
         </member>
         <member name="T:FileCabinetApp.Readers.FileCabinetRecordCsvReader">
             <summary>
@@ -875,6 +1176,13 @@
             </summary>
             <param name="dateOfBirth">The date of birth.</param>
             <returns>Return the result of validation an value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.IRecordValidator.ValidateImportExportParameters(System.String)">
+            <summary>
+            Validates the import export parameters.
+            </summary>
+            <param name="parameters">The parameters.</param>
+            <returns>Return validation result and value.</returns>
         </member>
         <member name="T:FileCabinetApp.Validators.ValidationRule.ValidationCustomRules">
             <summary>

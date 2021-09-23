@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Validators.ValidationRule;
 
@@ -156,6 +157,30 @@ namespace FileCabinetApp.Validators
             bool isValid = dateOfBirth > this.ValidationRules.MinDateOfBirth && dateOfBirth < this.ValidationRules.MaxDateOfBirth;
 
             return new Tuple<bool, string>(isValid, dateOfBirth.ToString(CultureInfo.CreateSpecificCulture("en-US")));
+        }
+
+        /// <summary>
+        /// Validates the import export parameters.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Return validation result and value.</returns>
+        public Tuple<bool, string, string> ValidateImportExportParameters(string parameters)
+        {
+            string[] inputs = parameters?.Split(' ', 2);
+            const int parameterIndex = 0;
+            const int valueIndex = 1;
+            string fileFormat = inputs[parameterIndex];
+            string filePath = inputs.Length > 1 ? inputs[valueIndex] : string.Empty;
+            int lastIndexOfBackSlash = filePath.LastIndexOf("\\", StringComparison.OrdinalIgnoreCase);
+            string fileDirection = lastIndexOfBackSlash > 0 ? filePath[..lastIndexOfBackSlash] : string.Empty;
+
+            if (string.IsNullOrWhiteSpace(filePath) || (!string.IsNullOrEmpty(fileDirection) && (!Directory.Exists(fileDirection))))
+            {
+                Console.WriteLine($"Export failed: can't open file {filePath}.");
+                return new Tuple<bool, string, string>(false, null, null);
+            }
+
+            return new Tuple<bool, string, string>(true, filePath, fileFormat);
         }
     }
 }
