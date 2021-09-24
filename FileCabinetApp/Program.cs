@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using CommandLine;
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Printers;
@@ -13,7 +14,9 @@ using FileCabinetApp.Services.MemoryService;
 using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
 using FileCabinetApp.Validators;
-using FileCabinetApp.Validators.InputValidator;
+using FileCabinetApp.Validators.InputValidators;
+using FileCabinetApp.Validators.InputValidators.ValidationRule;
+using FileCabinetApp.Validators.RecordValidator;
 
 namespace FileCabinetApp
 {
@@ -55,9 +58,10 @@ namespace FileCabinetApp
         /// <param name="args">The arguments.</param>
         public static void Main(string[] args)
         {
-            fileCabinetService = InitFileCabinetService(args);
-            var commandHandler = CreateCommandHandler();
-            Console.WriteLine(Program.HintMessage);
+            Console.WriteLine($"File Cabinet Application, developed by {DeveloperName}");
+            InitFileCabinetService(args);
+            ICommandHandler commandHandler = CreateCommandHandler();
+            Console.WriteLine(HintMessage);
             Console.WriteLine();
 
             do
@@ -127,48 +131,36 @@ namespace FileCabinetApp
             }
         }
 
-        private static IFileCabinetService InitFileCabinetService(string[] args)
+        private static void InitFileCabinetService(string[] args)
         {
-            Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
-            if (args?.Length != 0)
-            {
-                const int initialCommandIndex = 0;
-                const int initialCommandValueIndex = 1;
-                string parameter = args![initialCommandIndex];
-                var parameterValue = args.Length > 1 ? args[initialCommandValueIndex] : string.Empty;
-                if (string.IsNullOrEmpty(parameterValue))
-                {
-                    string[] splitParameter = parameter.Split('=', 2);
-                    parameter = splitParameter[initialCommandIndex];
-                    parameterValue = splitParameter[initialCommandValueIndex];
-                }
-
-                if (parameter.Equals("-s", StringComparison.OrdinalIgnoreCase) || parameter.Equals("--storage", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (parameterValue.Equals("file", StringComparison.OrdinalIgnoreCase))
+            IRecordValidator recordValidator = new ValidatorBuilder().CreateDefault();
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed(
+                    o =>
                     {
-                        Console.WriteLine("Using file service");
-                        Console.WriteLine("Using default validation rules");
-                        return new FileCabinetFilesystemService(File.Open("cabinet-records.db", FileMode.Create));
-                    }
-                }
+                        if ((o.ValidationRules == null) || o.ValidationRules.Equals("default", StringComparison.OrdinalIgnoreCase))
+                        {
+                            Console.WriteLine("Using default validation rules.");
+                        }
+                        else if (o.ValidationRules.Equals("custom", StringComparison.OrdinalIgnoreCase))
+                        {
+                            recordValidator = new ValidatorBuilder().CreateCustom();
+                            Console.WriteLine("Using custom validation rules.");
+                        }
 
-                if (parameter.Equals("-v", StringComparison.OrdinalIgnoreCase) || parameter.Equals("--validation-rules", StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine("Using memory service");
-                    if (parameterValue.Equals("custom", StringComparison.OrdinalIgnoreCase))
-                    {
-                        Console.WriteLine("Using custom validation rules");
-                        return new FileCabinetMemoryCustomService();
-                    }
-
-                    return new FileCabinetMemoryDefaultService();
-                }
-            }
-
-            Console.WriteLine("Using memory service");
-            Console.WriteLine("Using default validation rules");
-            return new FileCabinetMemoryDefaultService();
+                        if ((o.StorageRules == null) || o.StorageRules.Equals("memory", StringComparison.OrdinalIgnoreCase))
+                        {
+                            fileCabinetService = new FileCabinetMemoryService(recordValidator);
+                            Console.WriteLine("Using memory storage rules.");
+                        }
+                        else if (o.StorageRules.Equals("file", StringComparison.OrdinalIgnoreCase))
+                        {
+                            fileCabinetService = !File.Exists("cabinet-records.db")
+                                                     ? new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.OpenOrCreate), recordValidator)
+                                                     : new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Open), recordValidator);
+                            Console.WriteLine("Using file storage rules.");
+                        }
+                    });
         }
 
         private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)

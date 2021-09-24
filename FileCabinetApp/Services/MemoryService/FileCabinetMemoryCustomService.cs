@@ -13,7 +13,7 @@ namespace FileCabinetApp.Services.MemoryService
         /// Initializes a new instance of the <see cref="FileCabinetMemoryCustomService"/> class.
         /// </summary>
         public FileCabinetMemoryCustomService()
-            : base(new CustomValidator())
+            : base(new ValidatorBuilder().CreateCustom())
         {
         }
     }

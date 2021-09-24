@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using FileCabinetApp.Validators.InputValidator.ValidationRule;
+using FileCabinetApp.Validators.InputValidators.ValidationRule;
 
-namespace FileCabinetApp.Validators.InputValidator
+namespace FileCabinetApp.Validators.InputValidators
 {
     /// <summary>
     /// Class <c>InputValidator</c>.
