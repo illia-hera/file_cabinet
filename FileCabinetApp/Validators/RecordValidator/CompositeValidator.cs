@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FileCabinetApp.Entities;
 
-namespace FileCabinetApp.Validators
+namespace FileCabinetApp.Validators.RecordValidator
 {
     /// <summary>
     /// Class composite validator.
     /// </summary>
-    /// <seealso cref="FileCabinetApp.Validators.IRecordValidator" />
+    /// <seealso cref="IRecordValidator" />
     public class CompositeValidator : IRecordValidator
     {
         private readonly List<IRecordValidator> validators;

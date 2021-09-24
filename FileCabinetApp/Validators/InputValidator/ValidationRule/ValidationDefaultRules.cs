@@ -1,55 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
-namespace FileCabinetApp.Validators.ValidationRule
+namespace FileCabinetApp.Validators.InputValidator.ValidationRule
 {
     /// <summary>
-    /// Abstract validation rules.
+    /// Default validation rules.
     /// </summary>
-    public abstract class ValidationRules
+    /// <seealso cref="ValidationRules" />
+    public class ValidationDefaultRules : ValidationRules
     {
         /// <summary>Gets the minimum annual income.</summary>
         /// <value>The minimum annual income.</value>
-        public abstract int MinAnnualIncome { get; }
+        public override int MinAnnualIncome { get; } = 1000;
 
         /// <summary>Gets the maximum annual income.</summary>
         /// <value>The maximum annual income.</value>
-        public abstract int MaxAnnualIncome { get; }
+        public override int MaxAnnualIncome { get; } = 1000000;
 
         /// <summary>Gets the maximum name of the length last.</summary>
         /// <value>The maximum name of the length last.</value>
-        public abstract int MaxLengthLastName { get; }
+        public override int MaxLengthLastName { get; } = 60;
 
         /// <summary>Gets the minimum name of the length last.</summary>
         /// <value>The minimum name of the length last.</value>
-        public abstract int MinLengthLastName { get; }
+        public override int MinLengthLastName { get; } = 2;
 
         /// <summary>Gets the maximum name of the length first.</summary>
         /// <value>The maximum name of the length first.</value>
-        public abstract int MaxLengthFirstName { get; }
+        public override int MaxLengthFirstName { get; } = 60;
 
         /// <summary>Gets the minimum name of the length first.</summary>
         /// <value>The minimum name of the length first.</value>
-        public abstract int MinLengthFirstName { get; }
+        public override int MinLengthFirstName { get; } = 2;
 
         /// <summary>Gets the minimum working hours per week.</summary>
         /// <value>The minimum working hours per week.</value>
-        public abstract int MinWorkingHoursPerWeek { get; }
+        public override int MinWorkingHoursPerWeek { get; } = 1;
 
         /// <summary>Gets the maximum working hours per week.</summary>
         /// <value>The maximum working hours per week.</value>
-        public abstract int MaxWorkingHoursPerWeek { get; }
+        public override int MaxWorkingHoursPerWeek { get; } = 40;
 
         /// <summary>Gets the minimum date of birth.</summary>
         /// <value>The minimum date of birth.</value>
-        public abstract DateTime MinDateOfBirth { get; }
+        public override DateTime MinDateOfBirth { get; } = DateTime.Parse("01-Jun-1950", CultureInfo.CreateSpecificCulture("en-US"));
 
         /// <summary>Gets the maximum date of birth.</summary>
         /// <value>The maximum date of birth.</value>
-        public abstract DateTime MaxDateOfBirth { get; }
+        public override DateTime MaxDateOfBirth { get; } = DateTime.Now;
 
         /// <summary>Gets the actual categories.</summary>
         /// <value>The actual categories.</value>
-        public abstract IList<char> ActualCategories { get; }
+        public override List<char> ActualCategories { get; } = new List<char>() { 'A', 'B', 'C', 'D' };
     }
 }

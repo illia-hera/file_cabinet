@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using FileCabinetApp.Entities;
-using FileCabinetApp.Validators.ParametersValidators;
+using FileCabinetApp.Validators.RecordValidator.ParametersValidators;
 
-namespace FileCabinetApp.Validators
+namespace FileCabinetApp.Validators.RecordValidator
 {
     /// <summary>
     /// Default validator for person parameters.
     /// </summary>
-    /// <seealso cref="FileCabinetApp.Validators.CompositeValidator" />
+    /// <seealso cref="CompositeValidator" />
     /// <seealso cref="IRecordValidator" />
     public class DefaultValidator : CompositeValidator
     {

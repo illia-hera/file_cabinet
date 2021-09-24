@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using FileCabinetApp.Entities;
 
-namespace FileCabinetApp.Validators.ParametersValidators
+namespace FileCabinetApp.Validators.RecordValidator.ParametersValidators
 {
     /// <summary>
     /// Validation Class.
     /// </summary>
-    /// <seealso cref="FileCabinetApp.Validators.IRecordValidator" />
+    /// <seealso cref="IRecordValidator" />
     public class DriverCategoryValidator : IRecordValidator
     {
         private readonly IList<char> actualCategories;

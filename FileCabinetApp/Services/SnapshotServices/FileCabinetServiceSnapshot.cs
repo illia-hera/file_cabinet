@@ -7,6 +7,7 @@ using FileCabinetApp.Entities;
 using FileCabinetApp.Readers;
 using FileCabinetApp.RecordWriters;
 using FileCabinetApp.Validators;
+using FileCabinetApp.Validators.RecordValidator;
 
 namespace FileCabinetApp.Services.SnapshotServices
 {

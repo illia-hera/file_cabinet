@@ -1,24 +1,24 @@
 ﻿using System;
 using FileCabinetApp.Entities;
 
-namespace FileCabinetApp.Validators.ParametersValidators
+namespace FileCabinetApp.Validators.RecordValidator.ParametersValidators
 {
     /// <summary>
     /// Validation Class.
     /// </summary>
-    /// <seealso cref="FileCabinetApp.Validators.IRecordValidator" />
-    public class WorkingHoursValidator : IRecordValidator
+    /// <seealso cref="IRecordValidator" />
+    public class LastNameValidator : IRecordValidator
     {
         private readonly int min;
 
         private readonly int max;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WorkingHoursValidator"/> class.
+        /// Initializes a new instance of the <see cref="LastNameValidator"/> class.
         /// </summary>
         /// <param name="max">The maximum.</param>
         /// <param name="min">The minimum.</param>
-        public WorkingHoursValidator(int max, int min)
+        public LastNameValidator(int max, int min)
         {
             this.max = max;
             this.min = min;
@@ -35,9 +35,16 @@ namespace FileCabinetApp.Validators.ParametersValidators
                 throw new ArgumentNullException(nameof(container));
             }
 
-            if (container.WorkingHoursPerWeek > this.max || container.WorkingHoursPerWeek < this.min)
+            if (container.LastName is null)
             {
-                throw new ArgumentException($"The minimum hours is {this.min} hour, the maximum hours is the {this.max}.");
+                throw new ArgumentNullException(nameof(container), $"{container.LastName}can not be null");
+            }
+
+            if (container.LastName.Length < this.min ||
+                container.LastName.Length > this.max)
+            {
+                throw new ArgumentException(
+                    $"Last name must to have from {this.min} to {this.max} characters.");
             }
         }
     }

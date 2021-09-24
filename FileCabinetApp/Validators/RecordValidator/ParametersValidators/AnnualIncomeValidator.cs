@@ -1,24 +1,24 @@
 ﻿using System;
 using FileCabinetApp.Entities;
 
-namespace FileCabinetApp.Validators.ParametersValidators
+namespace FileCabinetApp.Validators.RecordValidator.ParametersValidators
 {
     /// <summary>
     /// Validation Class.
     /// </summary>
-    /// <seealso cref="FileCabinetApp.Validators.IRecordValidator" />
-    public class FirstNameValidator : IRecordValidator
+    /// <seealso cref="IRecordValidator" />
+    public class AnnualIncomeValidator : IRecordValidator
     {
         private readonly int min;
 
         private readonly int max;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FirstNameValidator"/> class.
+        /// Initializes a new instance of the <see cref="AnnualIncomeValidator"/> class.
         /// </summary>
         /// <param name="max">The maximum.</param>
         /// <param name="min">The minimum.</param>
-        public FirstNameValidator(int max, int min)
+        public AnnualIncomeValidator(int max, int min)
         {
             this.max = max;
             this.min = min;
@@ -35,14 +35,9 @@ namespace FileCabinetApp.Validators.ParametersValidators
                 throw new ArgumentNullException(nameof(container));
             }
 
-            if (container.FirstName is null)
+            if (container.AnnualIncome < this.min || container.AnnualIncome > this.max)
             {
-                throw new ArgumentNullException(nameof(container), $"{container.FirstName}can not be null");
-            }
-
-            if (container.FirstName.Length < this.min || container.FirstName.Length > this.max)
-            {
-                throw new ArgumentException($"First name must to have from {this.min} to {this.max} characters.");
+                throw new ArgumentException($"The Annual income min value - {this.min}, max value - {this.max}.");
             }
         }
     }

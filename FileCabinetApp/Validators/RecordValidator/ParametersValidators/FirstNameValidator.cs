@@ -1,24 +1,24 @@
 ﻿using System;
 using FileCabinetApp.Entities;
 
-namespace FileCabinetApp.Validators.ParametersValidators
+namespace FileCabinetApp.Validators.RecordValidator.ParametersValidators
 {
     /// <summary>
     /// Validation Class.
     /// </summary>
-    /// <seealso cref="FileCabinetApp.Validators.IRecordValidator" />
-    public class LastNameValidator : IRecordValidator
+    /// <seealso cref="IRecordValidator" />
+    public class FirstNameValidator : IRecordValidator
     {
         private readonly int min;
 
         private readonly int max;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LastNameValidator"/> class.
+        /// Initializes a new instance of the <see cref="FirstNameValidator"/> class.
         /// </summary>
         /// <param name="max">The maximum.</param>
         /// <param name="min">The minimum.</param>
-        public LastNameValidator(int max, int min)
+        public FirstNameValidator(int max, int min)
         {
             this.max = max;
             this.min = min;
@@ -35,16 +35,14 @@ namespace FileCabinetApp.Validators.ParametersValidators
                 throw new ArgumentNullException(nameof(container));
             }
 
-            if (container.LastName is null)
+            if (container.FirstName is null)
             {
-                throw new ArgumentNullException(nameof(container), $"{container.LastName}can not be null");
+                throw new ArgumentNullException(nameof(container), $"{container.FirstName}can not be null");
             }
 
-            if (container.LastName.Length < this.min ||
-                container.LastName.Length > this.max)
+            if (container.FirstName.Length < this.min || container.FirstName.Length > this.max)
             {
-                throw new ArgumentException(
-                    $"Last name must to have from {this.min} to {this.max} characters.");
+                throw new ArgumentException($"First name must to have from {this.min} to {this.max} characters.");
             }
         }
     }

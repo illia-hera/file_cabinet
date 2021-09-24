@@ -5,6 +5,7 @@ using System.IO;
 
 using FileCabinetApp.Entities;
 using FileCabinetApp.Validators;
+using FileCabinetApp.Validators.RecordValidator;
 
 namespace FileCabinetApp.Readers
 {

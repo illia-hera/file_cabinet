@@ -1,24 +1,24 @@
 ﻿using System;
 using FileCabinetApp.Entities;
 
-namespace FileCabinetApp.Validators.ParametersValidators
+namespace FileCabinetApp.Validators.RecordValidator.ParametersValidators
 {
     /// <summary>
     /// Validation Class.
     /// </summary>
-    /// <seealso cref="FileCabinetApp.Validators.IRecordValidator" />
-    public class AnnualIncomeValidator : IRecordValidator
+    /// <seealso cref="IRecordValidator" />
+    public class WorkingHoursValidator : IRecordValidator
     {
-        private readonly int min;
+        private readonly short min;
 
-        private readonly int max;
+        private readonly short max;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnnualIncomeValidator"/> class.
+        /// Initializes a new instance of the <see cref="WorkingHoursValidator"/> class.
         /// </summary>
         /// <param name="max">The maximum.</param>
         /// <param name="min">The minimum.</param>
-        public AnnualIncomeValidator(int max, int min)
+        public WorkingHoursValidator(short max, short min)
         {
             this.max = max;
             this.min = min;
@@ -35,9 +35,9 @@ namespace FileCabinetApp.Validators.ParametersValidators
                 throw new ArgumentNullException(nameof(container));
             }
 
-            if (container.AnnualIncome < this.min || container.AnnualIncome > this.max)
+            if (container.WorkingHoursPerWeek > this.max || container.WorkingHoursPerWeek < this.min)
             {
-                throw new ArgumentException($"The Annual income min value - {this.min}, max value - {this.max}.");
+                throw new ArgumentException($"The minimum hours is {this.min} hour, the maximum hours is the {this.max}.");
             }
         }
     }

@@ -6,6 +6,7 @@ using System.Linq;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Validators;
+using FileCabinetApp.Validators.RecordValidator;
 
 namespace FileCabinetApp.Services.MemoryService
 {

@@ -13,7 +13,7 @@ using FileCabinetApp.Services.MemoryService;
 using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
 using FileCabinetApp.Validators;
-using FileCabinetApp.Validators.ValidationRule;
+using FileCabinetApp.Validators.InputValidator;
 
 namespace FileCabinetApp
 {
