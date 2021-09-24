@@ -8,6 +8,7 @@ using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
 using FileCabinetApp.Validators;
+using FileCabinetApp.Validators.RecordValidator;
 using Microsoft.Win32.SafeHandles;
 
 namespace FileCabinetApp.Services.FileService
@@ -32,7 +33,7 @@ namespace FileCabinetApp.Services.FileService
 
         private readonly FileStream fileStream;
 
-        private readonly IRecordValidator validator = new DefaultValidator();
+        private readonly IRecordValidator validator = new ValidatorBuilder().CreateDefault();
 
         private int recordsCount;
 
@@ -45,6 +46,17 @@ namespace FileCabinetApp.Services.FileService
         public FileCabinetFilesystemService(FileStream fileStream)
         {
             this.fileStream = fileStream;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetFilesystemService" /> class.
+        /// </summary>
+        /// <param name="fileStream">The file stream.</param>
+        /// <param name="validator">The validator.</param>
+        public FileCabinetFilesystemService(FileStream fileStream, IRecordValidator validator)
+            : this(fileStream)
+        {
+            this.validator = validator;
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using System.IO;
 
 using FileCabinetApp.Entities;
 using FileCabinetApp.Validators;
+using FileCabinetApp.Validators.RecordValidator;
 
 namespace FileCabinetApp.Readers
 {
@@ -50,7 +51,7 @@ namespace FileCabinetApp.Readers
                 while (!this.reader.EndOfStream)
                 {
                     var line = this.reader.ReadLine();
-                    if (line != null && !line.Equals("Id,Firstname,Last name,Date of birthday,Working hours per week,Annual income,Driver license category", StringComparison.InvariantCulture))
+                    if (line != null && !line.Equals("Id,Firstname,Last name,Date of birthday,Working hours per week,Annual income,Driver license category", StringComparison.Ordinal))
                     {
                         var values = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
 

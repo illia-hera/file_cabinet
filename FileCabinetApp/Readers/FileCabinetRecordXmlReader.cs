@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Entities.XmlSerialization;
 using FileCabinetApp.Validators;
+using FileCabinetApp.Validators.RecordValidator;
 
 namespace FileCabinetApp.Readers
 {
