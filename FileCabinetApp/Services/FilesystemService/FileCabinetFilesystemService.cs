@@ -33,7 +33,7 @@ namespace FileCabinetApp.Services.FileService
 
         private readonly FileStream fileStream;
 
-        private readonly IRecordValidator validator = new ValidatorBuilder().CreateDefault();
+        private readonly IRecordValidator validator;
 
         private int recordsCount;
 
