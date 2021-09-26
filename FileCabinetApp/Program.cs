@@ -108,7 +108,13 @@ namespace FileCabinetApp
         {
             foreach (FileCabinetRecord record in records)
             {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
+                Console.WriteLine($"#{record.Id}," +
+                                  $" {record.FirstName}," +
+                                  $" {record.LastName}," +
+                                  $" {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}," +
+                                  $" working hours: {record.WorkingHoursPerWeek}," +
+                                  $" annual income: {record.AnnualIncome}," +
+                                  $" driver category: {record.DriverLicenseCategory}.");
             }
         }
 

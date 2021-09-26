@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using FileCabinetApp.Entities;
 
@@ -26,6 +27,8 @@ namespace FileCabinetApp.RecordWriters
         /// <param name="record">The record.</param>
         public void Write(FileCabinetRecord record)
         {
+            NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
+            nfi.CurrencyDecimalSeparator = ".";
             if (record != null)
             {
                 this.textWriter.WriteLine($"{record.Id}," +
@@ -33,7 +36,7 @@ namespace FileCabinetApp.RecordWriters
                                           $"{record.LastName}," +
                                           $"{record.DateOfBirth.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)}," +
                                           $"{record.WorkingHoursPerWeek}," +
-                                          $"{record.AnnualIncome}," +
+                                          $"{Convert.ToString(record.AnnualIncome, nfi)}," +
                                           $"{record.DriverLicenseCategory}");
             }
         }
