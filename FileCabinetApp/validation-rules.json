@@ -10,7 +10,7 @@
     },
     "dateOfBirth": {
       "from": "1/1/1950",
-      "to": "21/09/2021"
+      "to": "9/09/2021"
     },
     "workingHoursPerWeek": {
       "min": 1,
@@ -21,7 +21,7 @@
       "max": 1000000
     },
     "driverCategories": {
-      "actualCategories": [ "A", "B", "C", "D" ] 
+      "actualCategories": [ "A", "B", "C", "D" ]
     }
   },
   "custom": {
@@ -34,8 +34,8 @@
       "max": 10
     },
     "dateOfBirth": {
-      "from": "12/10/1970",
-      "to": "21/09/2015"
+      "from": "10/12/1970",
+      "to": "09/09/2015"
     },
     "workingHoursPerWeek": {
       "min": 20,

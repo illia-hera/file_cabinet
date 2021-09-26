@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
-using FileCabinetApp.Validators;
 using FileCabinetApp.Validators.RecordValidator;
-using Microsoft.Win32.SafeHandles;
 
-namespace FileCabinetApp.Services.FileService
+namespace FileCabinetApp.Services
 {
     /// <summary>
     /// Class <c>FileCabinetFilesystemService</c>.
@@ -195,7 +192,7 @@ namespace FileCabinetApp.Services.FileService
         /// Return array of records.
         /// </returns>
         /// <exception cref="System.NotImplementedException">Not implemented.</exception>
-        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthName(DateTime dateOfBirth)
+        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
         {
             var records = this.GetRecords();
             var filteredRecords = records.Where(record => dateOfBirth == record.DateOfBirth).ToArray();
@@ -298,9 +295,11 @@ namespace FileCabinetApp.Services.FileService
         }
 
         /// <summary>
-        /// Defragmentation the data file — removing voids in the data file formed by deleted records.
+        /// Removing voids in the data file formed by deleted records.
         /// </summary>
-        /// <returns>Return deleted Count.</returns>
+        /// <returns>
+        /// Return purged Count.
+        /// </returns>
         public int Purge()
         {
             var currentSize = this.recordsCount * RecordSize;

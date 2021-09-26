@@ -54,7 +54,7 @@ namespace FileCabinetApp.CommandHandlers
                     var p when p.Equals("firstname", StringComparison.OrdinalIgnoreCase) => this.FileCabinetService.FindByFirstName(value.Trim('\"')),
                     var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => this.FileCabinetService.FindByLastName(value.Trim('\"')),
                     var p when p.Equals("dateOfBirth", StringComparison.OrdinalIgnoreCase)
-                               && DateTime.TryParse(value.Trim('\"'), out DateTime dateOfBd) => this.FileCabinetService.FindByDateOfBirthName(dateOfBd),
+                               && DateTime.TryParse(value.Trim('\"'), out DateTime dateOfBd) => this.FileCabinetService.FindByDateOfBirthday(dateOfBd),
                     _ => Array.Empty<FileCabinetRecord>()
                 };
 

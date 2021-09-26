@@ -36,7 +36,7 @@ namespace FileCabinetApp.Validators.RecordValidator
 
             return builder.ValidateFirstName(configuration.FirstName.Max, configuration.FirstName.Min)
                 .ValidateLastName(configuration.LastName.Max, configuration.LastName.Min)
-                .ValidateDateOfBirth(configuration.DateOfBirth.Max, configuration.DateOfBirth.Min)
+                .ValidateDateOfBirth(configuration.DateOfBirth.To, configuration.DateOfBirth.From)
                 .ValidateWorkingHours(configuration.WorkingHoursPerWeek.Max, configuration.WorkingHoursPerWeek.Min)
                 .ValidateAnnualIncome(configuration.AnnualIncome.Max, configuration.AnnualIncome.Min)
                 .ValidateDriverCategory(configuration.DriverCategories.ActualCategories)

@@ -417,7 +417,7 @@
             Date of birthday.
             </summary>
         </member>
-        <member name="P:FileCabinetApp.Entities.JsonSerialization.DateOfBirth.Min">
+        <member name="P:FileCabinetApp.Entities.JsonSerialization.DateOfBirth.From">
             <summary>
             Gets or sets the minimum.
             </summary>
@@ -425,7 +425,7 @@
             The minimum.
             </value>
         </member>
-        <member name="P:FileCabinetApp.Entities.JsonSerialization.DateOfBirth.Max">
+        <member name="P:FileCabinetApp.Entities.JsonSerialization.DateOfBirth.To">
             <summary>
             Gets or sets the maximum.
             </summary>
@@ -581,6 +581,14 @@
             </summary>
             <value>
             The storage rules.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.Entities.Options.StopWatchUse">
+            <summary>
+            Gets or sets a value indicating whether [stop watch use].
+            </summary>
+            <value>
+              <c>true</c> if [stop watch use]; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="T:FileCabinetApp.Entities.ParametersContainer">
@@ -913,7 +921,7 @@
             </returns>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.FindByDateOfBirthName(System.DateTime)">
+        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.FindByDateOfBirthday(System.DateTime)">
             <summary>
             Finds the records by date of birthday.
             </summary>
@@ -947,9 +955,11 @@
         </member>
         <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.Purge">
             <summary>
-            Defragmentation the data file — removing voids in the data file formed by deleted records.
+            Removing voids in the data file formed by deleted records.
             </summary>
-            <returns>Return deleted Count.</returns>
+            <returns>
+            Return purged Count.
+            </returns>
         </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
@@ -996,7 +1006,7 @@
             <param name="lastName">The last name.</param>
             <returns>Return array of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirthName(System.DateTime)">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirthday(System.DateTime)">
             <summary>
             Finds the records by date of birthday.
             </summary>
@@ -1020,6 +1030,12 @@
             Removes the record from FileCabinetApp.
             </summary>
             <param name="id">The identifier.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.Purge">
+            <summary>
+            Removing voids in the data file formed by deleted records.
+            </summary>
+            <returns>Return purged Count.</returns>
         </member>
         <member name="T:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService">
             <summary>
@@ -1074,7 +1090,7 @@
             <param name="lastName">The last name.</param>
             <returns>Return array of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.FindByDateOfBirthName(System.DateTime)">
+        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.FindByDateOfBirthday(System.DateTime)">
             <summary>
             Finds the records by date of birthday.
             </summary>
@@ -1099,6 +1115,113 @@
             Removes the record from FileCabinetApp.
             </summary>
             <param name="id">The identifier.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.Purge">
+            <summary>
+            Removing voids in the data file formed by deleted records.
+            </summary>
+            <returns>
+            Return deleted Count.
+            </returns>
+        </member>
+        <member name="T:FileCabinetApp.Services.ServiceMeter">
+            <summary>
+            Class ServiceMeter.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Services.IFileCabinetService" />
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.ServiceMeter"/> class.
+            </summary>
+            <param name="fileCabinetServiceImplementation">The file cabinet service implementation.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.CreateRecord(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Creates the record.
+            </summary>
+            <param name="container">The container of parameters.</param>
+            <returns>
+            Return Id of created record.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.GetRecords">
+            <summary>
+            Gets all records in File Cabinet.
+            </summary>
+            <returns>
+            Return array of <c>FileCabinetRecord</c>.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.EditRecord(System.Int32,FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Edits the record.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="container">The container of parameters.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.FindByFirstName(System.String)">
+            <summary>
+            Finds the records by the first name.
+            </summary>
+            <param name="firstName">The first name.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.FindByLastName(System.String)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="lastName">The last name.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.FindByDateOfBirthday(System.DateTime)">
+            <summary>
+            Finds the records by date of birthday.
+            </summary>
+            <param name="dateOfBirth">The date of birthday.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.GetStat">
+            <summary>
+            Gets the stat of users.
+            </summary>
+            <returns>
+            Return count of records and deleted records in File Cabinet.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.MakeSnapshot">
+            <summary>
+            Makes the snapshot.
+            </summary>
+            <returns>
+            Return <c>FileCabinetServiceSnapshot</c>.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the record from FileCabinetApp.
+            </summary>
+            <param name="id">The identifier.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.Restore(FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot)">
+            <summary>
+            Restores the specified snapshot.
+            </summary>
+            <param name="snapshot">The snapshot.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.Purge">
+            <summary>
+            Removing voids in the data file formed by deleted records.
+            </summary>
+            <returns>
+            Return purged Count.
+            </returns>
         </member>
         <member name="T:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot">
             <summary>

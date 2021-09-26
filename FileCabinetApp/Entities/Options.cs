@@ -29,5 +29,14 @@ namespace FileCabinetApp.Entities
         /// </value>
         [Option('s', "storage", Required = false)]
         public string StorageRules { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [stop watch use].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [stop watch use]; otherwise, <c>false</c>.
+        /// </value>
+        [Option("use-stopwatch", Required = false)]
+        public bool StopWatchUse { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace FileCabinetApp.Entities.JsonSerialization
         /// <value>
         /// The minimum.
         /// </value>
-        public DateTime Min { get; set; }
+        public DateTime From { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum.
@@ -25,6 +25,6 @@ namespace FileCabinetApp.Entities.JsonSerialization
         /// <value>
         /// The minimum.
         /// </value>
-        public DateTime Max { get; set; }
+        public DateTime To { get; set; }
     }
 }

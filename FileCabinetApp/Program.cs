@@ -10,8 +10,6 @@ using FileCabinetApp.Entities;
 using FileCabinetApp.Entities.JsonSerialization;
 using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
-using FileCabinetApp.Services.FileService;
-using FileCabinetApp.Services.MemoryService;
 using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
 using FileCabinetApp.Validators;
@@ -138,6 +136,12 @@ namespace FileCabinetApp
                         {
                             fileCabinetService = new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create), recordValidator);
                             Console.WriteLine("Using file storage rules.");
+                        }
+
+                        if (o.StopWatchUse)
+                        {
+                            fileCabinetService = new ServiceMeter(new FileCabinetMemoryService(recordValidator));
+                            Console.WriteLine("Using stopWatch.");
                         }
                     });
 

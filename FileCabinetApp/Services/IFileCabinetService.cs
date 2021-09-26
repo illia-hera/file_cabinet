@@ -55,7 +55,7 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="dateOfBirth">The date of birthday.</param>
         /// <returns>Return array of records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthName(DateTime dateOfBirth);
+        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth);
 
         /// <summary>
         /// Makes the snapshot.
@@ -74,5 +74,11 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="id">The identifier.</param>
         public void RemoveRecord(int id);
+
+        /// <summary>
+        /// Removing voids in the data file formed by deleted records.
+        /// </summary>
+        /// <returns>Return purged Count.</returns>
+        public int Purge();
     }
 }

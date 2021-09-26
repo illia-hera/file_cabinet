@@ -2,7 +2,7 @@
   "profiles": {
     "FileCabinetApp": {
       "commandName": "Project",
-      "commandLineArgs": "-s file-v default"
+      "commandLineArgs": "--use-stopwatch -s file -v custom"
     }
   }
 }

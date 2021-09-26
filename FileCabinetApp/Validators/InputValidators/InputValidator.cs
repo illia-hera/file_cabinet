@@ -113,7 +113,7 @@ namespace FileCabinetApp.Validators.InputValidators
         /// <returns>Return the result of validation an value.</returns>
         public Tuple<bool, string> DateOfBirthValidator(DateTime dateOfBirth)
         {
-            bool isValid = dateOfBirth > this.validationRules.DateOfBirth.Min && dateOfBirth < this.validationRules.DateOfBirth.Max;
+            bool isValid = dateOfBirth > this.validationRules.DateOfBirth.From && dateOfBirth < this.validationRules.DateOfBirth.To;
 
             return new Tuple<bool, string>(isValid, dateOfBirth.ToString(CultureInfo.CreateSpecificCulture("en-US")));
         }
