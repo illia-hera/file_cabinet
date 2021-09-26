@@ -1,0 +1,52 @@
+{
+  "default": {
+    "firstName": {
+      "min": 2,
+      "max": 60
+    },
+    "lastName": {
+      "min": 2,
+      "max": 60
+    },
+    "dateOfBirth": {
+      "from": "1/1/1950",
+      "to": "9/09/2021"
+    },
+    "workingHoursPerWeek": {
+      "min": 1,
+      "max": 40
+    },
+    "annualIncome": {
+      "min": 1000,
+      "max": 1000000
+    },
+    "driverCategories": {
+      "actualCategories": [ "A", "B", "C", "D" ]
+    }
+  },
+  "custom": {
+    "firstName": {
+      "min": 5,
+      "max": 10
+    },
+    "lastName": {
+      "min": 5,
+      "max": 10
+    },
+    "dateOfBirth": {
+      "from": "10/12/1970",
+      "to": "09/09/2015"
+    },
+    "workingHoursPerWeek": {
+      "min": 20,
+      "max": 30
+    },
+    "annualIncome": {
+      "min": 500,
+      "max": 1500
+    },
+    "driverCategories": {
+      "actualCategories": [ "A", "B" ]
+    }
+  }
+}

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
-using FileCabinetApp.Validators;
 using FileCabinetApp.Validators.RecordValidator;
 
-namespace FileCabinetApp.Services.MemoryService
+namespace FileCabinetApp.Services
 {
     /// <summary>
     /// Class <c>FileCabinetMemoryService</c> with File Cabinet.
@@ -144,7 +142,7 @@ namespace FileCabinetApp.Services.MemoryService
         /// </summary>
         /// <param name="dateOfBirth">The date of birthday.</param>
         /// <returns>Return array of records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthName(DateTime dateOfBirth)
+        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
         {
             IReadOnlyCollection<FileCabinetRecord> recordsCollection = this.dateOfBirthDictionary.ContainsKey(dateOfBirth) ? this.dateOfBirthDictionary[dateOfBirth].ToArray() : Array.Empty<FileCabinetRecord>();
 
@@ -230,6 +228,17 @@ namespace FileCabinetApp.Services.MemoryService
             {
                 throw new ArgumentException($"Record #{id} doesn't exist.");
             }
+        }
+
+        /// <summary>
+        /// Removing voids in the data file formed by deleted records.
+        /// </summary>
+        /// <returns>
+        /// Return deleted Count.
+        /// </returns>
+        public int Purge()
+        {
+            return 0;
         }
 
         private static void DeleteRecordFromDictionary<T>(T key, FileCabinetRecord record, IDictionary<T, List<FileCabinetRecord>> dictionary)

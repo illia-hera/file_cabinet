@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FileCabinetApp.Services;
-using FileCabinetApp.Services.FileService;
 
 namespace FileCabinetApp.CommandHandlers
 {
@@ -37,12 +36,9 @@ namespace FileCabinetApp.CommandHandlers
 
             if (appCommandRequest.Command.Equals("purge", StringComparison.OrdinalIgnoreCase))
             {
-                if (this.FileCabinetService is FileCabinetFilesystemService filesystemService)
-                {
-                    var items = this.FileCabinetService.GetStat();
-                    var deleted = filesystemService.Purge();
-                    Console.WriteLine($"Data file processing is completed: {deleted} of {items.Item1} records were purged.");
-                }
+                var items = this.FileCabinetService.GetStat();
+                var deleted = this.FileCabinetService.Purge();
+                Console.WriteLine($"Data file processing is completed: {deleted} of {items.Item1} records were purged.");
 
                 return;
             }

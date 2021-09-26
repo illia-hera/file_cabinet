@@ -7,16 +7,15 @@ using System.Xml;
 using CommandLine;
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.Entities;
+using FileCabinetApp.Entities.JsonSerialization;
 using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
-using FileCabinetApp.Services.FileService;
-using FileCabinetApp.Services.MemoryService;
 using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
 using FileCabinetApp.Validators;
 using FileCabinetApp.Validators.InputValidators;
-using FileCabinetApp.Validators.InputValidators.ValidationRule;
 using FileCabinetApp.Validators.RecordValidator;
+using Microsoft.Extensions.Configuration;
 
 namespace FileCabinetApp
 {
@@ -32,25 +31,7 @@ namespace FileCabinetApp
 
         private static IFileCabinetService fileCabinetService;
 
-        private static InputValidator validator;
-
-        /// <summary>
-        ///   <para>
-        /// Gets the validator.
-        /// </para>
-        /// </summary>
-        /// <value>The validator.</value>
-        public static InputValidator Validator
-        {
-            get
-            {
-                return validator ??= fileCabinetService switch
-                {
-                    FileCabinetMemoryCustomService _ => new InputValidator(new ValidationCustomRules()),
-                    _ => new InputValidator(new ValidationDefaultRules()),
-                };
-            }
-        }
+        private static InputValidator inputValidator;
 
         /// <summary>
         /// Defines the entry point of the application.
@@ -85,22 +66,22 @@ namespace FileCabinetApp
             var container = new ParametersContainer();
 
             Console.Write("First name: ");
-            container.FirstName = ReadInput(Converter.StringConverter, Validator.FirstNameValidator);
+            container.FirstName = ReadInput(Converter.StringConverter, inputValidator.FirstNameValidator);
 
             Console.Write("Last name: ");
-            container.LastName = ReadInput(Converter.StringConverter, Validator.LastNameValidator);
+            container.LastName = ReadInput(Converter.StringConverter, inputValidator.LastNameValidator);
 
             Console.Write("Date of birth: ");
-            container.DateOfBirthday = ReadInput(Converter.DateConverter, Validator.DateOfBirthValidator);
+            container.DateOfBirthday = ReadInput(Converter.DateConverter, inputValidator.DateOfBirthValidator);
 
             Console.Write("Working Hours Per Week: ");
-            container.WorkingHoursPerWeek = ReadInput(Converter.ShortConverter, Validator.WorkingHoursValidator);
+            container.WorkingHoursPerWeek = ReadInput(Converter.ShortConverter, inputValidator.WorkingHoursValidator);
 
             Console.Write("Annual Income: ");
-            container.AnnualIncome = ReadInput(Converter.DecimalConverter, Validator.AnnualIncomeValidator);
+            container.AnnualIncome = ReadInput(Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
 
             Console.Write("Driver License Category: ");
-            container.DriverLicenseCategory = ReadInput(Converter.CharConverter, Validator.DriverLicenseCategoryValidator);
+            container.DriverLicenseCategory = ReadInput(Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
 
             return container;
         }
@@ -133,7 +114,9 @@ namespace FileCabinetApp
 
         private static void InitFileCabinetService(string[] args)
         {
-            IRecordValidator recordValidator = new ValidatorBuilder().CreateDefault();
+            IConfigurationRoot configurationRoot = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("validation-rules.json").Build();
+            ValidationRules configuration = configurationRoot.GetSection("default").Get<ValidationRules>();
+            IRecordValidator recordValidator = new ValidatorBuilder().CreateRecordValidator(configuration);
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(
                     o =>
@@ -144,23 +127,37 @@ namespace FileCabinetApp
                         }
                         else if (o.ValidationRules.Equals("custom", StringComparison.OrdinalIgnoreCase))
                         {
-                            recordValidator = new ValidatorBuilder().CreateCustom();
+                            configuration = configurationRoot.GetSection("custom").Get<ValidationRules>();
+                            recordValidator = new ValidatorBuilder().CreateRecordValidator(configuration);
                             Console.WriteLine("Using custom validation rules.");
                         }
 
-                        if ((o.StorageRules == null) || o.StorageRules.Equals("memory", StringComparison.OrdinalIgnoreCase))
+                        if (o.StorageRules.Equals("file", StringComparison.OrdinalIgnoreCase))
                         {
-                            fileCabinetService = new FileCabinetMemoryService(recordValidator);
-                            Console.WriteLine("Using memory storage rules.");
-                        }
-                        else if (o.StorageRules.Equals("file", StringComparison.OrdinalIgnoreCase))
-                        {
-                            fileCabinetService = !File.Exists("cabinet-records.db")
-                                                     ? new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.OpenOrCreate), recordValidator)
-                                                     : new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Open), recordValidator);
+                            fileCabinetService = new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create), recordValidator);
                             Console.WriteLine("Using file storage rules.");
                         }
+
+                        if (o.StopWatchUse)
+                        {
+                            fileCabinetService = new ServiceMeter(new FileCabinetMemoryService(recordValidator));
+                            Console.WriteLine("Using stopWatch.");
+                        }
+
+                        if (o.UseLogger)
+                        {
+                            fileCabinetService = new ServiceLogger(fileCabinetService);
+                            Console.WriteLine("Using logger.");
+                        }
                     });
+
+            if (fileCabinetService is null)
+            {
+                fileCabinetService = new FileCabinetMemoryService(recordValidator);
+                Console.WriteLine("Using memory storage rules.");
+            }
+
+            inputValidator = new InputValidator(configuration);
         }
 
         private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)

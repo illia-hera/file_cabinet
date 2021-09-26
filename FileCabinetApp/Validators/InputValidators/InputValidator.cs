@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using FileCabinetApp.Validators.InputValidators.ValidationRule;
+using System.Linq;
+using FileCabinetApp.Entities.JsonSerialization;
 
 namespace FileCabinetApp.Validators.InputValidators
 {
@@ -52,7 +53,7 @@ namespace FileCabinetApp.Validators.InputValidators
         /// </returns>
         public Tuple<bool, string> FirstNameValidator(string firstName)
         {
-            bool isValid = firstName?.Length >= this.validationRules.MinLengthFirstName && firstName?.Length <= this.validationRules.MaxLengthFirstName;
+            bool isValid = firstName?.Length >= this.validationRules.FirstName.Min && firstName?.Length <= this.validationRules.FirstName.Max;
 
             return new Tuple<bool, string>(isValid, firstName);
         }
@@ -64,7 +65,7 @@ namespace FileCabinetApp.Validators.InputValidators
         /// <returns>Return the result of validation an value.</returns>
         public Tuple<bool, string> LastNameValidator(string lastName)
         {
-            bool isValid = lastName?.Length >= this.validationRules.MinLengthLastName && lastName?.Length <= this.validationRules.MaxLengthLastName;
+            bool isValid = lastName?.Length >= this.validationRules.LastName.Min && lastName?.Length <= this.validationRules.LastName.Max;
 
             return new Tuple<bool, string>(isValid, lastName);
         }
@@ -76,7 +77,7 @@ namespace FileCabinetApp.Validators.InputValidators
         /// <returns>Return the result of validation an value.</returns>
         public Tuple<bool, string> AnnualIncomeValidator(decimal annualIncome)
         {
-            bool isValid = annualIncome >= this.validationRules.MinAnnualIncome && annualIncome <= this.validationRules.MaxAnnualIncome;
+            bool isValid = annualIncome >= this.validationRules.AnnualIncome.Min && annualIncome <= this.validationRules.AnnualIncome.Max;
 
             return new Tuple<bool, string>(isValid, annualIncome.ToString(CultureInfo.CurrentCulture));
         }
@@ -88,7 +89,7 @@ namespace FileCabinetApp.Validators.InputValidators
         /// <returns>Return the result of validation an value.</returns>
         public Tuple<bool, string> WorkingHoursValidator(short workingHours)
         {
-            bool isValid = workingHours >= this.validationRules.MinWorkingHoursPerWeek && workingHours <= this.validationRules.MaxWorkingHoursPerWeek;
+            bool isValid = workingHours >= this.validationRules.WorkingHoursPerWeek.Min && workingHours <= this.validationRules.WorkingHoursPerWeek.Max;
 
             return new Tuple<bool, string>(isValid, workingHours.ToString(CultureInfo.CurrentCulture));
         }
@@ -100,7 +101,7 @@ namespace FileCabinetApp.Validators.InputValidators
         /// <returns>Return the result of validation an value.</returns>
         public Tuple<bool, string> DriverLicenseCategoryValidator(char category)
         {
-            bool isValid = this.validationRules.ActualCategories.Contains(char.ToUpper(category, CultureInfo.CurrentCulture));
+            bool isValid = this.validationRules.DriverCategories.ActualCategories.ToList().Contains(char.ToUpper(category, CultureInfo.CurrentCulture));
 
             return new Tuple<bool, string>(isValid, category.ToString(CultureInfo.CurrentCulture));
         }
@@ -112,7 +113,7 @@ namespace FileCabinetApp.Validators.InputValidators
         /// <returns>Return the result of validation an value.</returns>
         public Tuple<bool, string> DateOfBirthValidator(DateTime dateOfBirth)
         {
-            bool isValid = dateOfBirth > this.validationRules.MinDateOfBirth && dateOfBirth < this.validationRules.MaxDateOfBirth;
+            bool isValid = dateOfBirth > this.validationRules.DateOfBirth.From && dateOfBirth < this.validationRules.DateOfBirth.To;
 
             return new Tuple<bool, string>(isValid, dateOfBirth.ToString(CultureInfo.CreateSpecificCulture("en-US")));
         }

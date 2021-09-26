@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using FileCabinetApp.Entities.JsonSerialization;
+using Microsoft.Extensions.Configuration;
 
 namespace FileCabinetApp.Validators.RecordValidator
 {
@@ -11,43 +11,35 @@ namespace FileCabinetApp.Validators.RecordValidator
     /// </summary>
     public static class ValidatorBuilderExtension
     {
-        /// <summary>Creates the custom.</summary>
+        /// <summary>
+        /// Creates the record validator.
+        /// </summary>
         /// <param name="builder">The builder.</param>
-        /// <returns><see cref="ValidatorBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException">builder.</exception>
-        public static IRecordValidator CreateCustom(this ValidatorBuilder builder)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>Return Record Validator.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// builder
+        /// or
+        /// configuration.
+        /// </exception>
+        public static IRecordValidator CreateRecordValidator(this ValidatorBuilder builder, ValidationRules configuration)
         {
             if (builder == null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            return builder.ValidateFirstName(10, 5)
-                .ValidateLastName(10, 5)
-                .ValidateDateOfBirth(new DateTime(1970, 12, 10).Date, DateTime.Now.Date)
-                .ValidateWorkingHours(30, 20)
-                .ValidateAnnualIncome(1500, 500)
-                .ValidateDriverCategory(new List<char>() { 'A', 'B' })
-                .Create();
-        }
-
-        /// <summary>Creates the default.</summary>
-        /// <param name="builder">The builder.</param>
-        /// <returns><see cref="ValidatorBuilder"/>.</returns>
-        /// <exception cref="ArgumentNullException">builder.</exception>
-        public static IRecordValidator CreateDefault(this ValidatorBuilder builder)
-        {
-            if (builder == null)
+            if (configuration is null)
             {
-                throw new ArgumentNullException(nameof(builder));
+                throw new ArgumentNullException(nameof(configuration));
             }
 
-            return builder.ValidateFirstName(60, 2)
-                .ValidateLastName(60, 2)
-                .ValidateDateOfBirth(DateTime.Now.Date, new DateTime(1950, 1, 1).Date)
-                .ValidateWorkingHours(40, 1)
-                .ValidateAnnualIncome(1000_000, 1000)
-                .ValidateDriverCategory(new List<char>() { 'A', 'B', 'C', 'D' })
+            return builder.ValidateFirstName(configuration.FirstName.Max, configuration.FirstName.Min)
+                .ValidateLastName(configuration.LastName.Max, configuration.LastName.Min)
+                .ValidateDateOfBirth(configuration.DateOfBirth.To, configuration.DateOfBirth.From)
+                .ValidateWorkingHours(configuration.WorkingHoursPerWeek.Max, configuration.WorkingHoursPerWeek.Min)
+                .ValidateAnnualIncome(configuration.AnnualIncome.Max, configuration.AnnualIncome.Min)
+                .ValidateDriverCategory(configuration.DriverCategories.ActualCategories)
                 .Create();
         }
     }
