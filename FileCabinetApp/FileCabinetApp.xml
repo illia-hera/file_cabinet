@@ -591,6 +591,14 @@
               <c>true</c> if [stop watch use]; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:FileCabinetApp.Entities.Options.UseLogger">
+            <summary>
+            Gets or sets a value indicating whether [use logger].
+            </summary>
+            <value>
+              <c>true</c> if [use logger]; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="T:FileCabinetApp.Entities.ParametersContainer">
             <summary>
             Class <c>ParametersContainer</c> parsed and validate string values.
@@ -847,26 +855,26 @@
             </summary>
             <returns>Return list of Records.</returns>
         </member>
-        <member name="T:FileCabinetApp.Services.FileService.FileCabinetFilesystemService">
+        <member name="T:FileCabinetApp.Services.FileCabinetFilesystemService">
             <summary>
             Class <c>FileCabinetFilesystemService</c>.
             </summary>
             <seealso cref="T:FileCabinetApp.Services.IFileCabinetService" />
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileService.FileCabinetFilesystemService"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetFilesystemService"/> class.
             </summary>
             <param name="fileStream">The file stream.</param>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.#ctor(System.IO.FileStream,FileCabinetApp.Validators.RecordValidator.IRecordValidator)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.#ctor(System.IO.FileStream,FileCabinetApp.Validators.RecordValidator.IRecordValidator)">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileService.FileCabinetFilesystemService" /> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetFilesystemService" /> class.
             </summary>
             <param name="fileStream">The file stream.</param>
             <param name="validator">The validator.</param>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.Entities.ParametersContainer)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.Entities.ParametersContainer)">
             <summary>
             Creates the record.
             </summary>
@@ -875,7 +883,7 @@
             Return Id of created record.
             </returns>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.GetRecords">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetRecords">
             <summary>
             Gets all records in File Cabinet.
             </summary>
@@ -884,7 +892,7 @@
             </returns>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.EditRecord(System.Int32,FileCabinetApp.Entities.ParametersContainer)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.EditRecord(System.Int32,FileCabinetApp.Entities.ParametersContainer)">
             <summary>
             Edits the record.
             </summary>
@@ -892,7 +900,7 @@
             <param name="container">The record of parameters.</param>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.GetStat">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetStat">
             <summary>
             Gets the stat of users.
             </summary>
@@ -901,7 +909,7 @@
             </returns>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.FindByFirstName(System.String)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByFirstName(System.String)">
             <summary>
             Finds the records by the first name.
             </summary>
@@ -911,7 +919,7 @@
             </returns>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.FindByLastName(System.String)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByLastName(System.String)">
             <summary>
             Finds the records by the last name.
             </summary>
@@ -921,7 +929,7 @@
             </returns>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.FindByDateOfBirthday(System.DateTime)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByDateOfBirthday(System.DateTime)">
             <summary>
             Finds the records by date of birthday.
             </summary>
@@ -931,7 +939,7 @@
             </returns>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.MakeSnapshot">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.MakeSnapshot">
             <summary>
             Makes the snapshot.
             </summary>
@@ -940,25 +948,112 @@
             </returns>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.Restore(FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Restore(FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot)">
             <summary>
             Restores this instance.
             </summary>
             <param name="snapshot">IFileCabinetServiceSnapshot.</param>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.RemoveRecord(System.Int32)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.RemoveRecord(System.Int32)">
             <summary>
             Removes the record from FileCabinetApp.
             </summary>
             <param name="id">The identifier.</param>
         </member>
-        <member name="M:FileCabinetApp.Services.FileService.FileCabinetFilesystemService.Purge">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Purge">
             <summary>
             Removing voids in the data file formed by deleted records.
             </summary>
             <returns>
             Return purged Count.
+            </returns>
+        </member>
+        <member name="T:FileCabinetApp.Services.FileCabinetMemoryService">
+            <summary>
+            Class <c>FileCabinetMemoryService</c> with File Cabinet.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.#ctor(FileCabinetApp.Validators.RecordValidator.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetMemoryService"/> class.
+            </summary>
+            <param name="validator">The validator.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.CreateRecord(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Creates the record.
+            </summary>
+            <param name="container">The container of parameters.</param>
+            <returns>Return Id of created record.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.EditRecord(System.Int32,FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Edits the record.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="container">The container of parameters.</param>
+            <exception cref="T:System.ArgumentException">#{id} record is not found.</exception>
+            <exception cref="T:System.ArgumentNullException">container.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.GetRecords">
+            <summary>
+            Gets all records in File Cabinet.
+            </summary>
+            <returns>Return array of <c>FileCabinetRecord</c>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.GetStat">
+            <summary>
+            Gets the stat of users.
+            </summary>
+            <returns>Return count of records in File Cabinet.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByFirstName(System.String)">
+            <summary>
+            Finds the records by the first name.
+            </summary>
+            <param name="firstName">The first name.</param>
+            <returns>Return array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByLastName(System.String)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="lastName">The last name.</param>
+            <returns>Return array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByDateOfBirthday(System.DateTime)">
+            <summary>
+            Finds the records by date of birthday.
+            </summary>
+            <param name="dateOfBirth">The date of birthday.</param>
+            <returns>Return array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.MakeSnapshot">
+            <summary>
+            Makes the snapshot.
+            </summary>
+            <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Restore(FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot)">
+            <summary>
+            Restores the specified snapshot.
+            </summary>
+            <param name="snapshot">The snapshot.</param>
+            <exception cref="T:System.ArgumentException">Snapshot can't be null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the record from FileCabinetApp.
+            </summary>
+            <param name="id">The identifier.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Purge">
+            <summary>
+            Removing voids in the data file formed by deleted records.
+            </summary>
+            <returns>
+            Return deleted Count.
             </returns>
         </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
@@ -1036,192 +1131,6 @@
             Removing voids in the data file formed by deleted records.
             </summary>
             <returns>Return purged Count.</returns>
-        </member>
-        <member name="T:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService">
-            <summary>
-            Class <c>FileCabinetMemoryService</c> with File Cabinet.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.#ctor(FileCabinetApp.Validators.RecordValidator.IRecordValidator)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService"/> class.
-            </summary>
-            <param name="validator">The validator.</param>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.CreateRecord(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Creates the record.
-            </summary>
-            <param name="container">The container of parameters.</param>
-            <returns>Return Id of created record.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.EditRecord(System.Int32,FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Edits the record.
-            </summary>
-            <param name="id">The identifier.</param>
-            <param name="container">The container of parameters.</param>
-            <exception cref="T:System.ArgumentException">#{id} record is not found.</exception>
-            <exception cref="T:System.ArgumentNullException">container.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.GetRecords">
-            <summary>
-            Gets all records in File Cabinet.
-            </summary>
-            <returns>Return array of <c>FileCabinetRecord</c>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.GetStat">
-            <summary>
-            Gets the stat of users.
-            </summary>
-            <returns>Return count of records in File Cabinet.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.FindByFirstName(System.String)">
-            <summary>
-            Finds the records by the first name.
-            </summary>
-            <param name="firstName">The first name.</param>
-            <returns>Return array of records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.FindByLastName(System.String)">
-            <summary>
-            Finds the records by the last name.
-            </summary>
-            <param name="lastName">The last name.</param>
-            <returns>Return array of records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.FindByDateOfBirthday(System.DateTime)">
-            <summary>
-            Finds the records by date of birthday.
-            </summary>
-            <param name="dateOfBirth">The date of birthday.</param>
-            <returns>Return array of records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.MakeSnapshot">
-            <summary>
-            Makes the snapshot.
-            </summary>
-            <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.Restore(FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot)">
-            <summary>
-            Restores the specified snapshot.
-            </summary>
-            <param name="snapshot">The snapshot.</param>
-            <exception cref="T:System.ArgumentException">Snapshot can't be null.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.RemoveRecord(System.Int32)">
-            <summary>
-            Removes the record from FileCabinetApp.
-            </summary>
-            <param name="id">The identifier.</param>
-        </member>
-        <member name="M:FileCabinetApp.Services.MemoryService.FileCabinetMemoryService.Purge">
-            <summary>
-            Removing voids in the data file formed by deleted records.
-            </summary>
-            <returns>
-            Return deleted Count.
-            </returns>
-        </member>
-        <member name="T:FileCabinetApp.Services.ServiceMeter">
-            <summary>
-            Class ServiceMeter.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Services.IFileCabinetService" />
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.#ctor(FileCabinetApp.Services.IFileCabinetService)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.ServiceMeter"/> class.
-            </summary>
-            <param name="fileCabinetServiceImplementation">The file cabinet service implementation.</param>
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.CreateRecord(FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Creates the record.
-            </summary>
-            <param name="container">The container of parameters.</param>
-            <returns>
-            Return Id of created record.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.GetRecords">
-            <summary>
-            Gets all records in File Cabinet.
-            </summary>
-            <returns>
-            Return array of <c>FileCabinetRecord</c>.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.EditRecord(System.Int32,FileCabinetApp.Entities.ParametersContainer)">
-            <summary>
-            Edits the record.
-            </summary>
-            <param name="id">The identifier.</param>
-            <param name="container">The container of parameters.</param>
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.FindByFirstName(System.String)">
-            <summary>
-            Finds the records by the first name.
-            </summary>
-            <param name="firstName">The first name.</param>
-            <returns>
-            Return array of records.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.FindByLastName(System.String)">
-            <summary>
-            Finds the records by the last name.
-            </summary>
-            <param name="lastName">The last name.</param>
-            <returns>
-            Return array of records.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.FindByDateOfBirthday(System.DateTime)">
-            <summary>
-            Finds the records by date of birthday.
-            </summary>
-            <param name="dateOfBirth">The date of birthday.</param>
-            <returns>
-            Return array of records.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.GetStat">
-            <summary>
-            Gets the stat of users.
-            </summary>
-            <returns>
-            Return count of records and deleted records in File Cabinet.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.MakeSnapshot">
-            <summary>
-            Makes the snapshot.
-            </summary>
-            <returns>
-            Return <c>FileCabinetServiceSnapshot</c>.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.RemoveRecord(System.Int32)">
-            <summary>
-            Removes the record from FileCabinetApp.
-            </summary>
-            <param name="id">The identifier.</param>
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.Restore(FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot)">
-            <summary>
-            Restores the specified snapshot.
-            </summary>
-            <param name="snapshot">The snapshot.</param>
-        </member>
-        <member name="M:FileCabinetApp.Services.ServiceMeter.Purge">
-            <summary>
-            Removing voids in the data file formed by deleted records.
-            </summary>
-            <returns>
-            Return purged Count.
-            </returns>
         </member>
         <member name="T:FileCabinetApp.Services.SnapshotServices.FileCabinetServiceSnapshot">
             <summary>
@@ -1388,6 +1297,204 @@
             </summary>
             <param name="input">The input.</param>
             <returns>Return result of boolean conversion result and string input value and decimal value.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Utility.ServiceLogger">
+            <summary>
+            Class <c>ServiceLogger</c> make logging of commands.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Services.IFileCabinetService" />
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Utility.ServiceLogger"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service implementation.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.CreateRecord(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Creates the record.
+            </summary>
+            <param name="container">The container of parameters.</param>
+            <returns>
+            Return Id of created record.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.EditRecord(System.Int32,FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Edits the record.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="container">The container of parameters.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.GetStat">
+            <summary>
+            Gets the stat of users.
+            </summary>
+            <returns>
+            Return count of records and deleted records in File Cabinet.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.FindByFirstName(System.String)">
+            <summary>
+            Finds the records by the first name.
+            </summary>
+            <param name="firstName">The first name.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.FindByLastName(System.String)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="lastName">The last name.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.FindByDateOfBirthday(System.DateTime)">
+            <summary>
+            Finds the records by date of birthday.
+            </summary>
+            <param name="dateOfBirth">The date of birthday.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.MakeSnapshot">
+            <summary>
+            Makes the snapshot.
+            </summary>
+            <returns>
+            Return <c>FileCabinetServiceSnapshot</c>.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.Restore(FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot)">
+            <summary>
+            Restores the specified snapshot.
+            </summary>
+            <param name="snapshot">The snapshot.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.GetRecords">
+            <summary>
+            Gets all records in File Cabinet.
+            </summary>
+            <returns>
+            Return array of <c>FileCabinetRecord</c>.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the record from FileCabinetApp.
+            </summary>
+            <param name="id">The identifier.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.Purge">
+            <summary>
+            Removing voids in the data file formed by deleted records.
+            </summary>
+            <returns>
+            Return purged Count.
+            </returns>
+        </member>
+        <member name="T:FileCabinetApp.Utility.ServiceMeter">
+            <summary>
+            Class ServiceMeter.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Services.IFileCabinetService" />
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Utility.ServiceMeter"/> class.
+            </summary>
+            <param name="fileCabinetServiceImplementation">The file cabinet service implementation.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.CreateRecord(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Creates the record.
+            </summary>
+            <param name="container">The container of parameters.</param>
+            <returns>
+            Return Id of created record.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.GetRecords">
+            <summary>
+            Gets all records in File Cabinet.
+            </summary>
+            <returns>
+            Return array of <c>FileCabinetRecord</c>.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.EditRecord(System.Int32,FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Edits the record.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="container">The container of parameters.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.FindByFirstName(System.String)">
+            <summary>
+            Finds the records by the first name.
+            </summary>
+            <param name="firstName">The first name.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.FindByLastName(System.String)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="lastName">The last name.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.FindByDateOfBirthday(System.DateTime)">
+            <summary>
+            Finds the records by date of birthday.
+            </summary>
+            <param name="dateOfBirth">The date of birthday.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.GetStat">
+            <summary>
+            Gets the stat of users.
+            </summary>
+            <returns>
+            Return count of records and deleted records in File Cabinet.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.MakeSnapshot">
+            <summary>
+            Makes the snapshot.
+            </summary>
+            <returns>
+            Return <c>FileCabinetServiceSnapshot</c>.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.RemoveRecord(System.Int32)">
+            <summary>
+            Removes the record from FileCabinetApp.
+            </summary>
+            <param name="id">The identifier.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.Restore(FileCabinetApp.Services.SnapshotServices.IFileCabinetServiceSnapshot)">
+            <summary>
+            Restores the specified snapshot.
+            </summary>
+            <param name="snapshot">The snapshot.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.Purge">
+            <summary>
+            Removing voids in the data file formed by deleted records.
+            </summary>
+            <returns>
+            Return purged Count.
+            </returns>
         </member>
         <member name="T:FileCabinetApp.Validators.InputValidators.InputValidator">
             <summary>

@@ -143,6 +143,12 @@ namespace FileCabinetApp
                             fileCabinetService = new ServiceMeter(new FileCabinetMemoryService(recordValidator));
                             Console.WriteLine("Using stopWatch.");
                         }
+
+                        if (o.UseLogger)
+                        {
+                            fileCabinetService = new ServiceLogger(fileCabinetService);
+                            Console.WriteLine("Using logger.");
+                        }
                     });
 
             if (fileCabinetService is null)

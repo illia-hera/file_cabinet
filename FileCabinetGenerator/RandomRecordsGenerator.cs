@@ -35,12 +35,12 @@ namespace FileCabinetGenerator
             {
                 string firstName = personGenerator.GenerateRandomFirstName();
                 string lastName = personGenerator.GenerateRandomLastName();
-                DateTime birthDay = datetimeGenerator.GenerateValue(new DateTime(1950, 1, 1), DateTime.Now.Date);
-                short workingHours = shortGenerator.GenerateValue(0, 40);
-                decimal annualIncome = decimalGenerator.GenerateValue(0, 1_000m);
-                char driverLicense = charGenerator.GenerateValue('A', 'D');
+                DateTime birthDay = datetimeGenerator.GenerateValue(new DateTime(1970, 1, 1), new DateTime(2021, 1, 1));
+                short workingHours = shortGenerator.GenerateValue(20, 30);
+                decimal annualIncome = decimalGenerator.GenerateValue(500, 1_500);
+                char driverLicense = charGenerator.GenerateValue('A', 'B');
 
-                records.Add(CreateRecord(startId, new ParametersContainer(firstName, lastName, birthDay, workingHours, annualIncome, driverLicense)));
+                records.Add(CreateRecord(startId + i - 1, new ParametersContainer(firstName, lastName, birthDay, workingHours, annualIncome, driverLicense)));
             }
 
             return records;
