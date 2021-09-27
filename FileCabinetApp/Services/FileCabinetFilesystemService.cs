@@ -264,9 +264,9 @@ namespace FileCabinetApp.Services
 
                 this.fileStream.Seek(0, SeekOrigin.Begin);
                 this.fileStream.Write(buffer);
-                foreach (var record in snapShotRecords)
+                for (var i = 0; i < snapShotRecords.Count; i++)
                 {
-                    this.WriteRecord((record.Id - 1) * RecordSize, record);
+                    this.WriteRecord(i * RecordSize, snapShotRecords[i]);
                 }
             }
         }

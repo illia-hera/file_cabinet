@@ -861,6 +861,11 @@
             </summary>
             <seealso cref="T:FileCabinetApp.Services.IFileCabinetService" />
         </member>
+        <member name="F:FileCabinetApp.Services.FileCabinetFilesystemService.RecordSize">
+            <summary>
+            The record size.
+            </summary>
+        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetFilesystemService"/> class.
@@ -891,6 +896,14 @@
             Return array of <c>FileCabinetRecord</c>.
             </returns>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetRecord(System.Int64)">
+            <summary>
+            Gets the record.
+            </summary>
+            <param name="position">The position.</param>
+            <returns>Return record.</returns>
+            <exception cref="T:System.ArgumentException">Incorrect value {nameof(position)}, it is must be multiples to RecordSize - {RecordSize}</exception>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.EditRecord(System.Int32,FileCabinetApp.Entities.ParametersContainer)">
             <summary>
@@ -1298,6 +1311,34 @@
             <param name="input">The input.</param>
             <returns>Return result of boolean conversion result and string input value and decimal value.</returns>
         </member>
+        <member name="T:FileCabinetApp.Utility.Iterator.FilesystemIterator">
+            <summary>
+            Class <c>FilesystemIterator</c>.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Utility.Iterator.IRecordIterator" />
+        </member>
+        <member name="M:FileCabinetApp.Utility.Iterator.FilesystemIterator.#ctor(FileCabinetApp.Services.FileCabinetFilesystemService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Utility.Iterator.FilesystemIterator"/> class.
+            </summary>
+            <param name="fileCabinetFilesystemService">The file cabinet filesystem service.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utility.Iterator.FilesystemIterator.GetNext">
+            <summary>
+            Gets the next.
+            </summary>
+            <returns>
+            Return next FileCabinetRecord.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.Iterator.FilesystemIterator.HasMore">
+            <summary>
+            Determines whether this instance has more.
+            </summary>
+            <returns>
+              <c>true</c> if this instance has more; otherwise, <c>false</c>.
+            </returns>
+        </member>
         <member name="M:FileCabinetApp.Utility.Iterator.IRecordIterator.GetNext">
             <summary>
             Gets the next.
@@ -1305,6 +1346,34 @@
             <returns>Return next FileCabinetRecord.</returns>
         </member>
         <member name="M:FileCabinetApp.Utility.Iterator.IRecordIterator.HasMore">
+            <summary>
+            Determines whether this instance has more.
+            </summary>
+            <returns>
+              <c>true</c> if this instance has more; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="T:FileCabinetApp.Utility.Iterator.MemoryIterator">
+            <summary>
+            Class <c>MemoryIterator</c>.
+            </summary>
+            <seealso cref="T:FileCabinetApp.Utility.Iterator.IRecordIterator" />
+        </member>
+        <member name="M:FileCabinetApp.Utility.Iterator.MemoryIterator.#ctor(FileCabinetApp.Services.FileCabinetMemoryService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Utility.Iterator.MemoryIterator"/> class.
+            </summary>
+            <param name="fileCabinetMemoryService">The file cabinet memory service.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utility.Iterator.MemoryIterator.GetNext">
+            <summary>
+            Gets the next.
+            </summary>
+            <returns>
+            Return next FileCabinetRecord.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.Iterator.MemoryIterator.HasMore">
             <summary>
             Determines whether this instance has more.
             </summary>

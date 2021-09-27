@@ -151,7 +151,7 @@ namespace FileCabinetApp
 
                         if (o.StopWatchUse)
                         {
-                            fileCabinetService = new ServiceMeter(new FileCabinetMemoryService(recordValidator));
+                            fileCabinetService = new ServiceMeter(fileCabinetService);
                             Console.WriteLine("Using stopWatch.");
                         }
 
