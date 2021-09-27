@@ -123,6 +123,7 @@ namespace FileCabinetApp
             IConfigurationRoot configurationRoot = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("validation-rules.json").Build();
             ValidationRules configuration = configurationRoot.GetSection("default").Get<ValidationRules>();
             IRecordValidator recordValidator = new ValidatorBuilder().CreateRecordValidator(configuration);
+            fileCabinetService = new FileCabinetMemoryService(recordValidator);
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(
                     o =>
@@ -143,6 +144,10 @@ namespace FileCabinetApp
                             fileCabinetService = new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create), recordValidator);
                             Console.WriteLine("Using file storage rules.");
                         }
+                        else
+                        {
+                            Console.WriteLine("Using memory storage rules.");
+                        }
 
                         if (o.StopWatchUse)
                         {
@@ -156,12 +161,6 @@ namespace FileCabinetApp
                             Console.WriteLine("Using logger.");
                         }
                     });
-
-            if (fileCabinetService is null)
-            {
-                fileCabinetService = new FileCabinetMemoryService(recordValidator);
-                Console.WriteLine("Using memory storage rules.");
-            }
 
             inputValidator = new InputValidator(configuration);
         }

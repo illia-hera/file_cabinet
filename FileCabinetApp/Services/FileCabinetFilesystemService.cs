@@ -56,6 +56,8 @@ namespace FileCabinetApp.Services
             this.validator = validator;
         }
 
+        private Dictionary<string, List<int>> FieldOffsetDictionary => this.InitializeIndexes();
+
         /// <summary>
         /// Creates the record.
         /// </summary>
@@ -329,6 +331,43 @@ namespace FileCabinetApp.Services
             }
 
             return deletedCount;
+        }
+
+        private Dictionary<string, List<int>> InitializeIndexes()
+        {
+            long count = this.fileStream.Length / RecordSize;
+
+            int firstNameOffset = sizeof(short) + sizeof(int);
+
+            var firstNameIndexes = new List<int>((int)count);
+            var lastNameIndexes = new List<int>((int)count);
+            var birthDayIndexes = new List<int>((int)count);
+            var workingHoursIndexes = new List<int>((int)count);
+            var annualIncomeIndexes = new List<int>((int)count);
+            var driverCategoryIndexes = new List<int>((int)count);
+
+            for (int i = 0; i < count; i++)
+            {
+                firstNameIndexes.Add(firstNameOffset);
+                lastNameIndexes.Add(firstNameOffset + 120);
+                birthDayIndexes.Add(firstNameOffset + 120 + (sizeof(int) * 3));
+                workingHoursIndexes.Add(firstNameOffset + 120 + (sizeof(int) * 3) + sizeof(short));
+                annualIncomeIndexes.Add(firstNameOffset + 120 + (sizeof(int) * 3) + sizeof(short) + sizeof(decimal));
+                driverCategoryIndexes.Add(firstNameOffset + 120 + (sizeof(int) * 3) + sizeof(short) + sizeof(decimal) + sizeof(char));
+                firstNameOffset += RecordSize;
+            }
+
+            Dictionary<string, List<int>> offsetDictionary = new Dictionary<string, List<int>>
+                                                                 {
+                                                                     { "lastname", lastNameIndexes },
+                                                                     { "firstname", firstNameIndexes },
+                                                                     { "birthday", birthDayIndexes },
+                                                                     { "workingHours", workingHoursIndexes },
+                                                                     { "annualIncome", annualIncomeIndexes },
+                                                                     { "driverCategory", driverCategoryIndexes },
+                                                                 };
+
+            return offsetDictionary;
         }
 
         private void WriteRecord(long offset,  FileCabinetRecord record)
