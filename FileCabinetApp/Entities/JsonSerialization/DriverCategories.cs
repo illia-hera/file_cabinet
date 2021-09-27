@@ -17,6 +17,6 @@ namespace FileCabinetApp.Entities.JsonSerialization
         /// <value>
         /// The actual categories.
         /// </value>
-        public char[] ActualCategories { get; set; } // it is need to get records from jason
+        public char[] ActualCategories { get; set; } // it is need to get records from json
     }
 }

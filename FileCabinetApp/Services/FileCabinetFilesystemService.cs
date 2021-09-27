@@ -16,17 +16,20 @@ namespace FileCabinetApp.Services
     /// <seealso cref="FileCabinetApp.Services.IFileCabinetService" />
     public class FileCabinetFilesystemService : IFileCabinetService
     {
+        /// <summary>
+        /// The record size.
+        /// </summary>
+        public const int RecordSize = sizeof(int) // id
+                                      + (NameSizes * 2) // First name + Last name
+                                      + (sizeof(int) * 3)
+                                      + sizeof(short) // balance
+                                      + sizeof(decimal) // money
+                                      + sizeof(char) // account type
+                                      + StringsInFile; // String's count because the number in front of each string tell how many bytes are necessary to store the string in binary file
+
         private const int NameSizes = 120;
 
         private const int StringsInFile = 2;
-
-        private const int RecordSize = sizeof(int) // id
-                                       + (NameSizes * 2) // First name + Last name
-                                       + (sizeof(int) * 3)
-                                       + sizeof(short) // balance
-                                       + sizeof(decimal) // money
-                                       + sizeof(char) // account type
-                                       + StringsInFile; // String's count because the number in front of each string tell how many bytes are necessary to store the string in binary file
 
         private readonly FileStream fileStream;
 
@@ -93,29 +96,54 @@ namespace FileCabinetApp.Services
 
             for (int i = 0, count = 0; count < this.recordsCount; i++, count++)
             {
-                byte[] buffer = new byte[RecordSize];
-                this.fileStream.Seek(RecordSize * i, SeekOrigin.Begin);
-                this.fileStream.Read(buffer);
-                var status = BitConverter.ToInt16(buffer.AsSpan()[0..2]);
-                if (status == 1)
+                long position = RecordSize * i;
+                var record = this.GetRecord(position);
+                if (record is null)
                 {
                     count--;
                     continue;
                 }
 
-                resultArray[count] = new FileCabinetRecord
-                {
-                    Id = BitConverter.ToInt32(buffer.AsSpan()[2..6]),
-                    FirstName = ByteConverter.ToString(buffer[6..126]),
-                    LastName = ByteConverter.ToString(buffer[126..246]),
-                    DateOfBirth = ByteConverter.ToDateTime(buffer[246..258]),
-                    WorkingHoursPerWeek = BitConverter.ToInt16(buffer.AsSpan()[258..260]),
-                    AnnualIncome = ByteConverter.ToDecimal(buffer[260..276]),
-                    DriverLicenseCategory = BitConverter.ToChar(buffer.AsSpan()[276..278]),
-                };
+                resultArray[count] = record;
             }
 
             return resultArray;
+        }
+
+        /// <summary>
+        /// Gets the record.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns>Return record.</returns>
+        /// <exception cref="System.ArgumentException">Incorrect value {nameof(position)}, it is must be multiples to RecordSize - {RecordSize}</exception>
+        public FileCabinetRecord GetRecord(long position)
+        {
+            if (position % RecordSize != 0)
+            {
+                throw new ArgumentException($"Incorrect value {nameof(position)}, it is must be multiples to RecordSize - {RecordSize}");
+            }
+
+            byte[] buffer = new byte[RecordSize];
+            this.fileStream.Seek(position, SeekOrigin.Begin);
+            this.fileStream.Read(buffer);
+            var status = BitConverter.ToInt16(buffer.AsSpan()[0..2]);
+            if (status == 1)
+            {
+                return null;
+            }
+
+            var record = new FileCabinetRecord
+            {
+                Id = BitConverter.ToInt32(buffer.AsSpan()[2..6]),
+                FirstName = ByteConverter.ToString(buffer[6..126]),
+                LastName = ByteConverter.ToString(buffer[126..246]),
+                DateOfBirth = ByteConverter.ToDateTime(buffer[246..258]),
+                WorkingHoursPerWeek = BitConverter.ToInt16(buffer.AsSpan()[258..260]),
+                AnnualIncome = ByteConverter.ToDecimal(buffer[260..276]),
+                DriverLicenseCategory = BitConverter.ToChar(buffer.AsSpan()[276..278]),
+            };
+
+            return record;
         }
 
         /// <summary>
@@ -373,7 +401,7 @@ namespace FileCabinetApp.Services
         private void WriteRecord(long offset,  FileCabinetRecord record)
         {
             this.fileStream.Seek(offset, SeekOrigin.Begin);
-            this.fileStream.Write(BitConverter.GetBytes((short)0)); // Id
+            this.fileStream.Write(BitConverter.GetBytes((short)0)); // status if 1 - record deleted; if 0 - record is exist
             this.fileStream.Seek(offset + 2, SeekOrigin.Begin);
             this.fileStream.Write(BitConverter.GetBytes(record.Id)); // Id
             this.fileStream.Seek(offset + 6, SeekOrigin.Begin);

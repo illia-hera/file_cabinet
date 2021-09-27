@@ -1298,6 +1298,20 @@
             <param name="input">The input.</param>
             <returns>Return result of boolean conversion result and string input value and decimal value.</returns>
         </member>
+        <member name="M:FileCabinetApp.Utility.Iterator.IRecordIterator.GetNext">
+            <summary>
+            Gets the next.
+            </summary>
+            <returns>Return next FileCabinetRecord.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.Iterator.IRecordIterator.HasMore">
+            <summary>
+            Determines whether this instance has more.
+            </summary>
+            <returns>
+              <c>true</c> if this instance has more; otherwise, <c>false</c>.
+            </returns>
+        </member>
         <member name="T:FileCabinetApp.Utility.ServiceLogger">
             <summary>
             Class <c>ServiceLogger</c> make logging of commands.
