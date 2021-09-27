@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
+using FileCabinetApp.Utility.Iterator;
 using FileCabinetApp.Validators.RecordValidator;
 
 namespace FileCabinetApp.Services
@@ -118,11 +119,14 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="firstName">The first name.</param>
         /// <returns>Return array of records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecordIterator FindByFirstName(string firstName)
         {
-            IReadOnlyCollection<FileCabinetRecord> recordsCollection = this.firstNameDictionary.ContainsKey(firstName) ? this.firstNameDictionary[firstName].ToArray() : Array.Empty<FileCabinetRecord>();
+            if (this.firstNameDictionary.ContainsKey(firstName))
+            {
+                return new MemoryIterator(this.firstNameDictionary[firstName]);
+            }
 
-            return recordsCollection;
+            return new MemoryIterator(new List<FileCabinetRecord>());
         }
 
         /// <summary>
@@ -130,11 +134,14 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="lastName">The last name.</param>
         /// <returns>Return array of records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IRecordIterator FindByLastName(string lastName)
         {
-            IReadOnlyCollection<FileCabinetRecord> recordsCollection = this.lastNameDictionary.ContainsKey(lastName) ? this.lastNameDictionary[lastName].ToArray() : Array.Empty<FileCabinetRecord>();
+            if (this.lastNameDictionary.ContainsKey(lastName))
+            {
+                return new MemoryIterator(this.lastNameDictionary[lastName]);
+            }
 
-            return recordsCollection;
+            return new MemoryIterator(new List<FileCabinetRecord>());
         }
 
         /// <summary>
@@ -142,11 +149,14 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="dateOfBirth">The date of birthday.</param>
         /// <returns>Return array of records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
+        public IRecordIterator FindByDateOfBirthday(DateTime dateOfBirth)
         {
-            IReadOnlyCollection<FileCabinetRecord> recordsCollection = this.dateOfBirthDictionary.ContainsKey(dateOfBirth) ? this.dateOfBirthDictionary[dateOfBirth].ToArray() : Array.Empty<FileCabinetRecord>();
+            if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
+            {
+                return new MemoryIterator(this.dateOfBirthDictionary[dateOfBirth]);
+            }
 
-            return recordsCollection;
+            return new MemoryIterator(new List<FileCabinetRecord>());
         }
 
         /// <summary>

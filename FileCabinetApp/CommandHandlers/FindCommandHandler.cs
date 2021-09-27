@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
+using FileCabinetApp.Utility.Iterator;
 
 namespace FileCabinetApp.CommandHandlers
 {
@@ -41,6 +42,7 @@ namespace FileCabinetApp.CommandHandlers
                 throw new ArgumentNullException(nameof(appCommandRequest));
             }
 
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
             if (appCommandRequest.Command.Equals("find", StringComparison.OrdinalIgnoreCase))
             {
                 string[] inputs = appCommandRequest.Parameters.Split(' ', 2);
@@ -49,21 +51,31 @@ namespace FileCabinetApp.CommandHandlers
                 string parameter = inputs[parameterIndex];
                 string value = inputs.Length > 1 ? inputs[valueIndex] : string.Empty;
 
-                IReadOnlyCollection<FileCabinetRecord> recordsCollection = parameter switch
+                IRecordIterator iterator = parameter switch
                 {
                     var p when p.Equals("firstname", StringComparison.OrdinalIgnoreCase) => this.FileCabinetService.FindByFirstName(value.Trim('\"')),
                     var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => this.FileCabinetService.FindByLastName(value.Trim('\"')),
                     var p when p.Equals("dateOfBirth", StringComparison.OrdinalIgnoreCase)
                                && DateTime.TryParse(value.Trim('\"'), out DateTime dateOfBd) => this.FileCabinetService.FindByDateOfBirthday(dateOfBd),
-                    _ => Array.Empty<FileCabinetRecord>()
+                    _ => null
                 };
 
-                if (recordsCollection.Count == 0)
+                if (iterator is null)
                 {
                     Console.WriteLine($"No records with {parameter} - {value}.");
+                    return;
                 }
 
-                this.print(recordsCollection);
+                while (iterator.HasMore())
+                {
+                    var record = iterator.GetNext();
+                    if (record != null)
+                    {
+                        records.Add(record);
+                    }
+                }
+
+                this.print(records);
                 return;
             }
 

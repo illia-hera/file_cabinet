@@ -14,20 +14,17 @@ namespace FileCabinetApp.Utility.Iterator
     /// <seealso cref="FileCabinetApp.Utility.Iterator.IRecordIterator" />
     public class MemoryIterator : IRecordIterator
     {
-        private readonly List<FileCabinetRecord> list;
-
-        private readonly FileCabinetMemoryService fileCabinetMemoryService;
+        private readonly List<FileCabinetRecord> records;
 
         private int currentPosition;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MemoryIterator"/> class.
+        /// Initializes a new instance of the <see cref="MemoryIterator" /> class.
         /// </summary>
-        /// <param name="fileCabinetMemoryService">The file cabinet memory service.</param>
-        public MemoryIterator(FileCabinetMemoryService fileCabinetMemoryService)
+        /// <param name="records">The records.</param>
+        public MemoryIterator(List<FileCabinetRecord> records)
         {
-            this.fileCabinetMemoryService = fileCabinetMemoryService;
-            this.list = this.fileCabinetMemoryService.GetRecords().ToList();
+            this.records = records ?? throw new ArgumentNullException(nameof(records));
         }
 
         /// <summary>
@@ -43,9 +40,7 @@ namespace FileCabinetApp.Utility.Iterator
                 return null;
             }
 
-            this.currentPosition++;
-
-            return this.list[this.currentPosition];
+            return this.records[this.currentPosition++];
         }
 
         /// <summary>
@@ -56,7 +51,7 @@ namespace FileCabinetApp.Utility.Iterator
         /// </returns>
         public bool HasMore()
         {
-            return this.currentPosition < this.fileCabinetMemoryService.GetStat().Item1;
+            return this.currentPosition < this.records.Count;
         }
     }
 }

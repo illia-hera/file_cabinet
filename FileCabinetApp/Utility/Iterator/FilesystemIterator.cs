@@ -16,15 +16,18 @@ namespace FileCabinetApp.Utility.Iterator
     public class FilesystemIterator : IRecordIterator
     {
         private readonly FileCabinetFilesystemService fileCabinetFilesystemService;
+        private readonly Func<FileCabinetRecord, bool> predicate;
         private int currentPosition;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FilesystemIterator"/> class.
+        /// Initializes a new instance of the <see cref="FilesystemIterator" /> class.
         /// </summary>
         /// <param name="fileCabinetFilesystemService">The file cabinet filesystem service.</param>
-        public FilesystemIterator(FileCabinetFilesystemService fileCabinetFilesystemService)
+        /// <param name="predicate">The predicate.</param>
+        public FilesystemIterator(FileCabinetFilesystemService fileCabinetFilesystemService, Func<FileCabinetRecord, bool> predicate)
         {
             this.fileCabinetFilesystemService = fileCabinetFilesystemService;
+            this.predicate = predicate;
         }
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace FileCabinetApp.Utility.Iterator
                 Console.WriteLine(ex.Message);
             }
 
-            return record;
+            return this.predicate(record) ? record : null;
         }
 
         /// <summary>

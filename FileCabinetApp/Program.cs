@@ -123,7 +123,7 @@ namespace FileCabinetApp
             IConfigurationRoot configurationRoot = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("validation-rules.json").Build();
             ValidationRules configuration = configurationRoot.GetSection("default").Get<ValidationRules>();
             IRecordValidator recordValidator = new ValidatorBuilder().CreateRecordValidator(configuration);
-            fileCabinetService = new FileCabinetMemoryService(recordValidator);
+
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(
                     o =>
@@ -146,6 +146,7 @@ namespace FileCabinetApp
                         }
                         else
                         {
+                            fileCabinetService = new FileCabinetMemoryService(recordValidator);
                             Console.WriteLine("Using memory storage rules.");
                         }
 

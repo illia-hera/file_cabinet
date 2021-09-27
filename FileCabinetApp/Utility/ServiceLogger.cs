@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services;
 using FileCabinetApp.Services.SnapshotServices;
+using FileCabinetApp.Utility.Iterator;
 
 namespace FileCabinetApp.Utility
 {
@@ -148,10 +149,9 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecordIterator FindByFirstName(string firstName)
         {
-            IReadOnlyCollection<FileCabinetRecord> result;
-
+            IRecordIterator result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
             sb.Append($"Calling {GetCurrentMethod()} with FirstName = '{firstName} ', ");
@@ -171,7 +171,6 @@ namespace FileCabinetApp.Utility
                 }
 
                 writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
-                writer.Write(WriteRecords(result));
             }
 
             return result;
@@ -184,10 +183,9 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IRecordIterator FindByLastName(string lastName)
         {
-            IReadOnlyCollection<FileCabinetRecord> result;
-
+            IRecordIterator result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
             sb.Append($"Calling {GetCurrentMethod()} with LastName = '{lastName} ', ");
@@ -207,7 +205,6 @@ namespace FileCabinetApp.Utility
                 }
 
                 writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
-                writer.Write(WriteRecords(result));
             }
 
             return result;
@@ -220,10 +217,9 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
+        public IRecordIterator FindByDateOfBirthday(DateTime dateOfBirth)
         {
-            IReadOnlyCollection<FileCabinetRecord> result;
-
+            IRecordIterator result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
             sb.Append($"Calling {GetCurrentMethod()} with birthDay = '{dateOfBirth} ', ");
@@ -243,7 +239,6 @@ namespace FileCabinetApp.Utility
                 }
 
                 writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
-                writer.Write(WriteRecords(result));
             }
 
             return result;

@@ -7,6 +7,9 @@ using FileCabinetApp.Entities;
 
 namespace FileCabinetApp.Utility.Iterator
 {
+    /// <summary>
+    /// IRecordIterator.
+    /// </summary>
     public interface IRecordIterator
     {
         /// <summary>

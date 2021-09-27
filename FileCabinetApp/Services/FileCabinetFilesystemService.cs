@@ -6,6 +6,7 @@ using System.Text;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
+using FileCabinetApp.Utility.Iterator;
 using FileCabinetApp.Validators.RecordValidator;
 
 namespace FileCabinetApp.Services
@@ -115,7 +116,7 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="position">The position.</param>
         /// <returns>Return record.</returns>
-        /// <exception cref="System.ArgumentException">Incorrect value {nameof(position)}, it is must be multiples to RecordSize - {RecordSize}</exception>
+        /// <exception cref="System.ArgumentException">Incorrect value {nameof(position)}, it is must be multiples to RecordSize - {RecordSize}.</exception>
         public FileCabinetRecord GetRecord(long position)
         {
             if (position % RecordSize != 0)
@@ -187,14 +188,9 @@ namespace FileCabinetApp.Services
         /// <returns>
         /// Return array of records.
         /// </returns>
-        /// <exception cref="System.NotImplementedException">Not implemented.</exception>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecordIterator FindByFirstName(string firstName)
         {
-            var records = this.GetRecords();
-            var filteredRecords = records.Where(record =>
-                firstName.Equals(record.FirstName, StringComparison.OrdinalIgnoreCase)).ToArray();
-
-            return filteredRecords;
+            return new FilesystemIterator(this, record => record.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -204,14 +200,9 @@ namespace FileCabinetApp.Services
         /// <returns>
         /// Return array of records.
         /// </returns>
-        /// <exception cref="System.NotImplementedException">Not implemented.</exception>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IRecordIterator FindByLastName(string lastName)
         {
-            var records = this.GetRecords();
-            var filteredRecords = records.Where(record =>
-                lastName.Equals(record.LastName, StringComparison.OrdinalIgnoreCase)).ToArray();
-
-            return filteredRecords;
+            return new FilesystemIterator(this, record => record.FirstName.Equals(lastName, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -221,13 +212,9 @@ namespace FileCabinetApp.Services
         /// <returns>
         /// Return array of records.
         /// </returns>
-        /// <exception cref="System.NotImplementedException">Not implemented.</exception>
-        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
+        public IRecordIterator FindByDateOfBirthday(DateTime dateOfBirth)
         {
-            var records = this.GetRecords();
-            var filteredRecords = records.Where(record => dateOfBirth == record.DateOfBirth).ToArray();
-
-            return filteredRecords;
+            return new FilesystemIterator(this, record => record.DateOfBirth.Equals(dateOfBirth));
         }
 
         /// <summary>

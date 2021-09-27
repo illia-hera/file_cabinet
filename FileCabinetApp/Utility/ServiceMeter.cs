@@ -4,6 +4,7 @@ using System.Diagnostics;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services;
 using FileCabinetApp.Services.SnapshotServices;
+using FileCabinetApp.Utility.Iterator;
 
 namespace FileCabinetApp.Utility
 {
@@ -92,7 +93,7 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecordIterator FindByFirstName(string firstName)
         {
             var sw = new Stopwatch();
 
@@ -114,7 +115,7 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IRecordIterator FindByLastName(string lastName)
         {
             var sw = new Stopwatch();
 
@@ -136,7 +137,7 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
+        public IRecordIterator FindByDateOfBirthday(DateTime dateOfBirth)
         {
             var sw = new Stopwatch();
 
