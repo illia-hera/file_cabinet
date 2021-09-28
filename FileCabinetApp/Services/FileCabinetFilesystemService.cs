@@ -6,7 +6,6 @@ using System.Text;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
-using FileCabinetApp.Utility.Iterator;
 using FileCabinetApp.Validators.RecordValidator;
 
 namespace FileCabinetApp.Services
@@ -58,6 +57,16 @@ namespace FileCabinetApp.Services
             : this(fileStream)
         {
             this.validator = validator;
+        }
+
+        private enum RecordParametersOffsets : long
+        {
+            FirstName = sizeof(short) + sizeof(int),
+            LastName = FirstName + 120,
+            DateOfBirth = LastName + 120,
+            WorkingHours = DateOfBirth + (sizeof(int) * 3),
+            AnnualIncome = WorkingHours + sizeof(short),
+            DriverCategory = AnnualIncome + sizeof(decimal),
         }
 
         private Dictionary<string, List<int>> FieldOffsetDictionary => this.InitializeIndexes();
@@ -190,7 +199,26 @@ namespace FileCabinetApp.Services
         /// </returns>
         public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            return new FilesystemEnumerable(this);
+            if (string.IsNullOrWhiteSpace(firstName))
+            {
+                throw new ArgumentNullException(nameof(firstName));
+            }
+
+            foreach (int index in this.FieldOffsetDictionary["firstName"])
+            {
+                byte[] buffer = new byte[120];
+                this.fileStream.Seek(index, SeekOrigin.Begin);
+                this.fileStream.Read(buffer);
+
+                string name = ByteConverter.ToString(buffer);
+
+                if (name.Equals(firstName, StringComparison.OrdinalIgnoreCase))
+                {
+                    var record = this.GetRecord((int)(index - RecordParametersOffsets.FirstName));
+
+                    yield return record;
+                }
+            }
         }
 
         /// <summary>
@@ -202,7 +230,26 @@ namespace FileCabinetApp.Services
         /// </returns>
         public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
-            return new FilesystemEnumerable(this);
+            if (string.IsNullOrWhiteSpace(lastName))
+            {
+                throw new ArgumentNullException(nameof(lastName));
+            }
+
+            foreach (int index in this.FieldOffsetDictionary["lastName"])
+            {
+                byte[] buffer = new byte[120];
+                this.fileStream.Seek(index, SeekOrigin.Begin);
+                this.fileStream.Read(buffer);
+
+                string name = ByteConverter.ToString(buffer);
+
+                if (name.Equals(lastName, StringComparison.OrdinalIgnoreCase))
+                {
+                    var record = this.GetRecord((int)(index - RecordParametersOffsets.LastName));
+
+                    yield return record;
+                }
+            }
         }
 
         /// <summary>
@@ -214,7 +261,21 @@ namespace FileCabinetApp.Services
         /// </returns>
         public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
         {
-            return new FilesystemEnumerable(this);
+            foreach (int index in this.FieldOffsetDictionary["birthDay"])
+            {
+                byte[] buffer = new byte[sizeof(int) * 3];
+                this.fileStream.Seek(index, SeekOrigin.Begin);
+                this.fileStream.Read(buffer);
+
+                var dateOfBd = ByteConverter.ToDateTime(buffer);
+
+                if (dateOfBd == dateOfBirth)
+                {
+                    var record = this.GetRecord((int)(index - RecordParametersOffsets.DateOfBirth));
+
+                    yield return record;
+                }
+            }
         }
 
         /// <summary>
@@ -352,8 +413,6 @@ namespace FileCabinetApp.Services
         {
             long count = this.fileStream.Length / RecordSize;
 
-            int firstNameOffset = sizeof(short) + sizeof(int);
-
             var firstNameIndexes = new List<int>((int)count);
             var lastNameIndexes = new List<int>((int)count);
             var birthDayIndexes = new List<int>((int)count);
@@ -361,22 +420,23 @@ namespace FileCabinetApp.Services
             var annualIncomeIndexes = new List<int>((int)count);
             var driverCategoryIndexes = new List<int>((int)count);
 
+            int currentPos = 0;
             for (int i = 0; i < count; i++)
             {
-                firstNameIndexes.Add(firstNameOffset);
-                lastNameIndexes.Add(firstNameOffset + 120);
-                birthDayIndexes.Add(firstNameOffset + 120 + (sizeof(int) * 3));
-                workingHoursIndexes.Add(firstNameOffset + 120 + (sizeof(int) * 3) + sizeof(short));
-                annualIncomeIndexes.Add(firstNameOffset + 120 + (sizeof(int) * 3) + sizeof(short) + sizeof(decimal));
-                driverCategoryIndexes.Add(firstNameOffset + 120 + (sizeof(int) * 3) + sizeof(short) + sizeof(decimal) + sizeof(char));
-                firstNameOffset += RecordSize;
+                firstNameIndexes.Add((int)RecordParametersOffsets.FirstName + currentPos);
+                lastNameIndexes.Add((int)RecordParametersOffsets.LastName + currentPos);
+                birthDayIndexes.Add((int)RecordParametersOffsets.DateOfBirth + currentPos);
+                workingHoursIndexes.Add((int)RecordParametersOffsets.WorkingHours + currentPos);
+                annualIncomeIndexes.Add((int)RecordParametersOffsets.AnnualIncome + currentPos);
+                driverCategoryIndexes.Add((int)RecordParametersOffsets.DriverCategory + currentPos);
+                currentPos += RecordSize;
             }
 
             Dictionary<string, List<int>> offsetDictionary = new Dictionary<string, List<int>>
                                                                  {
-                                                                     { "lastname", lastNameIndexes },
-                                                                     { "firstname", firstNameIndexes },
-                                                                     { "birthday", birthDayIndexes },
+                                                                     { "lastName", lastNameIndexes },
+                                                                     { "firstName", firstNameIndexes },
+                                                                     { "birthDay", birthDayIndexes },
                                                                      { "workingHours", workingHoursIndexes },
                                                                      { "annualIncome", annualIncomeIndexes },
                                                                      { "driverCategory", driverCategoryIndexes },

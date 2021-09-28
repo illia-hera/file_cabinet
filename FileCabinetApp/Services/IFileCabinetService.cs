@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
-using FileCabinetApp.Utility.Iterator;
 
 namespace FileCabinetApp.Services
 {

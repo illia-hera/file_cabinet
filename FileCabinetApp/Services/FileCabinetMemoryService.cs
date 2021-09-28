@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
-using FileCabinetApp.Utility.Iterator;
 using FileCabinetApp.Validators.RecordValidator;
 
 namespace FileCabinetApp.Services
@@ -123,10 +122,10 @@ namespace FileCabinetApp.Services
         {
             if (this.firstNameDictionary.ContainsKey(firstName))
             {
-                return new MemoryEnumerable(this.firstNameDictionary[firstName]);
+                return this.firstNameDictionary[firstName];
             }
 
-            return new MemoryEnumerable(new List<FileCabinetRecord>());
+            return new List<FileCabinetRecord>();
         }
 
         /// <summary>
@@ -138,10 +137,10 @@ namespace FileCabinetApp.Services
         {
             if (this.lastNameDictionary.ContainsKey(lastName))
             {
-                return new MemoryEnumerable(this.lastNameDictionary[lastName]);
+                return this.lastNameDictionary[lastName];
             }
 
-            return new MemoryEnumerable(new List<FileCabinetRecord>());
+            return new List<FileCabinetRecord>();
         }
 
         /// <summary>
@@ -153,10 +152,10 @@ namespace FileCabinetApp.Services
         {
             if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
             {
-                return new MemoryEnumerable(this.dateOfBirthDictionary[dateOfBirth]);
+                return this.dateOfBirthDictionary[dateOfBirth];
             }
 
-            return new MemoryEnumerable(new List<FileCabinetRecord>());
+            return new List<FileCabinetRecord>();
         }
 
         /// <summary>

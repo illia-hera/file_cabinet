@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
-using FileCabinetApp.Utility.Iterator;
 
 namespace FileCabinetApp.CommandHandlers
 {
