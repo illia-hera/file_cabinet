@@ -42,7 +42,6 @@ namespace FileCabinetApp.CommandHandlers
                 throw new ArgumentNullException(nameof(appCommandRequest));
             }
 
-            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
             if (appCommandRequest.Command.Equals("find", StringComparison.OrdinalIgnoreCase))
             {
                 string[] inputs = appCommandRequest.Parameters.Split(' ', 2);
@@ -51,7 +50,7 @@ namespace FileCabinetApp.CommandHandlers
                 string parameter = inputs[parameterIndex];
                 string value = inputs.Length > 1 ? inputs[valueIndex] : string.Empty;
 
-                IRecordIterator iterator = parameter switch
+                IEnumerable<FileCabinetRecord> records = parameter switch
                 {
                     var p when p.Equals("firstname", StringComparison.OrdinalIgnoreCase) => this.FileCabinetService.FindByFirstName(value.Trim('\"')),
                     var p when p.Equals("lastName", StringComparison.OrdinalIgnoreCase) => this.FileCabinetService.FindByLastName(value.Trim('\"')),
@@ -60,22 +59,14 @@ namespace FileCabinetApp.CommandHandlers
                     _ => null
                 };
 
-                if (iterator is null)
+                if (records is null)
                 {
                     Console.WriteLine($"No records with {parameter} - {value}.");
                     return;
                 }
 
-                while (iterator.HasMore())
-                {
-                    var record = iterator.GetNext();
-                    if (record != null)
-                    {
-                        records.Add(record);
-                    }
-                }
-
                 this.print(records);
+
                 return;
             }
 

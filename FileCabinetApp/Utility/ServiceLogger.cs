@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -149,9 +150,9 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IRecordIterator FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            IRecordIterator result;
+            IEnumerable<FileCabinetRecord> result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
             sb.Append($"Calling {GetCurrentMethod()} with FirstName = '{firstName} ', ");
@@ -171,6 +172,7 @@ namespace FileCabinetApp.Utility
                 }
 
                 writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
+                writer.Write(WriteRecords(result));
             }
 
             return result;
@@ -183,9 +185,9 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IRecordIterator FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
-            IRecordIterator result;
+            IEnumerable<FileCabinetRecord> result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
             sb.Append($"Calling {GetCurrentMethod()} with LastName = '{lastName} ', ");
@@ -205,6 +207,7 @@ namespace FileCabinetApp.Utility
                 }
 
                 writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
+                writer.Write(WriteRecords(result));
             }
 
             return result;
@@ -217,9 +220,9 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IRecordIterator FindByDateOfBirthday(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
         {
-            IRecordIterator result;
+            IEnumerable<FileCabinetRecord> result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
             sb.Append($"Calling {GetCurrentMethod()} with birthDay = '{dateOfBirth} ', ");
@@ -239,6 +242,7 @@ namespace FileCabinetApp.Utility
                 }
 
                 writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
+                writer.Write(WriteRecords(result));
             }
 
             return result;

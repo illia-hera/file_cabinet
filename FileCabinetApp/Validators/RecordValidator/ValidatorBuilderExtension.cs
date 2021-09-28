@@ -18,7 +18,7 @@ namespace FileCabinetApp.Validators.RecordValidator
         /// <returns>Return Record Validator.</returns>
         public static IRecordValidator CreateDefaultValidator(this ValidatorBuilder builder)
         {
-            return CreateRecordValidator(builder, "custom");
+            return CreateRecordValidator(builder, "default");
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace FileCabinetApp.Validators.RecordValidator
         /// <returns>Return Record Validator.</returns>
         public static IRecordValidator CreateCustomValidator(this ValidatorBuilder builder)
         {
-            return CreateRecordValidator(builder, "default");
+            return CreateRecordValidator(builder, "custom");
         }
 
         /// <summary>

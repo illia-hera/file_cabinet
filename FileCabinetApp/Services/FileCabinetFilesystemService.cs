@@ -188,9 +188,9 @@ namespace FileCabinetApp.Services
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IRecordIterator FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            return new FilesystemIterator(this, record => record.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase));
+            return new FilesystemEnumerable(this);
         }
 
         /// <summary>
@@ -200,9 +200,9 @@ namespace FileCabinetApp.Services
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IRecordIterator FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
-            return new FilesystemIterator(this, record => record.FirstName.Equals(lastName, StringComparison.OrdinalIgnoreCase));
+            return new FilesystemEnumerable(this);
         }
 
         /// <summary>
@@ -212,9 +212,9 @@ namespace FileCabinetApp.Services
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IRecordIterator FindByDateOfBirthday(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
         {
-            return new FilesystemIterator(this, record => record.DateOfBirth.Equals(dateOfBirth));
+            return new FilesystemEnumerable(this);
         }
 
         /// <summary>

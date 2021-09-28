@@ -22,7 +22,7 @@ namespace FileCabinetApp.Validators.InputValidators
         {
             if (string.IsNullOrWhiteSpace(validationType))
             {
-                throw new ArgumentNullException( nameof(validationType), $" can not be null or empty");
+                throw new ArgumentNullException(nameof(validationType), $" can not be null or empty");
             }
 
             IConfigurationRoot configurationRoot = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("validation-rules.json").Build();

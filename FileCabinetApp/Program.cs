@@ -121,8 +121,7 @@ namespace FileCabinetApp
 
         private static void InitFileCabinetService(string[] args)
         {
-
-            IRecordValidator recordValidator = null;
+            IRecordValidator recordValidator;
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(
                     o =>

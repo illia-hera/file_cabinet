@@ -119,14 +119,14 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="firstName">The first name.</param>
         /// <returns>Return array of records.</returns>
-        public IRecordIterator FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             if (this.firstNameDictionary.ContainsKey(firstName))
             {
-                return new MemoryIterator(this.firstNameDictionary[firstName]);
+                return new MemoryEnumerable(this.firstNameDictionary[firstName]);
             }
 
-            return new MemoryIterator(new List<FileCabinetRecord>());
+            return new MemoryEnumerable(new List<FileCabinetRecord>());
         }
 
         /// <summary>
@@ -134,14 +134,14 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="lastName">The last name.</param>
         /// <returns>Return array of records.</returns>
-        public IRecordIterator FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             if (this.lastNameDictionary.ContainsKey(lastName))
             {
-                return new MemoryIterator(this.lastNameDictionary[lastName]);
+                return new MemoryEnumerable(this.lastNameDictionary[lastName]);
             }
 
-            return new MemoryIterator(new List<FileCabinetRecord>());
+            return new MemoryEnumerable(new List<FileCabinetRecord>());
         }
 
         /// <summary>
@@ -149,14 +149,14 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="dateOfBirth">The date of birthday.</param>
         /// <returns>Return array of records.</returns>
-        public IRecordIterator FindByDateOfBirthday(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
         {
             if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
             {
-                return new MemoryIterator(this.dateOfBirthDictionary[dateOfBirth]);
+                return new MemoryEnumerable(this.dateOfBirthDictionary[dateOfBirth]);
             }
 
-            return new MemoryIterator(new List<FileCabinetRecord>());
+            return new MemoryEnumerable(new List<FileCabinetRecord>());
         }
 
         /// <summary>
