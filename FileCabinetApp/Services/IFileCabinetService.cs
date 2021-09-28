@@ -41,21 +41,21 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="firstName">The first name.</param>
         /// <returns>Return array of records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName);
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
 
         /// <summary>
         /// Finds the records by the last name.
         /// </summary>
         /// <param name="lastName">The last name.</param>
         /// <returns>Return array of records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
 
         /// <summary>
         /// Finds the records by date of birthday.
         /// </summary>
         /// <param name="dateOfBirth">The date of birthday.</param>
         /// <returns>Return array of records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth);
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth);
 
         /// <summary>
         /// Makes the snapshot.

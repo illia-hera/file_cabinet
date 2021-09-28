@@ -16,17 +16,20 @@ namespace FileCabinetApp.Services
     /// <seealso cref="FileCabinetApp.Services.IFileCabinetService" />
     public class FileCabinetFilesystemService : IFileCabinetService
     {
+        /// <summary>
+        /// The record size.
+        /// </summary>
+        public const int RecordSize = sizeof(int) // id
+                                      + (NameSizes * 2) // First name + Last name
+                                      + (sizeof(int) * 3)
+                                      + sizeof(short) // balance
+                                      + sizeof(decimal) // money
+                                      + sizeof(char) // account type
+                                      + StringsInFile; // String's count because the number in front of each string tell how many bytes are necessary to store the string in binary file
+
         private const int NameSizes = 120;
 
         private const int StringsInFile = 2;
-
-        private const int RecordSize = sizeof(int) // id
-                                       + (NameSizes * 2) // First name + Last name
-                                       + (sizeof(int) * 3)
-                                       + sizeof(short) // balance
-                                       + sizeof(decimal) // money
-                                       + sizeof(char) // account type
-                                       + StringsInFile; // String's count because the number in front of each string tell how many bytes are necessary to store the string in binary file
 
         private readonly FileStream fileStream;
 
@@ -55,6 +58,18 @@ namespace FileCabinetApp.Services
         {
             this.validator = validator;
         }
+
+        private enum RecordParametersOffsets : long
+        {
+            FirstName = sizeof(short) + sizeof(int),
+            LastName = FirstName + 120,
+            DateOfBirth = LastName + 120,
+            WorkingHours = DateOfBirth + (sizeof(int) * 3),
+            AnnualIncome = WorkingHours + sizeof(short),
+            DriverCategory = AnnualIncome + sizeof(decimal),
+        }
+
+        private Dictionary<string, List<int>> FieldOffsetDictionary => this.InitializeIndexes();
 
         /// <summary>
         /// Creates the record.
@@ -91,29 +106,54 @@ namespace FileCabinetApp.Services
 
             for (int i = 0, count = 0; count < this.recordsCount; i++, count++)
             {
-                byte[] buffer = new byte[RecordSize];
-                this.fileStream.Seek(RecordSize * i, SeekOrigin.Begin);
-                this.fileStream.Read(buffer);
-                var status = BitConverter.ToInt16(buffer.AsSpan()[0..2]);
-                if (status == 1)
+                long position = RecordSize * i;
+                var record = this.GetRecord(position);
+                if (record is null)
                 {
                     count--;
                     continue;
                 }
 
-                resultArray[count] = new FileCabinetRecord
-                {
-                    Id = BitConverter.ToInt32(buffer.AsSpan()[2..6]),
-                    FirstName = ByteConverter.ToString(buffer[6..126]),
-                    LastName = ByteConverter.ToString(buffer[126..246]),
-                    DateOfBirth = ByteConverter.ToDateTime(buffer[246..258]),
-                    WorkingHoursPerWeek = BitConverter.ToInt16(buffer.AsSpan()[258..260]),
-                    AnnualIncome = ByteConverter.ToDecimal(buffer[260..276]),
-                    DriverLicenseCategory = BitConverter.ToChar(buffer.AsSpan()[276..278]),
-                };
+                resultArray[count] = record;
             }
 
             return resultArray;
+        }
+
+        /// <summary>
+        /// Gets the record.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns>Return record.</returns>
+        /// <exception cref="System.ArgumentException">Incorrect value {nameof(position)}, it is must be multiples to RecordSize - {RecordSize}.</exception>
+        public FileCabinetRecord GetRecord(long position)
+        {
+            if (position % RecordSize != 0)
+            {
+                throw new ArgumentException($"Incorrect value {nameof(position)}, it is must be multiples to RecordSize - {RecordSize}");
+            }
+
+            byte[] buffer = new byte[RecordSize];
+            this.fileStream.Seek(position, SeekOrigin.Begin);
+            this.fileStream.Read(buffer);
+            var status = BitConverter.ToInt16(buffer.AsSpan()[0..2]);
+            if (status == 1)
+            {
+                return null;
+            }
+
+            var record = new FileCabinetRecord
+            {
+                Id = BitConverter.ToInt32(buffer.AsSpan()[2..6]),
+                FirstName = ByteConverter.ToString(buffer[6..126]),
+                LastName = ByteConverter.ToString(buffer[126..246]),
+                DateOfBirth = ByteConverter.ToDateTime(buffer[246..258]),
+                WorkingHoursPerWeek = BitConverter.ToInt16(buffer.AsSpan()[258..260]),
+                AnnualIncome = ByteConverter.ToDecimal(buffer[260..276]),
+                DriverLicenseCategory = BitConverter.ToChar(buffer.AsSpan()[276..278]),
+            };
+
+            return record;
         }
 
         /// <summary>
@@ -157,14 +197,28 @@ namespace FileCabinetApp.Services
         /// <returns>
         /// Return array of records.
         /// </returns>
-        /// <exception cref="System.NotImplementedException">Not implemented.</exception>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            var records = this.GetRecords();
-            var filteredRecords = records.Where(record =>
-                firstName.Equals(record.FirstName, StringComparison.OrdinalIgnoreCase)).ToArray();
+            if (string.IsNullOrWhiteSpace(firstName))
+            {
+                throw new ArgumentNullException(nameof(firstName));
+            }
 
-            return filteredRecords;
+            foreach (int index in this.FieldOffsetDictionary["firstName"])
+            {
+                byte[] buffer = new byte[120];
+                this.fileStream.Seek(index, SeekOrigin.Begin);
+                this.fileStream.Read(buffer);
+
+                string name = ByteConverter.ToString(buffer);
+
+                if (name.Equals(firstName, StringComparison.OrdinalIgnoreCase))
+                {
+                    var record = this.GetRecord((int)(index - RecordParametersOffsets.FirstName));
+
+                    yield return record;
+                }
+            }
         }
 
         /// <summary>
@@ -174,14 +228,28 @@ namespace FileCabinetApp.Services
         /// <returns>
         /// Return array of records.
         /// </returns>
-        /// <exception cref="System.NotImplementedException">Not implemented.</exception>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
-            var records = this.GetRecords();
-            var filteredRecords = records.Where(record =>
-                lastName.Equals(record.LastName, StringComparison.OrdinalIgnoreCase)).ToArray();
+            if (string.IsNullOrWhiteSpace(lastName))
+            {
+                throw new ArgumentNullException(nameof(lastName));
+            }
 
-            return filteredRecords;
+            foreach (int index in this.FieldOffsetDictionary["lastName"])
+            {
+                byte[] buffer = new byte[120];
+                this.fileStream.Seek(index, SeekOrigin.Begin);
+                this.fileStream.Read(buffer);
+
+                string name = ByteConverter.ToString(buffer);
+
+                if (name.Equals(lastName, StringComparison.OrdinalIgnoreCase))
+                {
+                    var record = this.GetRecord((int)(index - RecordParametersOffsets.LastName));
+
+                    yield return record;
+                }
+            }
         }
 
         /// <summary>
@@ -191,13 +259,23 @@ namespace FileCabinetApp.Services
         /// <returns>
         /// Return array of records.
         /// </returns>
-        /// <exception cref="System.NotImplementedException">Not implemented.</exception>
-        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
         {
-            var records = this.GetRecords();
-            var filteredRecords = records.Where(record => dateOfBirth == record.DateOfBirth).ToArray();
+            foreach (int index in this.FieldOffsetDictionary["birthDay"])
+            {
+                byte[] buffer = new byte[sizeof(int) * 3];
+                this.fileStream.Seek(index, SeekOrigin.Begin);
+                this.fileStream.Read(buffer);
 
-            return filteredRecords;
+                var dateOfBd = ByteConverter.ToDateTime(buffer);
+
+                if (dateOfBd == dateOfBirth)
+                {
+                    var record = this.GetRecord((int)(index - RecordParametersOffsets.DateOfBirth));
+
+                    yield return record;
+                }
+            }
         }
 
         /// <summary>
@@ -234,9 +312,9 @@ namespace FileCabinetApp.Services
 
                 this.fileStream.Seek(0, SeekOrigin.Begin);
                 this.fileStream.Write(buffer);
-                foreach (var record in snapShotRecords)
+                for (var i = 0; i < snapShotRecords.Count; i++)
                 {
-                    this.WriteRecord((record.Id - 1) * RecordSize, record);
+                    this.WriteRecord(i * RecordSize, snapShotRecords[i]);
                 }
             }
         }
@@ -331,10 +409,46 @@ namespace FileCabinetApp.Services
             return deletedCount;
         }
 
+        private Dictionary<string, List<int>> InitializeIndexes()
+        {
+            long count = this.fileStream.Length / RecordSize;
+
+            var firstNameIndexes = new List<int>((int)count);
+            var lastNameIndexes = new List<int>((int)count);
+            var birthDayIndexes = new List<int>((int)count);
+            var workingHoursIndexes = new List<int>((int)count);
+            var annualIncomeIndexes = new List<int>((int)count);
+            var driverCategoryIndexes = new List<int>((int)count);
+
+            int currentPos = 0;
+            for (int i = 0; i < count; i++)
+            {
+                firstNameIndexes.Add((int)RecordParametersOffsets.FirstName + currentPos);
+                lastNameIndexes.Add((int)RecordParametersOffsets.LastName + currentPos);
+                birthDayIndexes.Add((int)RecordParametersOffsets.DateOfBirth + currentPos);
+                workingHoursIndexes.Add((int)RecordParametersOffsets.WorkingHours + currentPos);
+                annualIncomeIndexes.Add((int)RecordParametersOffsets.AnnualIncome + currentPos);
+                driverCategoryIndexes.Add((int)RecordParametersOffsets.DriverCategory + currentPos);
+                currentPos += RecordSize;
+            }
+
+            Dictionary<string, List<int>> offsetDictionary = new Dictionary<string, List<int>>
+                                                                 {
+                                                                     { "lastName", lastNameIndexes },
+                                                                     { "firstName", firstNameIndexes },
+                                                                     { "birthDay", birthDayIndexes },
+                                                                     { "workingHours", workingHoursIndexes },
+                                                                     { "annualIncome", annualIncomeIndexes },
+                                                                     { "driverCategory", driverCategoryIndexes },
+                                                                 };
+
+            return offsetDictionary;
+        }
+
         private void WriteRecord(long offset,  FileCabinetRecord record)
         {
             this.fileStream.Seek(offset, SeekOrigin.Begin);
-            this.fileStream.Write(BitConverter.GetBytes((short)0)); // Id
+            this.fileStream.Write(BitConverter.GetBytes((short)0)); // status if 1 - record deleted; if 0 - record is exist
             this.fileStream.Seek(offset + 2, SeekOrigin.Begin);
             this.fileStream.Write(BitConverter.GetBytes(record.Id)); // Id
             this.fileStream.Seek(offset + 6, SeekOrigin.Begin);

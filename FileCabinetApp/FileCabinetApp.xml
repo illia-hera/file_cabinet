@@ -861,6 +861,11 @@
             </summary>
             <seealso cref="T:FileCabinetApp.Services.IFileCabinetService" />
         </member>
+        <member name="F:FileCabinetApp.Services.FileCabinetFilesystemService.RecordSize">
+            <summary>
+            The record size.
+            </summary>
+        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetFilesystemService"/> class.
@@ -892,6 +897,14 @@
             </returns>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetRecord(System.Int64)">
+            <summary>
+            Gets the record.
+            </summary>
+            <param name="position">The position.</param>
+            <returns>Return record.</returns>
+            <exception cref="T:System.ArgumentException">Incorrect value {nameof(position)}, it is must be multiples to RecordSize - {RecordSize}.</exception>
+        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.EditRecord(System.Int32,FileCabinetApp.Entities.ParametersContainer)">
             <summary>
             Edits the record.
@@ -917,7 +930,6 @@
             <returns>
             Return array of records.
             </returns>
-            <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByLastName(System.String)">
             <summary>
@@ -927,7 +939,6 @@
             <returns>
             Return array of records.
             </returns>
-            <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByDateOfBirthday(System.DateTime)">
             <summary>
@@ -937,7 +948,6 @@
             <returns>
             Return array of records.
             </returns>
-            <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.MakeSnapshot">
             <summary>
@@ -1501,11 +1511,11 @@
             Class <c>InputValidator</c>.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Validators.InputValidators.InputValidator.#ctor(FileCabinetApp.Entities.JsonSerialization.ValidationRules)">
+        <member name="M:FileCabinetApp.Validators.InputValidators.InputValidator.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.InputValidators.InputValidator"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.InputValidators.InputValidator" /> class.
             </summary>
-            <param name="rules">The rules.</param>
+            <param name="validationType">Type of the validation.</param>
         </member>
         <member name="M:FileCabinetApp.Validators.InputValidators.InputValidator.ValidateImportExportParameters(System.String)">
             <summary>
@@ -1776,18 +1786,32 @@
             Class <c>ValidatorBuilderExtension</c>.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Validators.RecordValidator.ValidatorBuilderExtension.CreateRecordValidator(FileCabinetApp.Validators.RecordValidator.ValidatorBuilder,FileCabinetApp.Entities.JsonSerialization.ValidationRules)">
+        <member name="M:FileCabinetApp.Validators.RecordValidator.ValidatorBuilderExtension.CreateDefaultValidator(FileCabinetApp.Validators.RecordValidator.ValidatorBuilder)">
+            <summary>
+            Creates the default validator.
+            </summary>
+            <param name="builder">The builder.</param>
+            <returns>Return Record Validator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.RecordValidator.ValidatorBuilderExtension.CreateCustomValidator(FileCabinetApp.Validators.RecordValidator.ValidatorBuilder)">
+            <summary>
+            Creates the custom validator.
+            </summary>
+            <param name="builder">The builder.</param>
+            <returns>Return Record Validator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.RecordValidator.ValidatorBuilderExtension.CreateRecordValidator(FileCabinetApp.Validators.RecordValidator.ValidatorBuilder,System.String)">
             <summary>
             Creates the record validator.
             </summary>
             <param name="builder">The builder.</param>
-            <param name="configuration">The configuration.</param>
-            <returns>Return Record Validator.</returns>
-            <exception cref="T:System.ArgumentNullException">
-            builder
+            <param name="type">The type.</param>
+            <returns>
+            Return Record Validator.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">builder
             or
-            configuration.
-            </exception>
+            configuration.</exception>
         </member>
         <member name="T:FileCabinetApp.RecordWriters.FileCabinetRecordCsvWriter">
             <summary>

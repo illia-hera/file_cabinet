@@ -56,6 +56,12 @@ namespace FileCabinetApp.CommandHandlers
         private bool TryReadRecords(Tuple<bool, string, string> parametersTuple)
         {
             IFileCabinetServiceSnapshot snapshot = this.FileCabinetService.MakeSnapshot();
+            if (parametersTuple.Item2 is null)
+            {
+                Console.WriteLine($"File path can not be null");
+                return false;
+            }
+
             using var fs = new FileStream(parametersTuple.Item2, FileMode.Open, FileAccess.Read);
             if (parametersTuple.Item1 && parametersTuple.Item3.Equals("csv", StringComparison.OrdinalIgnoreCase))
             {

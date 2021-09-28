@@ -15,6 +15,7 @@ using FileCabinetApp.Utility;
 using FileCabinetApp.Validators;
 using FileCabinetApp.Validators.InputValidators;
 using FileCabinetApp.Validators.RecordValidator;
+using FileCabinetApp.Validators.RecordValidator.ParametersValidators;
 using Microsoft.Extensions.Configuration;
 
 namespace FileCabinetApp
@@ -108,28 +109,34 @@ namespace FileCabinetApp
         {
             foreach (FileCabinetRecord record in records)
             {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}");
+                Console.WriteLine($"#{record.Id}," +
+                                  $" {record.FirstName}," +
+                                  $" {record.LastName}," +
+                                  $" {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}," +
+                                  $" working hours: {record.WorkingHoursPerWeek}," +
+                                  $" annual income: {record.AnnualIncome}," +
+                                  $" driver category: {record.DriverLicenseCategory}.");
             }
         }
 
         private static void InitFileCabinetService(string[] args)
         {
-            IConfigurationRoot configurationRoot = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("validation-rules.json").Build();
-            ValidationRules configuration = configurationRoot.GetSection("default").Get<ValidationRules>();
-            IRecordValidator recordValidator = new ValidatorBuilder().CreateRecordValidator(configuration);
+            IRecordValidator recordValidator;
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(
                     o =>
                     {
-                        if ((o.ValidationRules == null) || o.ValidationRules.Equals("default", StringComparison.OrdinalIgnoreCase))
+                        if (o.ValidationRules.Equals("custom", StringComparison.OrdinalIgnoreCase))
                         {
-                            Console.WriteLine("Using default validation rules.");
-                        }
-                        else if (o.ValidationRules.Equals("custom", StringComparison.OrdinalIgnoreCase))
-                        {
-                            configuration = configurationRoot.GetSection("custom").Get<ValidationRules>();
-                            recordValidator = new ValidatorBuilder().CreateRecordValidator(configuration);
+                            recordValidator = new ValidatorBuilder().CreateCustomValidator();
+                            inputValidator = new InputValidator("custom");
                             Console.WriteLine("Using custom validation rules.");
+                        }
+                        else
+                        {
+                            recordValidator = new ValidatorBuilder().CreateDefaultValidator();
+                            inputValidator = new InputValidator("default");
+                            Console.WriteLine("Using default validation rules.");
                         }
 
                         if (o.StorageRules.Equals("file", StringComparison.OrdinalIgnoreCase))
@@ -137,10 +144,15 @@ namespace FileCabinetApp
                             fileCabinetService = new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create), recordValidator);
                             Console.WriteLine("Using file storage rules.");
                         }
+                        else
+                        {
+                            fileCabinetService = new FileCabinetMemoryService(recordValidator);
+                            Console.WriteLine("Using memory storage rules.");
+                        }
 
                         if (o.StopWatchUse)
                         {
-                            fileCabinetService = new ServiceMeter(new FileCabinetMemoryService(recordValidator));
+                            fileCabinetService = new ServiceMeter(fileCabinetService);
                             Console.WriteLine("Using stopWatch.");
                         }
 
@@ -150,14 +162,6 @@ namespace FileCabinetApp
                             Console.WriteLine("Using logger.");
                         }
                     });
-
-            if (fileCabinetService is null)
-            {
-                fileCabinetService = new FileCabinetMemoryService(recordValidator);
-                Console.WriteLine("Using memory storage rules.");
-            }
-
-            inputValidator = new InputValidator(configuration);
         }
 
         private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)

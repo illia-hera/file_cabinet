@@ -92,7 +92,7 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             var sw = new Stopwatch();
 
@@ -114,7 +114,7 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             var sw = new Stopwatch();
 
@@ -136,7 +136,7 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
         {
             var sw = new Stopwatch();
 

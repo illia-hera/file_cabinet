@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -148,10 +149,9 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            IReadOnlyCollection<FileCabinetRecord> result;
-
+            IEnumerable<FileCabinetRecord> result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
             sb.Append($"Calling {GetCurrentMethod()} with FirstName = '{firstName} ', ");
@@ -184,10 +184,9 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
-            IReadOnlyCollection<FileCabinetRecord> result;
-
+            IEnumerable<FileCabinetRecord> result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
             sb.Append($"Calling {GetCurrentMethod()} with LastName = '{lastName} ', ");
@@ -220,10 +219,9 @@ namespace FileCabinetApp.Utility
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
         {
-            IReadOnlyCollection<FileCabinetRecord> result;
-
+            IEnumerable<FileCabinetRecord> result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
             sb.Append($"Calling {GetCurrentMethod()} with birthDay = '{dateOfBirth} ', ");

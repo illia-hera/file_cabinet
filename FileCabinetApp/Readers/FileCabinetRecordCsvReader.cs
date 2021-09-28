@@ -56,7 +56,8 @@ namespace FileCabinetApp.Readers
                         var values = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
 
                         ParametersContainer container = null;
-
+                        NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
+                        nfi.CurrencyDecimalSeparator = ".";
                         try
                         {
                             container = new ParametersContainer(
@@ -64,7 +65,7 @@ namespace FileCabinetApp.Readers
                                 values[2],
                                 Convert.ToDateTime(values[3], DateTimeFormatInfo.InvariantInfo),
                                 Convert.ToInt16(values[4], CultureInfo.InvariantCulture),
-                                Convert.ToDecimal(values[5], NumberFormatInfo.InvariantInfo),
+                                Convert.ToDecimal(values[5], nfi),
                                 Convert.ToChar(values[6], CultureInfo.InvariantCulture));
 
                             this.inputValidator.ValidateParameters(container);
