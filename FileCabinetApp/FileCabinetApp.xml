@@ -1587,11 +1587,11 @@
             Class <c>InputValidator</c>.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Validators.InputValidators.InputValidator.#ctor(FileCabinetApp.Entities.JsonSerialization.ValidationRules)">
+        <member name="M:FileCabinetApp.Validators.InputValidators.InputValidator.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.InputValidators.InputValidator"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.InputValidators.InputValidator" /> class.
             </summary>
-            <param name="rules">The rules.</param>
+            <param name="validationType">Type of the validation.</param>
         </member>
         <member name="M:FileCabinetApp.Validators.InputValidators.InputValidator.ValidateImportExportParameters(System.String)">
             <summary>
@@ -1862,18 +1862,32 @@
             Class <c>ValidatorBuilderExtension</c>.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Validators.RecordValidator.ValidatorBuilderExtension.CreateRecordValidator(FileCabinetApp.Validators.RecordValidator.ValidatorBuilder,FileCabinetApp.Entities.JsonSerialization.ValidationRules)">
+        <member name="M:FileCabinetApp.Validators.RecordValidator.ValidatorBuilderExtension.CreateDefaultValidator(FileCabinetApp.Validators.RecordValidator.ValidatorBuilder)">
+            <summary>
+            Creates the default validator.
+            </summary>
+            <param name="builder">The builder.</param>
+            <returns>Return Record Validator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.RecordValidator.ValidatorBuilderExtension.CreateCustomValidator(FileCabinetApp.Validators.RecordValidator.ValidatorBuilder)">
+            <summary>
+            Creates the custom validator.
+            </summary>
+            <param name="builder">The builder.</param>
+            <returns>Return Record Validator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.RecordValidator.ValidatorBuilderExtension.CreateRecordValidator(FileCabinetApp.Validators.RecordValidator.ValidatorBuilder,System.String)">
             <summary>
             Creates the record validator.
             </summary>
             <param name="builder">The builder.</param>
-            <param name="configuration">The configuration.</param>
-            <returns>Return Record Validator.</returns>
-            <exception cref="T:System.ArgumentNullException">
-            builder
+            <param name="type">The type.</param>
+            <returns>
+            Return Record Validator.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">builder
             or
-            configuration.
-            </exception>
+            configuration.</exception>
         </member>
         <member name="T:FileCabinetApp.RecordWriters.FileCabinetRecordCsvWriter">
             <summary>
