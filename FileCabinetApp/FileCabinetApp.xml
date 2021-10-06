@@ -852,21 +852,6 @@
             </summary>
             <returns>Return container with parameters.</returns>
         </member>
-        <member name="M:FileCabinetApp.Program.ReadInput``1(System.String,System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
-            <summary>
-            Reads the input.
-            </summary>
-            <typeparam name="T">value.</typeparam>
-            <param name="input">The input.</param>
-            <param name="converter">The converter.</param>
-            <param name="validator">The validator.</param>
-            <returns>
-            Return value.
-            </returns>
-            <exception cref="T:System.ArgumentException">Conversion failed: {conversionResult.Item2}. Please, correct your input.
-            or
-            Conversion failed: {validationResult.Item2}. Please, correct your input.</exception>
-        </member>
         <member name="T:FileCabinetApp.Readers.FileCabinetRecordCsvReader">
             <summary>
             Class FileCabinetRecordCsvReader.
@@ -914,6 +899,35 @@
             Reads all.
             </summary>
             <returns>Return list of Records.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Readers.ParameterReaders">
+            <summary>
+            Parameter reader.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Readers.ParameterReaders.ReadInput``1(System.String,System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+            Reads the input.
+            </summary>
+            <typeparam name="T">Parameter type.</typeparam>
+            <param name="input">The input.</param>
+            <param name="converter">The converter.</param>
+            <param name="validator">The validator.</param>
+            <returns>
+            Return value.
+            </returns>
+            <exception cref="T:System.ArgumentException">Conversion failed: {conversionResult.Item2}. Please, correct your input.
+            or
+            Conversion failed: {validationResult.Item2}. Please, correct your input.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Readers.ParameterReaders.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+            Reads the input.
+            </summary>
+            <typeparam name="T">Parameter types.</typeparam>
+            <param name="converter">The converter.</param>
+            <param name="validator">The validator.</param>
+            <returns>Return value.</returns>
         </member>
         <member name="T:FileCabinetApp.Services.FileCabinetFilesystemService">
             <summary>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FileCabinetApp.Entities;
+using FileCabinetApp.Readers;
 using FileCabinetApp.Services;
 using FileCabinetApp.Utility;
 using FileCabinetApp.Validators.InputValidators;
@@ -119,22 +120,22 @@ namespace FileCabinetApp.CommandHandlers
                 switch (pair.Key.ToUpperInvariant())
                 {
                     case "FIRSTNAME":
-                        container.FirstName = Program.ReadInput(pair.Value, Converter.StringConverter, inputValidator.FirstNameValidator);
+                        container.FirstName = ParameterReaders.ReadInput(pair.Value, Converter.StringConverter, inputValidator.FirstNameValidator);
                         break;
                     case "LASTNAME":
-                        container.LastName = Program.ReadInput(pair.Value, Converter.StringConverter, inputValidator.LastNameValidator);
+                        container.LastName = ParameterReaders.ReadInput(pair.Value, Converter.StringConverter, inputValidator.LastNameValidator);
                         break;
                     case "ACCOUNTTYPE":
-                        container.DriverLicenseCategory = Program.ReadInput(pair.Value, Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
+                        container.DriverLicenseCategory = ParameterReaders.ReadInput(pair.Value, Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
                         break;
                     case "BONUSES":
-                        container.WorkingHoursPerWeek = Program.ReadInput(pair.Value, Converter.ShortConverter, inputValidator.WorkingHoursValidator);
+                        container.WorkingHoursPerWeek = ParameterReaders.ReadInput(pair.Value, Converter.ShortConverter, inputValidator.WorkingHoursValidator);
                         break;
                     case "DATEOFBIRTH":
-                        container.DateOfBirthday = Program.ReadInput(pair.Value, Converter.DateConverter, inputValidator.DateOfBirthValidator);
+                        container.DateOfBirthday = ParameterReaders.ReadInput(pair.Value, Converter.DateConverter, inputValidator.DateOfBirthValidator);
                         break;
                     case "MONEY":
-                        container.AnnualIncome = Program.ReadInput(pair.Value, Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
+                        container.AnnualIncome = ParameterReaders.ReadInput(pair.Value, Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
                         break;
                     case "ID":
                         throw new ArgumentException("Can't update a record ID.");
@@ -239,31 +240,31 @@ namespace FileCabinetApp.CommandHandlers
             switch (key.ToUpperInvariant())
             {
                 case "ID":
-                    int id = Program.ReadInput(parameterValue, Converter.IntConverter, InputValidator.IdValidator);
+                    int id = ParameterReaders.ReadInput(parameterValue, Converter.IntConverter, InputValidator.IdValidator);
                     records = this.FileCabinetService.FindById(id);
                     break;
                 case "FIRSTNAME":
-                    var firstName = Program.ReadInput(parameterValue, Converter.StringConverter, inputValidator.FirstNameValidator);
+                    var firstName = ParameterReaders.ReadInput(parameterValue, Converter.StringConverter, inputValidator.FirstNameValidator);
                     records = this.FileCabinetService.FindByFirstName(firstName);
                     break;
                 case "LASTNAME":
-                    var lastName = Program.ReadInput(parameterValue, Converter.StringConverter, inputValidator.LastNameValidator);
+                    var lastName = ParameterReaders.ReadInput(parameterValue, Converter.StringConverter, inputValidator.LastNameValidator);
                     records = this.FileCabinetService.FindByLastName(lastName);
                     break;
                 case "DATEOFBIRTH":
-                    var dateOfBirthday = Program.ReadInput(parameterValue, Converter.DateConverter, inputValidator.DateOfBirthValidator);
+                    var dateOfBirthday = ParameterReaders.ReadInput(parameterValue, Converter.DateConverter, inputValidator.DateOfBirthValidator);
                     records = this.FileCabinetService.FindByDateOfBirthday(dateOfBirthday);
                     break;
                 case "WORKINGHOURS":
-                    var workingHoursPerWeek = Program.ReadInput(parameterValue, Converter.ShortConverter, inputValidator.WorkingHoursValidator);
+                    var workingHoursPerWeek = ParameterReaders.ReadInput(parameterValue, Converter.ShortConverter, inputValidator.WorkingHoursValidator);
                     records = this.FileCabinetService.FindByWorkingHours(workingHoursPerWeek);
                     break;
                 case "ANNUALINCOME":
-                    var annualIncome = Program.ReadInput(parameterValue, Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
+                    var annualIncome = ParameterReaders.ReadInput(parameterValue, Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
                     records = this.FileCabinetService.FindByAnnualIncome(annualIncome);
                     break;
                 case "DRIVERCATEGORY":
-                    var driverLicenseCategory = Program.ReadInput(parameterValue, Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
+                    var driverLicenseCategory = ParameterReaders.ReadInput(parameterValue, Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
                     records = this.FileCabinetService.FindByDriverCategory(driverLicenseCategory);
                     break;
                 default:

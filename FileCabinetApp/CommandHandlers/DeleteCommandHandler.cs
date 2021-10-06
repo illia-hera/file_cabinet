@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using FileCabinetApp.Entities;
+using FileCabinetApp.Readers;
 using FileCabinetApp.Services;
 using FileCabinetApp.Utility;
 using FileCabinetApp.Validators.InputValidators;
@@ -93,31 +94,31 @@ namespace FileCabinetApp.CommandHandlers
             switch (key.ToUpperInvariant())
             {
                 case "ID":
-                    int id = Program.ReadInput(parameterValue, Converter.IntConverter, InputValidator.IdValidator);
+                    int id = ParameterReaders.ReadInput(parameterValue, Converter.IntConverter, InputValidator.IdValidator);
                     records = records.Union(this.FileCabinetService.FindById(id));
                     break;
                 case "FIRSTNAME":
-                    var firstName = Program.ReadInput(parameterValue, Converter.StringConverter, inputValidator.FirstNameValidator);
+                    var firstName = ParameterReaders.ReadInput(parameterValue, Converter.StringConverter, inputValidator.FirstNameValidator);
                     records = records.Union(this.FileCabinetService.FindByFirstName(firstName));
                     break;
                 case "LASTNAME":
-                    var lastName = Program.ReadInput(parameterValue, Converter.StringConverter, inputValidator.LastNameValidator);
+                    var lastName = ParameterReaders.ReadInput(parameterValue, Converter.StringConverter, inputValidator.LastNameValidator);
                     records = records.Union(this.FileCabinetService.FindByLastName(lastName));
                     break;
                 case "DATEOFBIRTH":
-                    var dateOfBirthday = Program.ReadInput(parameterValue, Converter.DateConverter, inputValidator.DateOfBirthValidator);
+                    var dateOfBirthday = ParameterReaders.ReadInput(parameterValue, Converter.DateConverter, inputValidator.DateOfBirthValidator);
                     records = records.Union(this.FileCabinetService.FindByDateOfBirthday(dateOfBirthday));
                     break;
                 case "WORKINGHOURS":
-                    var workingHoursPerWeek = Program.ReadInput(parameterValue, Converter.ShortConverter, inputValidator.WorkingHoursValidator);
+                    var workingHoursPerWeek = ParameterReaders.ReadInput(parameterValue, Converter.ShortConverter, inputValidator.WorkingHoursValidator);
                     records = records.Union(this.FileCabinetService.FindByWorkingHours(workingHoursPerWeek));
                     break;
                 case "ANNUALINCOME":
-                    var annualIncome = Program.ReadInput(parameterValue, Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
+                    var annualIncome = ParameterReaders.ReadInput(parameterValue, Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
                     records = records.Union(this.FileCabinetService.FindByAnnualIncome(annualIncome));
                     break;
                 case "DRIVERCATEGORY":
-                    var driverLicenseCategory = Program.ReadInput(parameterValue, Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
+                    var driverLicenseCategory = ParameterReaders.ReadInput(parameterValue, Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
                     records = records.Union(this.FileCabinetService.FindByDriverCategory(driverLicenseCategory));
                     break;
             }

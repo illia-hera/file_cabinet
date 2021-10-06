@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FileCabinetApp.Entities;
+using FileCabinetApp.Readers;
 using FileCabinetApp.Services;
 using FileCabinetApp.Utility;
 using FileCabinetApp.Validators.InputValidators;
@@ -103,25 +104,25 @@ namespace FileCabinetApp.CommandHandlers
             switch (parameterName.ToUpperInvariant())
             {
                 case "ID":
-                    container.Id = Program.ReadInput(parameterValue, Converter.IntConverter, InputValidator.IdValidator);
+                    container.Id = ParameterReaders.ReadInput(parameterValue, Converter.IntConverter, InputValidator.IdValidator);
                     break;
                 case "FIRSTNAME":
-                    container.FirstName = Program.ReadInput(parameterValue, Converter.StringConverter, inputValidator.FirstNameValidator);
+                    container.FirstName = ParameterReaders.ReadInput(parameterValue, Converter.StringConverter, inputValidator.FirstNameValidator);
                     break;
                 case "LASTNAME":
-                    container.LastName = Program.ReadInput(parameterValue, Converter.StringConverter, inputValidator.LastNameValidator);
+                    container.LastName = ParameterReaders.ReadInput(parameterValue, Converter.StringConverter, inputValidator.LastNameValidator);
                     break;
                 case "DATEOFBIRTH":
-                    container.DateOfBirthday = Program.ReadInput(parameterValue, Converter.DateConverter, inputValidator.DateOfBirthValidator);
+                    container.DateOfBirthday = ParameterReaders.ReadInput(parameterValue, Converter.DateConverter, inputValidator.DateOfBirthValidator);
                     break;
                 case "WORKINGHOURS":
-                    container.WorkingHoursPerWeek = Program.ReadInput(parameterValue, Converter.ShortConverter, inputValidator.WorkingHoursValidator);
+                    container.WorkingHoursPerWeek = ParameterReaders.ReadInput(parameterValue, Converter.ShortConverter, inputValidator.WorkingHoursValidator);
                     break;
                 case "ANNUALINCOME":
-                    container.AnnualIncome = Program.ReadInput(parameterValue, Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
+                    container.AnnualIncome = ParameterReaders.ReadInput(parameterValue, Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
                     break;
                 case "DRIVERCATEGORY":
-                    container.DriverLicenseCategory = Program.ReadInput(parameterValue, Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
+                    container.DriverLicenseCategory = ParameterReaders.ReadInput(parameterValue, Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
                     break;
             }
         }

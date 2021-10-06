@@ -9,6 +9,7 @@ using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Entities.JsonSerialization;
 using FileCabinetApp.Printers;
+using FileCabinetApp.Readers;
 using FileCabinetApp.Services;
 using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
@@ -67,59 +68,24 @@ namespace FileCabinetApp
             var container = new ParametersContainer();
 
             Console.Write("First name: ");
-            container.FirstName = ReadInput(Converter.StringConverter, inputValidator.FirstNameValidator);
+            container.FirstName = ParameterReaders.ReadInput(Converter.StringConverter, inputValidator.FirstNameValidator);
 
             Console.Write("Last name: ");
-            container.LastName = ReadInput(Converter.StringConverter, inputValidator.LastNameValidator);
+            container.LastName = ParameterReaders.ReadInput(Converter.StringConverter, inputValidator.LastNameValidator);
 
             Console.Write("Date of birth: ");
-            container.DateOfBirthday = ReadInput(Converter.DateConverter, inputValidator.DateOfBirthValidator);
+            container.DateOfBirthday = ParameterReaders.ReadInput(Converter.DateConverter, inputValidator.DateOfBirthValidator);
 
             Console.Write("Working Hours Per Week: ");
-            container.WorkingHoursPerWeek = ReadInput(Converter.ShortConverter, inputValidator.WorkingHoursValidator);
+            container.WorkingHoursPerWeek = ParameterReaders.ReadInput(Converter.ShortConverter, inputValidator.WorkingHoursValidator);
 
             Console.Write("Annual Income: ");
-            container.AnnualIncome = ReadInput(Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
+            container.AnnualIncome = ParameterReaders.ReadInput(Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
 
             Console.Write("Driver License Category: ");
-            container.DriverLicenseCategory = ReadInput(Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
+            container.DriverLicenseCategory = ParameterReaders.ReadInput(Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
 
             return container;
-        }
-
-        /// <summary>
-        /// Reads the input.
-        /// </summary>
-        /// <typeparam name="T">value.</typeparam>
-        /// <param name="input">The input.</param>
-        /// <param name="converter">The converter.</param>
-        /// <param name="validator">The validator.</param>
-        /// <returns>
-        /// Return value.
-        /// </returns>
-        /// <exception cref="System.ArgumentException">Conversion failed: {conversionResult.Item2}. Please, correct your input.
-        /// or
-        /// Conversion failed: {validationResult.Item2}. Please, correct your input.</exception>
-        public static T ReadInput<T>(string input, Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
-        {
-            T value;
-
-            var conversionResult = converter != null ? converter(input) : new Tuple<bool, string, T>(false, null, default);
-
-            if (!conversionResult.Item1)
-            {
-                throw new ArgumentException($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
-            }
-
-            value = conversionResult.Item3;
-
-            var validationResult = validator != null ? validator(value) : new Tuple<bool, string>(false, null);
-            if (!validationResult.Item1)
-            {
-                throw new ArgumentException($"Conversion failed: {validationResult.Item2}. Please, correct your input.");
-            }
-
-            return value;
         }
 
         private static ICommandHandler CreateCommandHandler()
@@ -198,35 +164,6 @@ namespace FileCabinetApp
                             Console.WriteLine("Using logger.");
                         }
                     });
-        }
-
-        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
-        {
-            do
-            {
-                T value;
-
-                var input = Console.ReadLine();
-                var conversionResult = converter(input);
-
-                if (!conversionResult.Item1)
-                {
-                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
-                    continue;
-                }
-
-                value = conversionResult.Item3;
-
-                var validationResult = validator(value);
-                if (!validationResult.Item1)
-                {
-                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
-                    continue;
-                }
-
-                return value;
-            }
-            while (true);
         }
     }
 }
