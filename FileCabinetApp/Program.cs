@@ -87,6 +87,41 @@ namespace FileCabinetApp
             return container;
         }
 
+        /// <summary>
+        /// Reads the input.
+        /// </summary>
+        /// <typeparam name="T">value.</typeparam>
+        /// <param name="input">The input.</param>
+        /// <param name="converter">The converter.</param>
+        /// <param name="validator">The validator.</param>
+        /// <returns>
+        /// Return value.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">Conversion failed: {conversionResult.Item2}. Please, correct your input.
+        /// or
+        /// Conversion failed: {validationResult.Item2}. Please, correct your input.</exception>
+        public static T ReadInput<T>(string input, Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        {
+            T value;
+
+            var conversionResult = converter != null ? converter(input) : new Tuple<bool, string, T>(false, null, default);
+
+            if (!conversionResult.Item1)
+            {
+                throw new ArgumentException($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
+            }
+
+            value = conversionResult.Item3;
+
+            var validationResult = validator != null ? validator(value) : new Tuple<bool, string>(false, null);
+            if (!validationResult.Item1)
+            {
+                throw new ArgumentException($"Conversion failed: {validationResult.Item2}. Please, correct your input.");
+            }
+
+            return value;
+        }
+
         private static ICommandHandler CreateCommandHandler()
         {
             var commandHandler = new CreateCommandHandler(fileCabinetService);
@@ -95,12 +130,13 @@ namespace FileCabinetApp
                 .SetNext(new StatCommandHandler(fileCabinetService))
                 .SetNext(new ExitCommandHandler(isR => isRunning = isR))
                 .SetNext(new ListCommandHandler(fileCabinetService, DefaultRecordPrint))
-                .SetNext(new EditCommandHandler(fileCabinetService))
                 .SetNext(new FindCommandHandler(fileCabinetService, DefaultRecordPrint))
                 .SetNext(new ExportCommandHandler(fileCabinetService))
                 .SetNext(new ImportCommandHandler(fileCabinetService))
-                .SetNext(new RemoveCommandHandler(fileCabinetService))
-                .SetNext(new PurgeCommandHandler(fileCabinetService));
+                .SetNext(new PurgeCommandHandler(fileCabinetService))
+                .SetNext(new InsertCommandHandler(fileCabinetService, inputValidator))
+                .SetNext(new DeleteCommandHandler(fileCabinetService, inputValidator))
+                .SetNext(new UpdateCommandHandler(fileCabinetService, inputValidator));
 
             return commandHandler;
         }

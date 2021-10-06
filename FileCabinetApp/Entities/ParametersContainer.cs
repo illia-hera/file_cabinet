@@ -15,6 +15,15 @@ namespace FileCabinetApp.Entities
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ParametersContainer" /> class.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        public ParametersContainer(int id)
+        {
+            this.Id = id;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ParametersContainer"/> class.
         /// </summary>
         /// <param name="record">The record.</param>
@@ -25,6 +34,7 @@ namespace FileCabinetApp.Entities
                 throw new ArgumentNullException(nameof(record));
             }
 
+            this.Id = record.Id;
             this.FirstName = record.FirstName;
             this.LastName = record.LastName;
             this.DateOfBirthday = record.DateOfBirth;
@@ -51,6 +61,14 @@ namespace FileCabinetApp.Entities
             this.AnnualIncome = annualIncome;
             this.DriverLicenseCategory = driverLicense;
         }
+
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
+        public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the date of birthday.

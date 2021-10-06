@@ -15,70 +15,113 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="container">The container of parameters.</param>
         /// <returns>Return Id of created record.</returns>
-        public int CreateRecord(ParametersContainer container);
+        int CreateRecord(ParametersContainer container);
 
         /// <summary>
         /// Edits the record.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="container">The container of parameters.</param>
-        public void EditRecord(int id, ParametersContainer container);
+        void EditRecord(int id, ParametersContainer container);
+
+        /// <summary>
+        /// Inserts the record.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <returns>
+        /// Return is record inserted.
+        /// </returns>
+        bool InsertRecord(ParametersContainer container);
 
         /// <summary>
         /// Gets all records in File Cabinet.
         /// </summary>
         /// <returns>Return array of <c>FileCabinetRecord</c>.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> GetRecords();
+        IReadOnlyCollection<FileCabinetRecord> GetRecords();
 
         /// <summary>
         /// Gets the stat of users.
         /// </summary>
         /// <returns>Return count of records and deleted records in File Cabinet.</returns>
-        public Tuple<int, int> GetStat();
+        Tuple<int, int> GetStat();
+
+        /// <summary>
+        /// Finds the by identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>Return the FileCabinetRecord.</returns>
+        IEnumerable<FileCabinetRecord> FindById(int id);
 
         /// <summary>
         /// Finds the records by the first name.
         /// </summary>
         /// <param name="firstName">The first name.</param>
         /// <returns>Return array of records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
+        IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
 
         /// <summary>
         /// Finds the records by the last name.
         /// </summary>
         /// <param name="lastName">The last name.</param>
         /// <returns>Return array of records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
+        IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
 
         /// <summary>
         /// Finds the records by date of birthday.
         /// </summary>
         /// <param name="dateOfBirth">The date of birthday.</param>
         /// <returns>Return array of records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth);
+        IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth);
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="workingHours">The working hours.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        IEnumerable<FileCabinetRecord> FindByWorkingHours(short workingHours);
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="annualIncome">The annual income.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        IEnumerable<FileCabinetRecord> FindByAnnualIncome(decimal annualIncome);
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="driverCategory">The driver category.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        IEnumerable<FileCabinetRecord> FindByDriverCategory(char driverCategory);
 
         /// <summary>
         /// Makes the snapshot.
         /// </summary>
         /// <returns>Return <c>FileCabinetServiceSnapshot</c>.</returns>
-        public IFileCabinetServiceSnapshot MakeSnapshot();
+        IFileCabinetServiceSnapshot MakeSnapshot();
 
         /// <summary>
         /// Restores the specified snapshot.
         /// </summary>
         /// <param name="snapshot">The snapshot.</param>
-        public void Restore(IFileCabinetServiceSnapshot snapshot);
+        void Restore(IFileCabinetServiceSnapshot snapshot);
 
         /// <summary>
         /// Removes the record from FileCabinetApp.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        public void RemoveRecord(int id);
+        void RemoveRecord(int id);
 
         /// <summary>
         /// Removing voids in the data file formed by deleted records.
         /// </summary>
         /// <returns>Return purged Count.</returns>
-        public int Purge();
+        int Purge();
     }
 }

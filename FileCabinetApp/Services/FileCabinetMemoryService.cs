@@ -41,20 +41,12 @@ namespace FileCabinetApp.Services
             }
 
             this.validator.ValidateParameters(container);
-            var record = new FileCabinetRecord
-            {
-                Id = this.list.Count + 1,
-                FirstName = container.FirstName,
-                LastName = container.LastName,
-                DateOfBirth = container.DateOfBirthday,
-                WorkingHoursPerWeek = container.WorkingHoursPerWeek,
-                AnnualIncome = container.AnnualIncome,
-                DriverLicenseCategory = char.ToUpper(container.DriverLicenseCategory, CultureInfo.InvariantCulture),
-            };
+            container.Id = this.list.Count + 1;
+            var record = GetNewRecord(container);
 
             this.list.Add(record);
-            AddRecordToDict(container.FirstName, record, this.firstNameDictionary);
-            AddRecordToDict(container.LastName, record, this.lastNameDictionary);
+            AddRecordToDict(container.FirstName.ToUpperInvariant(), record, this.firstNameDictionary);
+            AddRecordToDict(container.LastName.ToUpperInvariant(), record, this.lastNameDictionary);
             AddRecordToDict(container.DateOfBirthday, record, this.dateOfBirthDictionary);
 
             return record.Id;
@@ -95,6 +87,37 @@ namespace FileCabinetApp.Services
         }
 
         /// <summary>
+        /// Inserts the record.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <returns>
+        /// Return is record inserted.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">container.</exception>
+        public bool InsertRecord(ParametersContainer container)
+        {
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            this.validator.ValidateParameters(container);
+            if (this.list.FirstOrDefault(r => r.Id == container.Id) != null)
+            {
+                return false;
+            }
+
+            var record = GetNewRecord(container);
+
+            this.list.Add(record);
+            AddRecordToDict(container.FirstName.ToUpperInvariant(), record, this.firstNameDictionary);
+            AddRecordToDict(container.LastName.ToUpperInvariant(), record, this.lastNameDictionary);
+            AddRecordToDict(container.DateOfBirthday, record, this.dateOfBirthDictionary);
+
+            return true;
+        }
+
+        /// <summary>
         /// Gets all records in File Cabinet.
         /// </summary>
         /// <returns>Return array of <c>FileCabinetRecord</c>.</returns>
@@ -114,15 +137,27 @@ namespace FileCabinetApp.Services
         }
 
         /// <summary>
+        /// Finds the by identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// Return the FileCabinetRecord.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindById(int id)
+        {
+            return this.list.Where(r => r.Id == id);
+        }
+
+        /// <summary>
         /// Finds the records by the first name.
         /// </summary>
         /// <param name="firstName">The first name.</param>
         /// <returns>Return array of records.</returns>
         public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            if (this.firstNameDictionary.ContainsKey(firstName))
+            if (firstName != null && this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
             {
-                return this.firstNameDictionary[firstName];
+                return this.firstNameDictionary[firstName.ToUpperInvariant()];
             }
 
             return new List<FileCabinetRecord>();
@@ -135,9 +170,9 @@ namespace FileCabinetApp.Services
         /// <returns>Return array of records.</returns>
         public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
-            if (this.lastNameDictionary.ContainsKey(lastName))
+            if (lastName != null && this.lastNameDictionary.ContainsKey(lastName.ToUpperInvariant()))
             {
-                return this.lastNameDictionary[lastName];
+                return this.lastNameDictionary[lastName.ToUpperInvariant()];
             }
 
             return new List<FileCabinetRecord>();
@@ -156,6 +191,42 @@ namespace FileCabinetApp.Services
             }
 
             return new List<FileCabinetRecord>();
+        }
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="workingHours">The working hours.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindByWorkingHours(short workingHours)
+        {
+            return this.list.Where(r => r.WorkingHoursPerWeek == workingHours);
+        }
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="annualIncome">The annual income.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindByAnnualIncome(decimal annualIncome)
+        {
+            return this.list.Where(r => r.AnnualIncome == annualIncome);
+        }
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="driverCategory">The driver category.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindByDriverCategory(char driverCategory)
+        {
+            return this.list.Where(r => r.DriverLicenseCategory == char.ToUpper(driverCategory, CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -193,8 +264,8 @@ namespace FileCabinetApp.Services
                     this.list[this.list.IndexOf(match)] = record;
                 }
 
-                AddRecordToDict(record.FirstName, record, this.firstNameDictionary);
-                AddRecordToDict(record.LastName, record, this.lastNameDictionary);
+                AddRecordToDict(record.FirstName.ToUpperInvariant(), record, this.firstNameDictionary);
+                AddRecordToDict(record.LastName.ToUpperInvariant(), record, this.lastNameDictionary);
                 AddRecordToDict(record.DateOfBirth, record, this.dateOfBirthDictionary);
 
                 this.list.Add(record);
@@ -224,8 +295,8 @@ namespace FileCabinetApp.Services
                 {
                     this.list.Remove(record);
 
-                    DeleteRecordFromDictionary(record.FirstName, record, this.firstNameDictionary);
-                    DeleteRecordFromDictionary(record.LastName, record, this.lastNameDictionary);
+                    DeleteRecordFromDictionary(record.FirstName.ToUpperInvariant(), record, this.firstNameDictionary);
+                    DeleteRecordFromDictionary(record.LastName.ToUpperInvariant(), record, this.lastNameDictionary);
                     DeleteRecordFromDictionary(record.DateOfBirth, record, this.dateOfBirthDictionary);
 
                     noMatch = false;
@@ -250,6 +321,20 @@ namespace FileCabinetApp.Services
             return 0;
         }
 
+        private static FileCabinetRecord GetNewRecord(ParametersContainer container)
+        {
+            return new FileCabinetRecord
+            {
+                Id = container.Id,
+                FirstName = container.FirstName,
+                LastName = container.LastName,
+                DateOfBirth = container.DateOfBirthday,
+                WorkingHoursPerWeek = container.WorkingHoursPerWeek,
+                AnnualIncome = container.AnnualIncome,
+                DriverLicenseCategory = char.ToUpper(container.DriverLicenseCategory, CultureInfo.InvariantCulture),
+            };
+        }
+
         private static void DeleteRecordFromDictionary<T>(T key, FileCabinetRecord record, IDictionary<T, List<FileCabinetRecord>> dictionary)
         {
             dictionary[key].Remove(record);
@@ -269,35 +354,35 @@ namespace FileCabinetApp.Services
 
         private void EditFirstNameDictionary(string firstName, FileCabinetRecord record)
         {
-            if (!firstName.Equals(record.FirstName, StringComparison.OrdinalIgnoreCase))
+            if (!firstName.ToUpperInvariant().Equals(record.FirstName.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase))
             {
-                if (this.firstNameDictionary.ContainsKey(record.FirstName))
+                if (this.firstNameDictionary.ContainsKey(record.FirstName.ToUpperInvariant()))
                 {
-                    this.firstNameDictionary[record.FirstName].Remove(record);
-                    if (this.firstNameDictionary[record.FirstName].Count == 0)
+                    this.firstNameDictionary[record.FirstName.ToUpperInvariant()].Remove(record);
+                    if (this.firstNameDictionary[record.FirstName.ToUpperInvariant()].Count == 0)
                     {
-                        this.firstNameDictionary.Remove(record.FirstName);
+                        this.firstNameDictionary.Remove(record.FirstName.ToUpperInvariant());
                     }
                 }
 
-                AddRecordToDict(firstName, record, this.firstNameDictionary);
+                AddRecordToDict(firstName.ToUpperInvariant(), record, this.firstNameDictionary);
             }
         }
 
         private void EditLastNameDictionary(string lastName, FileCabinetRecord record)
         {
-            if (!lastName.Equals(record.FirstName, StringComparison.OrdinalIgnoreCase))
+            if (!lastName.ToUpperInvariant().Equals(record.FirstName.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase))
             {
-                if (this.lastNameDictionary.ContainsKey(record.LastName))
+                if (this.lastNameDictionary.ContainsKey(record.LastName.ToUpperInvariant()))
                 {
-                    this.lastNameDictionary[record.LastName].Remove(record);
-                    if (this.lastNameDictionary[record.LastName].Count == 0)
+                    this.lastNameDictionary[record.LastName.ToUpperInvariant()].Remove(record);
+                    if (this.lastNameDictionary[record.LastName.ToUpperInvariant()].Count == 0)
                     {
-                        this.lastNameDictionary.Remove(record.LastName);
+                        this.lastNameDictionary.Remove(record.LastName.ToUpperInvariant());
                     }
                 }
 
-                AddRecordToDict(lastName, record, this.lastNameDictionary);
+                AddRecordToDict(lastName.ToUpperInvariant(), record, this.lastNameDictionary);
             }
         }
 

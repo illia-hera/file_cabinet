@@ -38,7 +38,7 @@ namespace FileCabinetApp.CommandHandlers
             {
                 var items = this.FileCabinetService.GetStat();
                 var deleted = this.FileCabinetService.Purge();
-                Console.WriteLine($"Data file processing is completed: {deleted} of {items.Item1} records were purged.");
+                Console.WriteLine($"Data file processing is completed: {deleted} of {items.Item1 + items.Item2} records were purged.");
 
                 return;
             }

@@ -109,6 +109,44 @@ namespace FileCabinetApp.Utility
         }
 
         /// <summary>
+        /// Inserts the record.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <returns>
+        /// Return is record inserted.
+        /// </returns>
+        public bool InsertRecord(ParametersContainer container)
+        {
+            var sb = new StringBuilder();
+            sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
+            sb.Append($"Calling {GetCurrentMethod()} with id = '{container?.Id} ', ");
+            sb.Append($"FirstName = '{container?.FirstName} ', ");
+            sb.Append($"LastName = '{container?.LastName}', ");
+            sb.Append($"DateOfBirth = '{container?.DateOfBirthday.ToShortDateString()}', ");
+            sb.Append($"Working hours per week = '{container?.WorkingHoursPerWeek}', ");
+            sb.Append($"Annual income = '{container?.AnnualIncome}', ");
+            sb.Append($"Driver license category = '{container?.DriverLicenseCategory}'.");
+
+            var result = true;
+            using (var fs = new FileStream(this.path, FileMode.Append, FileAccess.Write))
+            using (var writer = new StreamWriter(fs, Encoding.UTF8))
+            {
+                writer.WriteLine(sb.ToString());
+
+                if (this.fileCabinetService is ServiceMeter meter)
+                {
+                    result = meter.InsertRecord(container);
+                }
+                else
+                {
+                    result = this.fileCabinetService.InsertRecord(container);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets the stat of users.
         /// </summary>
         /// <returns>
@@ -137,6 +175,40 @@ namespace FileCabinetApp.Utility
                 }
 
                 writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned '{result.Item1}, {result.Item2}'");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds the by identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// Return the FileCabinetRecord.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindById(int id)
+        {
+            IEnumerable<FileCabinetRecord> result;
+            var sb = new StringBuilder();
+            sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
+            sb.Append($"Calling {GetCurrentMethod()} with FirstName = '{id} ', ");
+
+            using (var fs = new FileStream(this.path, FileMode.Append, FileAccess.Write))
+            using (var writer = new StreamWriter(fs, Encoding.UTF8))
+            {
+                writer.WriteLine(sb.ToString());
+
+                if (this.fileCabinetService is ServiceMeter meter)
+                {
+                    result = meter.FindById(id);
+                }
+                else
+                {
+                    result = this.fileCabinetService.FindById(id);
+                }
+
+                writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
             }
 
             return result;
@@ -238,6 +310,111 @@ namespace FileCabinetApp.Utility
                 else
                 {
                     result = this.fileCabinetService.FindByDateOfBirthday(dateOfBirth);
+                }
+
+                writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
+                writer.Write(WriteRecords(result));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="workingHours">The working hours.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindByWorkingHours(short workingHours)
+        {
+            IEnumerable<FileCabinetRecord> result;
+            var sb = new StringBuilder();
+            sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
+            sb.Append($"Calling {GetCurrentMethod()} with birthDay = '{workingHours} ', ");
+
+            using (var fs = new FileStream(this.path, FileMode.Append, FileAccess.Write))
+            using (var writer = new StreamWriter(fs, Encoding.UTF8))
+            {
+                writer.WriteLine(sb.ToString());
+
+                if (this.fileCabinetService is ServiceMeter meter)
+                {
+                    result = meter.FindByWorkingHours(workingHours);
+                }
+                else
+                {
+                    result = this.fileCabinetService.FindByWorkingHours(workingHours);
+                }
+
+                writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
+                writer.Write(WriteRecords(result));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="annualIncome">The annual income.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindByAnnualIncome(decimal annualIncome)
+        {
+            IEnumerable<FileCabinetRecord> result;
+            var sb = new StringBuilder();
+            sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
+            sb.Append($"Calling {GetCurrentMethod()} with birthDay = '{annualIncome} ', ");
+
+            using (var fs = new FileStream(this.path, FileMode.Append, FileAccess.Write))
+            using (var writer = new StreamWriter(fs, Encoding.UTF8))
+            {
+                writer.WriteLine(sb.ToString());
+
+                if (this.fileCabinetService is ServiceMeter meter)
+                {
+                    result = meter.FindByAnnualIncome(annualIncome);
+                }
+                else
+                {
+                    result = this.fileCabinetService.FindByAnnualIncome(annualIncome);
+                }
+
+                writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
+                writer.Write(WriteRecords(result));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="driverCategory">The driver category.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindByDriverCategory(char driverCategory)
+        {
+            IEnumerable<FileCabinetRecord> result;
+            var sb = new StringBuilder();
+            sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
+            sb.Append($"Calling {GetCurrentMethod()} with birthDay = '{driverCategory} ', ");
+
+            using (var fs = new FileStream(this.path, FileMode.Append, FileAccess.Write))
+            using (var writer = new StreamWriter(fs, Encoding.UTF8))
+            {
+                writer.WriteLine(sb.ToString());
+
+                if (this.fileCabinetService is ServiceMeter meter)
+                {
+                    result = meter.FindByDriverCategory(driverCategory);
+                }
+                else
+                {
+                    result = this.fileCabinetService.FindByDriverCategory(driverCategory);
                 }
 
                 writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");

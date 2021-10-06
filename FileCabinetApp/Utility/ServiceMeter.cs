@@ -47,6 +47,28 @@ namespace FileCabinetApp.Utility
         }
 
         /// <summary>
+        /// Inserts the record.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <returns>
+        /// Return is record inserted.
+        /// </returns>
+        public bool InsertRecord(ParametersContainer container)
+        {
+            var sw = new Stopwatch();
+
+            sw.Start();
+
+            var result = this.fileCabinetServiceImplementation.InsertRecord(container);
+
+            sw.Stop();
+
+            Console.WriteLine($"Create method execution duration is {sw.ElapsedTicks} ticks.");
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets all records in File Cabinet.
         /// </summary>
         /// <returns>
@@ -83,6 +105,28 @@ namespace FileCabinetApp.Utility
             sw.Stop();
 
             Console.WriteLine($"Edit method execution duration is {sw.ElapsedTicks} ticks.");
+        }
+
+        /// <summary>
+        /// Finds the by identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// Return the FileCabinetRecord.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindById(int id)
+        {
+            var sw = new Stopwatch();
+
+            sw.Start();
+
+            var result = this.fileCabinetServiceImplementation.FindById(id);
+
+            sw.Stop();
+
+            Console.WriteLine($"Edit method execution duration is {sw.ElapsedTicks} ticks.");
+
+            return result;
         }
 
         /// <summary>
@@ -143,6 +187,72 @@ namespace FileCabinetApp.Utility
             sw.Start();
 
             var result = this.fileCabinetServiceImplementation.FindByDateOfBirthday(dateOfBirth);
+
+            sw.Stop();
+
+            Console.WriteLine($"FindByDateOfBirth method execution duration is {sw.ElapsedTicks} ticks.");
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="workingHours">The working hours.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindByWorkingHours(short workingHours)
+        {
+            var sw = new Stopwatch();
+
+            sw.Start();
+
+            var result = this.fileCabinetServiceImplementation.FindByWorkingHours(workingHours);
+
+            sw.Stop();
+
+            Console.WriteLine($"FindByDateOfBirth method execution duration is {sw.ElapsedTicks} ticks.");
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="annualIncome">The annual income.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindByAnnualIncome(decimal annualIncome)
+        {
+            var sw = new Stopwatch();
+
+            sw.Start();
+
+            var result = this.fileCabinetServiceImplementation.FindByAnnualIncome(annualIncome);
+
+            sw.Stop();
+
+            Console.WriteLine($"FindByDateOfBirth method execution duration is {sw.ElapsedTicks} ticks.");
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds the records by the last name.
+        /// </summary>
+        /// <param name="driverCategory">The driver category.</param>
+        /// <returns>
+        /// Return array of records.
+        /// </returns>
+        public IEnumerable<FileCabinetRecord> FindByDriverCategory(char driverCategory)
+        {
+            var sw = new Stopwatch();
+
+            sw.Start();
+
+            var result = this.fileCabinetServiceImplementation.FindByDriverCategory(driverCategory);
 
             sw.Stop();
 

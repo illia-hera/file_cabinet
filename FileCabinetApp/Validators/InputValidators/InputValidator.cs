@@ -30,6 +30,18 @@ namespace FileCabinetApp.Validators.InputValidators
         }
 
         /// <summary>
+        /// Workings the hours validator.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// Return the result of validation an value.
+        /// </returns>
+        public static Tuple<bool, string> IdValidator(int id)
+        {
+            return new Tuple<bool, string>(true, id.ToString(CultureInfo.CurrentCulture));
+        }
+
+        /// <summary>
         /// Validates the import export parameters.
         /// </summary>
         /// <param name="parameters">The parameters.</param>

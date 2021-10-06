@@ -91,21 +91,22 @@
             <param name="appCommandRequest">The application command request.</param>
             <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.EditCommandHandler">
+        <member name="T:FileCabinetApp.CommandHandlers.DeleteCommandHandler">
             <summary>
-            Class <c>EditCommandHandler</c> implement edit command.
+            Delete command implementation.
             </summary>
             <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+        <member name="M:FileCabinetApp.CommandHandlers.DeleteCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Validators.InputValidators.InputValidator)">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.EditCommandHandler"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.DeleteCommandHandler" /> class.
             </summary>
             <param name="fileCabinetService">The file cabinet service.</param>
+            <param name="validator">The validator.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+        <member name="M:FileCabinetApp.CommandHandlers.DeleteCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
-            Handles the specified application command request.
+                Handles the specified application command request.
             </summary>
             <param name="appCommandRequest">The application command request.</param>
         </member>
@@ -217,6 +218,26 @@
             <param name="appCommandRequest">The application command request.</param>
             <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
         </member>
+        <member name="T:FileCabinetApp.CommandHandlers.InsertCommandHandler">
+            <summary>
+            Implement insert command.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.InsertCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Validators.InputValidators.InputValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.InsertCommandHandler" /> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+            <param name="validator">The validator.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.InsertCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
+        </member>
         <member name="T:FileCabinetApp.CommandHandlers.ListCommandHandler">
             <summary>
             Class <c>ListCommandHandler</c> implement List command.
@@ -256,24 +277,6 @@
             <param name="appCommandRequest">The application command request.</param>
             <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler">
-            <summary>
-            Class <c>RemoveCommandHandler</c> implement remove command.
-            </summary>
-            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler"/> class.
-            </summary>
-            <param name="fileCabinetService">The file cabinet service.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
-            <summary>
-            Handles the specified application command request.
-            </summary>
-            <param name="appCommandRequest">The application command request.</param>
-        </member>
         <member name="T:FileCabinetApp.CommandHandlers.StatCommandHandler">
             <summary>
             CLass <c>StatCommandHandler</c> generate File Cabinet Stat.
@@ -287,6 +290,26 @@
             <param name="fileCabinetService">The file cabinet service.</param>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.StatCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.UpdateCommandHandler">
+            <summary>
+            Implement Update command.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.UpdateCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Validators.InputValidators.InputValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.UpdateCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+            <param name="validator">The validator.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.UpdateCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
             Handles the specified application command request.
             </summary>
@@ -334,6 +357,14 @@
             <param name="workingHours">The workingHours.</param>
             <param name="annualIncome">The annualIncome.</param>
             <param name="driverCategory">Type of the account.</param>
+        </member>
+        <member name="P:FileCabinetApp.Entities.FileCabinetRecord.Status">
+            <summary>
+            Gets or sets the status.
+            </summary>
+            <value>
+            The status.
+            </value>
         </member>
         <member name="P:FileCabinetApp.Entities.FileCabinetRecord.Id">
             <summary>
@@ -609,6 +640,12 @@
             Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.ParametersContainer"/> class.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.Entities.ParametersContainer.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.ParametersContainer" /> class.
+            </summary>
+            <param name="id">The identifier.</param>
+        </member>
         <member name="M:FileCabinetApp.Entities.ParametersContainer.#ctor(FileCabinetApp.Entities.FileCabinetRecord)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.ParametersContainer"/> class.
@@ -625,6 +662,14 @@
             <param name="workingHours">The working hours.</param>
             <param name="annualIncome">The annual income.</param>
             <param name="driverLicense">The driver license.</param>
+        </member>
+        <member name="P:FileCabinetApp.Entities.ParametersContainer.Id">
+            <summary>
+            Gets or sets the identifier.
+            </summary>
+            <value>
+            The identifier.
+            </value>
         </member>
         <member name="P:FileCabinetApp.Entities.ParametersContainer.DateOfBirthday">
             <summary>
@@ -807,6 +852,21 @@
             </summary>
             <returns>Return container with parameters.</returns>
         </member>
+        <member name="M:FileCabinetApp.Program.ReadInput``1(System.String,System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+            Reads the input.
+            </summary>
+            <typeparam name="T">value.</typeparam>
+            <param name="input">The input.</param>
+            <param name="converter">The converter.</param>
+            <param name="validator">The validator.</param>
+            <returns>
+            Return value.
+            </returns>
+            <exception cref="T:System.ArgumentException">Conversion failed: {conversionResult.Item2}. Please, correct your input.
+            or
+            Conversion failed: {validationResult.Item2}. Please, correct your input.</exception>
+        </member>
         <member name="T:FileCabinetApp.Readers.FileCabinetRecordCsvReader">
             <summary>
             Class FileCabinetRecordCsvReader.
@@ -887,6 +947,17 @@
             <returns>
             Return Id of created record.
             </returns>
+            <exception cref="T:System.ArgumentException">Container can not be null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.InsertRecord(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Inserts the record.
+            </summary>
+            <param name="container">The container.</param>
+            <returns>
+            Return is record inserted.
+            </returns>
+            <exception cref="T:System.ArgumentException">Container can not be null.</exception>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetRecords">
             <summary>
@@ -922,6 +993,15 @@
             </returns>
             <exception cref="T:System.NotImplementedException">Not implemented.</exception>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindById(System.Int32)">
+            <summary>
+            Finds the by identifier.
+            </summary>
+            <param name="id">The identifier.</param>
+            <returns>
+            Return the FileCabinetRecord.
+            </returns>
+        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByFirstName(System.String)">
             <summary>
             Finds the records by the first name.
@@ -945,6 +1025,33 @@
             Finds the records by date of birthday.
             </summary>
             <param name="dateOfBirth">The date of birthday.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByWorkingHours(System.Int16)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="workingHours">The working hours.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByAnnualIncome(System.Decimal)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="annualIncome">The annual income.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByDriverCategory(System.Char)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="driverCategory">The driver category.</param>
             <returns>
             Return array of records.
             </returns>
@@ -1006,6 +1113,16 @@
             <exception cref="T:System.ArgumentException">#{id} record is not found.</exception>
             <exception cref="T:System.ArgumentNullException">container.</exception>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.InsertRecord(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Inserts the record.
+            </summary>
+            <param name="container">The container.</param>
+            <returns>
+            Return is record inserted.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">container.</exception>
+        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.GetRecords">
             <summary>
             Gets all records in File Cabinet.
@@ -1017,6 +1134,15 @@
             Gets the stat of users.
             </summary>
             <returns>Return count of records in File Cabinet.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindById(System.Int32)">
+            <summary>
+            Finds the by identifier.
+            </summary>
+            <param name="id">The identifier.</param>
+            <returns>
+            Return the FileCabinetRecord.
+            </returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByFirstName(System.String)">
             <summary>
@@ -1038,6 +1164,33 @@
             </summary>
             <param name="dateOfBirth">The date of birthday.</param>
             <returns>Return array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByWorkingHours(System.Int16)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="workingHours">The working hours.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByAnnualIncome(System.Decimal)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="annualIncome">The annual income.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByDriverCategory(System.Char)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="driverCategory">The driver category.</param>
+            <returns>
+            Return array of records.
+            </returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.MakeSnapshot">
             <summary>
@@ -1085,6 +1238,15 @@
             <param name="id">The identifier.</param>
             <param name="container">The container of parameters.</param>
         </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.InsertRecord(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Inserts the record.
+            </summary>
+            <param name="container">The container.</param>
+            <returns>
+            Return is record inserted.
+            </returns>
+        </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.GetRecords">
             <summary>
             Gets all records in File Cabinet.
@@ -1096,6 +1258,13 @@
             Gets the stat of users.
             </summary>
             <returns>Return count of records and deleted records in File Cabinet.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindById(System.Int32)">
+            <summary>
+            Finds the by identifier.
+            </summary>
+            <param name="id">The identifier.</param>
+            <returns>Return the FileCabinetRecord.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
@@ -1117,6 +1286,33 @@
             </summary>
             <param name="dateOfBirth">The date of birthday.</param>
             <returns>Return array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByWorkingHours(System.Int16)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="workingHours">The working hours.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByAnnualIncome(System.Decimal)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="annualIncome">The annual income.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByDriverCategory(System.Char)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="driverCategory">The driver category.</param>
+            <returns>
+            Return array of records.
+            </returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot">
             <summary>
@@ -1294,6 +1490,13 @@
             <param name="input">The input.</param>
             <returns>Return result of boolean conversion result and string input value and <c>short</c> value.</returns>
         </member>
+        <member name="M:FileCabinetApp.Utility.Converter.IntConverter(System.String)">
+            <summary>
+            Shorts the converter.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Return result of boolean conversion result and string input value and <c>short</c> value.</returns>
+        </member>
         <member name="M:FileCabinetApp.Utility.Converter.CharConverter(System.String)">
             <summary>
             Characters the converter.
@@ -1336,12 +1539,30 @@
             <param name="id">The identifier.</param>
             <param name="container">The container of parameters.</param>
         </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.InsertRecord(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Inserts the record.
+            </summary>
+            <param name="container">The container.</param>
+            <returns>
+            Return is record inserted.
+            </returns>
+        </member>
         <member name="M:FileCabinetApp.Utility.ServiceLogger.GetStat">
             <summary>
             Gets the stat of users.
             </summary>
             <returns>
             Return count of records and deleted records in File Cabinet.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.FindById(System.Int32)">
+            <summary>
+            Finds the by identifier.
+            </summary>
+            <param name="id">The identifier.</param>
+            <returns>
+            Return the FileCabinetRecord.
             </returns>
         </member>
         <member name="M:FileCabinetApp.Utility.ServiceLogger.FindByFirstName(System.String)">
@@ -1367,6 +1588,33 @@
             Finds the records by date of birthday.
             </summary>
             <param name="dateOfBirth">The date of birthday.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.FindByWorkingHours(System.Int16)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="workingHours">The working hours.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.FindByAnnualIncome(System.Decimal)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="annualIncome">The annual income.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceLogger.FindByDriverCategory(System.Char)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="driverCategory">The driver category.</param>
             <returns>
             Return array of records.
             </returns>
@@ -1428,6 +1676,15 @@
             Return Id of created record.
             </returns>
         </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.InsertRecord(FileCabinetApp.Entities.ParametersContainer)">
+            <summary>
+            Inserts the record.
+            </summary>
+            <param name="container">The container.</param>
+            <returns>
+            Return is record inserted.
+            </returns>
+        </member>
         <member name="M:FileCabinetApp.Utility.ServiceMeter.GetRecords">
             <summary>
             Gets all records in File Cabinet.
@@ -1442,6 +1699,15 @@
             </summary>
             <param name="id">The identifier.</param>
             <param name="container">The container of parameters.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.FindById(System.Int32)">
+            <summary>
+            Finds the by identifier.
+            </summary>
+            <param name="id">The identifier.</param>
+            <returns>
+            Return the FileCabinetRecord.
+            </returns>
         </member>
         <member name="M:FileCabinetApp.Utility.ServiceMeter.FindByFirstName(System.String)">
             <summary>
@@ -1466,6 +1732,33 @@
             Finds the records by date of birthday.
             </summary>
             <param name="dateOfBirth">The date of birthday.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.FindByWorkingHours(System.Int16)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="workingHours">The working hours.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.FindByAnnualIncome(System.Decimal)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="annualIncome">The annual income.</param>
+            <returns>
+            Return array of records.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Utility.ServiceMeter.FindByDriverCategory(System.Char)">
+            <summary>
+            Finds the records by the last name.
+            </summary>
+            <param name="driverCategory">The driver category.</param>
             <returns>
             Return array of records.
             </returns>
@@ -1506,6 +1799,18 @@
             Return purged Count.
             </returns>
         </member>
+        <member name="T:FileCabinetApp.Utility.StringExtensions">
+            <summary>
+            String extensions.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Utility.StringExtensions.RemoveSpecialCharacters(System.String)">
+            <summary>
+            Removes the special characters.
+            </summary>
+            <param name="str">The string.</param>
+            <returns>Return new string without ' ', '(', ')' characters.</returns>
+        </member>
         <member name="T:FileCabinetApp.Validators.InputValidators.InputValidator">
             <summary>
             Class <c>InputValidator</c>.
@@ -1516,6 +1821,15 @@
             Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.InputValidators.InputValidator" /> class.
             </summary>
             <param name="validationType">Type of the validation.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.InputValidators.InputValidator.IdValidator(System.Int32)">
+            <summary>
+            Workings the hours validator.
+            </summary>
+            <param name="id">The identifier.</param>
+            <returns>
+            Return the result of validation an value.
+            </returns>
         </member>
         <member name="M:FileCabinetApp.Validators.InputValidators.InputValidator.ValidateImportExportParameters(System.String)">
             <summary>

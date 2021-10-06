@@ -27,7 +27,7 @@ namespace FileCabinetApp.Utility
         /// <returns>Return result of boolean conversion result and string input value and <c>DeteTime</c> value.</returns>
         public static Tuple<bool, string, DateTime> DateConverter(string input)
         {
-            string format = "MM/dd/yyyy";
+            string format = "M/d/yyyy";
             CultureInfo formatProvider = CultureInfo.CreateSpecificCulture("en-US");
             DateTimeStyles style = DateTimeStyles.None;
             bool isConverted = DateTime.TryParseExact(input, format, formatProvider, style, out DateTime dateTimeValue);
@@ -45,6 +45,18 @@ namespace FileCabinetApp.Utility
             bool isConverted = short.TryParse(input, out short shortValue);
 
             return new Tuple<bool, string, short>(isConverted, input, shortValue);
+        }
+
+        /// <summary>
+        /// Shorts the converter.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>Return result of boolean conversion result and string input value and <c>short</c> value.</returns>
+        public static Tuple<bool, string, int> IntConverter(string input)
+        {
+            bool isConverted = int.TryParse(input, out int shortValue);
+
+            return new Tuple<bool, string, int>(isConverted, input, shortValue);
         }
 
         /// <summary>
