@@ -102,7 +102,8 @@ namespace FileCabinetApp
                 .SetNext(new PurgeCommandHandler(fileCabinetService))
                 .SetNext(new InsertCommandHandler(fileCabinetService, inputValidator))
                 .SetNext(new DeleteCommandHandler(fileCabinetService, inputValidator))
-                .SetNext(new UpdateCommandHandler(fileCabinetService, inputValidator));
+                .SetNext(new UpdateCommandHandler(fileCabinetService, inputValidator))
+                .SetNext(new SelectCommandHandler(fileCabinetService, inputValidator));
 
             return commandHandler;
         }

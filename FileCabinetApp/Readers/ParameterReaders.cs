@@ -40,7 +40,7 @@ namespace FileCabinetApp.Readers
             var validationResult = validator != null ? validator(value) : new Tuple<bool, string>(false, null);
             if (!validationResult.Item1)
             {
-                throw new ArgumentException($"Conversion failed: {validationResult.Item2}. Please, correct your input.");
+                throw new ArgumentException($"Validation failed: {validationResult.Item2}. Please, correct your input.");
             }
 
             return value;
@@ -60,7 +60,7 @@ namespace FileCabinetApp.Readers
                 T value;
 
                 var input = Console.ReadLine();
-                var conversionResult = converter(input);
+                var conversionResult = converter != null ? converter(input) : new Tuple<bool, string, T>(false, null, default);
 
                 if (!conversionResult.Item1)
                 {
@@ -70,7 +70,7 @@ namespace FileCabinetApp.Readers
 
                 value = conversionResult.Item3;
 
-                var validationResult = validator(value);
+                var validationResult = validator != null ? validator(value) : new Tuple<bool, string>(false, null);
                 if (!validationResult.Item1)
                 {
                     Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");

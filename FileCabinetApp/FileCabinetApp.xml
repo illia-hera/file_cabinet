@@ -277,6 +277,22 @@
             <param name="appCommandRequest">The application command request.</param>
             <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
         </member>
+        <member name="T:FileCabinetApp.CommandHandlers.SelectCommandHandler">
+            <summary>
+            Implementation selection command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Validators.InputValidators.InputValidator)">
+            <summary>Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.SelectCommandHandler" /> class.</summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+            <param name="validator">Current validator.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Handles the specified application command request.
+            </summary>
+            <param name="appCommandRequest">The application command request.</param>
+        </member>
         <member name="T:FileCabinetApp.CommandHandlers.StatCommandHandler">
             <summary>
             CLass <c>StatCommandHandler</c> generate File Cabinet Stat.
@@ -421,6 +437,19 @@
             <value>
             The driver license category.
             </value>
+        </member>
+        <member name="M:FileCabinetApp.Entities.FileCabinetRecord.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.Entities.FileCabinetRecord.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.Entities.FileCabinetRecord.ToParametersValue(System.Collections.Generic.IList{System.Object})">
+            <summary>
+            Converts to string.
+            </summary>
+            <param name="columns">The columns.</param>
+            <returns>Return array of record parameters.</returns>
         </member>
         <member name="T:FileCabinetApp.Entities.JsonSerialization.AnnualIncome">
             <summary>

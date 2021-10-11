@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace FileCabinetApp.Entities
 {
@@ -138,5 +140,70 @@ namespace FileCabinetApp.Entities
         /// The driver license category.
         /// </value>
         public char DriverLicenseCategory { get; set; }
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            FileCabinetRecord record = obj as FileCabinetRecord;
+
+            if (record is null || this.Id != record.Id
+                               || !this.FirstName.Equals(record.FirstName, StringComparison.Ordinal)
+                               || !this.LastName.Equals(record.LastName, StringComparison.Ordinal)
+                               || this.DateOfBirth != record.DateOfBirth
+                               || this.WorkingHoursPerWeek != record.WorkingHoursPerWeek
+                               || this.AnnualIncome != record.AnnualIncome
+                               || !this.DriverLicenseCategory.Equals(record.DriverLicenseCategory))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// Converts to string.
+        /// </summary>
+        /// <param name="columns">The columns.</param>
+        /// <returns>Return array of record parameters.</returns>
+        internal object[] ToParametersValue(IList<object> columns)
+        {
+            List<object> result = new List<object>();
+            foreach (var o in columns)
+            {
+                var s = o as string;
+                switch (s?.ToUpper(CultureInfo.InvariantCulture).Trim())
+                {
+                    case "FIRSTNAME":
+                        result.Add(this.FirstName);
+                        break;
+                    case "LASTNAME":
+                        result.Add(this.LastName);
+                        break;
+                    case "DATEOFBIRTH":
+                        result.Add(this.DateOfBirth);
+                        break;
+                    case "ANNUALINCOME":
+                        result.Add(this.AnnualIncome);
+                        break;
+                    case "WORKINGHOURS":
+                        result.Add(this.WorkingHoursPerWeek);
+                        break;
+                    case "DRIVERCATEGORY":
+                        result.Add(this.DriverLicenseCategory);
+                        break;
+                    case "ID":
+                        result.Add(this.Id);
+                        break;
+                }
+            }
+
+            return result.ToArray();
+        }
     }
 }
