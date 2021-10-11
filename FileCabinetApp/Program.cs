@@ -95,8 +95,6 @@ namespace FileCabinetApp
             commandHandler.SetNext(new HelpCommandHandler())
                 .SetNext(new StatCommandHandler(fileCabinetService))
                 .SetNext(new ExitCommandHandler(isR => isRunning = isR))
-                .SetNext(new ListCommandHandler(fileCabinetService, DefaultRecordPrint))
-                .SetNext(new FindCommandHandler(fileCabinetService, DefaultRecordPrint))
                 .SetNext(new ExportCommandHandler(fileCabinetService))
                 .SetNext(new ImportCommandHandler(fileCabinetService))
                 .SetNext(new PurgeCommandHandler(fileCabinetService))

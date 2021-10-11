@@ -24,13 +24,12 @@ namespace FileCabinetApp.CommandHandlers
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "prints counts of records.", "The 'stat' command prints counts of records." },
             new string[] { "create", "create new record.", "The 'create' command create new record." },
-            new string[] { "list", "returned list of created records.", "The 'list' command returned list of created records." },
-            new string[] { "find", "find record by parameter.", "The 'find' command find record by parameter." },
             new string[] { "export csv/xml", "export records to csv/xml file.", "The 'export csv/xml' command export records to csv/xml file." },
             new string[] { "import csv/xml", "import records from csv/xml file.", "The 'import csv/xml' command import records from csv/xml file." },
             new string[] { "delete", "delete record from FileCabinet.", "The 'delete' command delete records from FileCabinet." },
             new string[] { "purge", "purge bites from file.", "The 'purge' command purge bites from file." },
             new string[] { "update", "update records parameters.", "The 'update' command update records parameters." },
+            new string[] { "select", "select records by input parameters.", "The 'select' command select records by input parameters." },
         };
 
         /// <summary>

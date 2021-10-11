@@ -15,16 +15,15 @@ namespace FileCabinetApp.CommandHandlers
         private readonly string[] commands = new[]
         {
             "help",
-            "list",
             "exit",
             "stat",
             "create",
-            "find",
             "export",
             "import",
             "delete",
             "purge",
             "update",
+            "select",
         };
 
         private ICommandHandler nextHandler;
