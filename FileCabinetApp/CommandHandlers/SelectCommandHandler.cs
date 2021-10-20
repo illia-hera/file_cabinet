@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using ConsoleTables;
 using FileCabinetApp.Entities;
-using FileCabinetApp.Entities.XmlSerialization;
 using FileCabinetApp.Readers;
 using FileCabinetApp.Services;
 using FileCabinetApp.Utility;
@@ -52,7 +48,7 @@ namespace FileCabinetApp.CommandHandlers
                 }
 
                 return;
-            } // select id, firstname, lastname where firstname = 'John' and lastname = 'Doe'
+            }
 
             base.Handle(appCommandRequest);
         }
@@ -69,13 +65,13 @@ namespace FileCabinetApp.CommandHandlers
 
         private static ConsoleTable CreateTable(string tableParams)
         {
-            var parametrs = GetTableParams(tableParams);
-            if (parametrs is null)
+            var columns = GetTableParams(tableParams);
+            if (columns is null)
             {
                 return null;
             }
 
-            var table = new ConsoleTable(parametrs);
+            var table = new ConsoleTable(columns);
             return table;
         }
 
@@ -185,31 +181,30 @@ namespace FileCabinetApp.CommandHandlers
             Tuple<List<string>, List<string>, string> tuple = GetSearchedParams(parameters);
             (string[] searchKeys, string[] searchValues, string separator) = (tuple.Item1.ToArray(), tuple.Item2.ToArray(), tuple.Item3);
 
-            for (int i = 0; i < searchKeys.Length; i++)
+            try
             {
-                IEnumerable<FileCabinetRecord> current;
-                try
+                for (int i = 0; i < searchKeys.Length; i++)
                 {
-                    current = this.FindBy(searchKeys[i], searchValues[i]);
-                }
-                catch (ArgumentException e)
-                {
-                    Console.WriteLine(e.Message);
-                    return null;
-                }
+                    var current = this.FindBy(searchKeys[i], searchValues[i]);
 
-                if (i == 0)
-                {
-                    result = current;
+                    if (i == 0)
+                    {
+                        result = current;
+                    }
+                    else if (separator.Equals("and", StringComparison.OrdinalIgnoreCase))
+                    {
+                        result = result.Where(x => current.Contains(x));
+                    }
+                    else if (separator.Equals("or", StringComparison.OrdinalIgnoreCase))
+                    {
+                        result = result.Union(current);
+                    }
                 }
-                else if (separator.Equals("and", StringComparison.OrdinalIgnoreCase))
-                {
-                    result = result.Where(x => current.Contains(x));
-                }
-                else if (separator.Equals("or", StringComparison.OrdinalIgnoreCase))
-                {
-                    result = result.Union(current);
-                }
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
             }
 
             return result.ToArray();
