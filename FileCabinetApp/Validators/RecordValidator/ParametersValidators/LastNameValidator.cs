@@ -35,7 +35,7 @@ namespace FileCabinetApp.Validators.RecordValidator.ParametersValidators
                 throw new ArgumentNullException(nameof(container));
             }
 
-            if (container.LastName is null)
+            if (string.IsNullOrWhiteSpace(container.LastName))
             {
                 throw new ArgumentNullException(nameof(container), $"{container.LastName}can not be null");
             }

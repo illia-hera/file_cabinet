@@ -47,13 +47,20 @@ namespace FileCabinetApp.Readers
         /// <returns>Return list of Records.</returns>
         public IList<FileCabinetRecord> ReadAll()
         {
-            RecordsGroup recordsGroup;
+            RecordsGroup recordsGroup = null;
             var records = new List<FileCabinetRecord>();
             var serializer = new XmlSerializer(typeof(RecordsGroup));
 
             using (this.reader)
             {
-                recordsGroup = serializer.Deserialize(this.reader) as RecordsGroup; // if create XmlReader from this.reader it always will be None
+                try
+                {
+                    recordsGroup = serializer.Deserialize(this.reader) as RecordsGroup; // if create XmlReader from this.reader it always will be None
+                }
+                catch (InvalidOperationException e)
+                {
+                    Console.WriteLine($"Check your xml file: {e.Message}");
+                }
             }
 
             if (recordsGroup != null && recordsGroup.Record.Count > 0)

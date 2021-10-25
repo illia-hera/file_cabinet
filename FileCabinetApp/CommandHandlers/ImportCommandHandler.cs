@@ -73,6 +73,11 @@ namespace FileCabinetApp.CommandHandlers
             {
                 using StreamReader streamReader = new StreamReader(fs);
                 snapshot.LoadFromXml(streamReader);
+                if (snapshot.Records.Count == 0)
+                {
+                    return false;
+                }
+
                 this.FileCabinetService.Restore(snapshot);
             }
             else

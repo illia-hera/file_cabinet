@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using FileCabinetApp.Entities;
-using FileCabinetApp.Services;
 using FileCabinetApp.Services.SnapshotServices;
 
-namespace FileCabinetApp.Utility
+namespace FileCabinetApp.Services
 {
     /// <summary>
     /// Class ServiceMeter.
@@ -132,17 +131,17 @@ namespace FileCabinetApp.Utility
         /// <summary>
         /// Finds the records by the first name.
         /// </summary>
-        /// <param name="firstName">The first name.</param>
+        /// <param name="value">The first name.</param>
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string value)
         {
             var sw = new Stopwatch();
 
             sw.Start();
 
-            var result = this.fileCabinetServiceImplementation.FindByFirstName(firstName);
+            var result = this.fileCabinetServiceImplementation.FindByFirstName(value);
 
             sw.Stop();
 
@@ -154,17 +153,17 @@ namespace FileCabinetApp.Utility
         /// <summary>
         /// Finds the records by the last name.
         /// </summary>
-        /// <param name="lastName">The last name.</param>
+        /// <param name="value">The last name.</param>
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string value)
         {
             var sw = new Stopwatch();
 
             sw.Start();
 
-            var result = this.fileCabinetServiceImplementation.FindByLastName(lastName);
+            var result = this.fileCabinetServiceImplementation.FindByLastName(value);
 
             sw.Stop();
 
@@ -176,17 +175,17 @@ namespace FileCabinetApp.Utility
         /// <summary>
         /// Finds the records by date of birthday.
         /// </summary>
-        /// <param name="dateOfBirth">The date of birthday.</param>
+        /// <param name="value">The date of birthday.</param>
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime value)
         {
             var sw = new Stopwatch();
 
             sw.Start();
 
-            var result = this.fileCabinetServiceImplementation.FindByDateOfBirthday(dateOfBirth);
+            var result = this.fileCabinetServiceImplementation.FindByDateOfBirthday(value);
 
             sw.Stop();
 

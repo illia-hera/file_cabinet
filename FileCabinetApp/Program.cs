@@ -95,14 +95,13 @@ namespace FileCabinetApp
             commandHandler.SetNext(new HelpCommandHandler())
                 .SetNext(new StatCommandHandler(fileCabinetService))
                 .SetNext(new ExitCommandHandler(isR => isRunning = isR))
-                .SetNext(new ListCommandHandler(fileCabinetService, DefaultRecordPrint))
-                .SetNext(new FindCommandHandler(fileCabinetService, DefaultRecordPrint))
                 .SetNext(new ExportCommandHandler(fileCabinetService))
                 .SetNext(new ImportCommandHandler(fileCabinetService))
                 .SetNext(new PurgeCommandHandler(fileCabinetService))
                 .SetNext(new InsertCommandHandler(fileCabinetService, inputValidator))
                 .SetNext(new DeleteCommandHandler(fileCabinetService, inputValidator))
-                .SetNext(new UpdateCommandHandler(fileCabinetService, inputValidator));
+                .SetNext(new UpdateCommandHandler(fileCabinetService, inputValidator))
+                .SetNext(new SelectCommandHandler(fileCabinetService, inputValidator));
 
             return commandHandler;
         }
