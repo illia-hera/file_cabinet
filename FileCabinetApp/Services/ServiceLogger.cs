@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 using FileCabinetApp.Entities;
-using FileCabinetApp.Services;
 using FileCabinetApp.Services.SnapshotServices;
 
-namespace FileCabinetApp.Utility
+namespace FileCabinetApp.Services
 {
     /// <summary>
     /// Class <c>ServiceLogger</c> make logging of commands.
@@ -217,16 +213,16 @@ namespace FileCabinetApp.Utility
         /// <summary>
         /// Finds the records by the first name.
         /// </summary>
-        /// <param name="firstName">The first name.</param>
+        /// <param name="value">The first name.</param>
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string value)
         {
             IEnumerable<FileCabinetRecord> result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
-            sb.Append($"Calling {GetCurrentMethod()} with FirstName = '{firstName} ', ");
+            sb.Append($"Calling {GetCurrentMethod()} with FirstName = '{value} ', ");
 
             using (var fs = new FileStream(this.path, FileMode.Append, FileAccess.Write))
             using (var writer = new StreamWriter(fs, Encoding.UTF8))
@@ -235,11 +231,11 @@ namespace FileCabinetApp.Utility
 
                 if (this.fileCabinetService is ServiceMeter meter)
                 {
-                    result = meter.FindByFirstName(firstName);
+                    result = meter.FindByFirstName(value);
                 }
                 else
                 {
-                    result = this.fileCabinetService.FindByFirstName(firstName);
+                    result = this.fileCabinetService.FindByFirstName(value);
                 }
 
                 writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
@@ -252,16 +248,16 @@ namespace FileCabinetApp.Utility
         /// <summary>
         /// Finds the records by the last name.
         /// </summary>
-        /// <param name="lastName">The last name.</param>
+        /// <param name="value">The last name.</param>
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string value)
         {
             IEnumerable<FileCabinetRecord> result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
-            sb.Append($"Calling {GetCurrentMethod()} with LastName = '{lastName} ', ");
+            sb.Append($"Calling {GetCurrentMethod()} with LastName = '{value} ', ");
 
             using (var fs = new FileStream(this.path, FileMode.Append, FileAccess.Write))
             using (var writer = new StreamWriter(fs, Encoding.UTF8))
@@ -270,11 +266,11 @@ namespace FileCabinetApp.Utility
 
                 if (this.fileCabinetService is ServiceMeter meter)
                 {
-                    result = meter.FindByLastName(lastName);
+                    result = meter.FindByLastName(value);
                 }
                 else
                 {
-                    result = this.fileCabinetService.FindByLastName(lastName);
+                    result = this.fileCabinetService.FindByLastName(value);
                 }
 
                 writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");
@@ -287,16 +283,16 @@ namespace FileCabinetApp.Utility
         /// <summary>
         /// Finds the records by date of birthday.
         /// </summary>
-        /// <param name="dateOfBirth">The date of birthday.</param>
+        /// <param name="value">The date of birthday.</param>
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime value)
         {
             IEnumerable<FileCabinetRecord> result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
-            sb.Append($"Calling {GetCurrentMethod()} with birthDay = '{dateOfBirth} ', ");
+            sb.Append($"Calling {GetCurrentMethod()} with birthDay = '{value} ', ");
 
             using (var fs = new FileStream(this.path, FileMode.Append, FileAccess.Write))
             using (var writer = new StreamWriter(fs, Encoding.UTF8))
@@ -305,11 +301,11 @@ namespace FileCabinetApp.Utility
 
                 if (this.fileCabinetService is ServiceMeter meter)
                 {
-                    result = meter.FindByDateOfBirthday(dateOfBirth);
+                    result = meter.FindByDateOfBirthday(value);
                 }
                 else
                 {
-                    result = this.fileCabinetService.FindByDateOfBirthday(dateOfBirth);
+                    result = this.fileCabinetService.FindByDateOfBirthday(value);
                 }
 
                 writer.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  {GetCurrentMethod()} returned:");

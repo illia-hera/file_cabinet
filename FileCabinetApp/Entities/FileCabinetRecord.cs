@@ -186,16 +186,16 @@ namespace FileCabinetApp.Entities
                         result.Add(this.LastName);
                         break;
                     case "DATEOFBIRTH":
-                        result.Add(this.DateOfBirth);
+                        result.Add(this.DateOfBirth.ToString(format: "yyyy-MMM-dd", CultureInfo.InvariantCulture));
                         break;
                     case "ANNUALINCOME":
-                        result.Add(this.AnnualIncome);
+                        result.Add(this.AnnualIncome.ToString("f", CultureInfo.InvariantCulture));
                         break;
-                    case "WORKINGHOURS":
-                        result.Add(this.WorkingHoursPerWeek);
+                    case "WORKINGHOURSPERWEEK":
+                        result.Add(this.WorkingHoursPerWeek.ToString(CultureInfo.InvariantCulture));
                         break;
                     case "DRIVERCATEGORY":
-                        result.Add(this.DriverLicenseCategory);
+                        result.Add(this.DriverLicenseCategory.ToString());
                         break;
                     case "ID":
                         result.Add(this.Id);

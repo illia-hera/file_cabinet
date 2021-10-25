@@ -55,23 +55,23 @@ namespace FileCabinetApp.Services
         /// <summary>
         /// Finds the records by the first name.
         /// </summary>
-        /// <param name="firstName">The first name.</param>
+        /// <param name="value">The first name.</param>
         /// <returns>Return array of records.</returns>
-        IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
+        IEnumerable<FileCabinetRecord> FindByFirstName(string value);
 
         /// <summary>
         /// Finds the records by the last name.
         /// </summary>
-        /// <param name="lastName">The last name.</param>
+        /// <param name="value">The last name.</param>
         /// <returns>Return array of records.</returns>
-        IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
+        IEnumerable<FileCabinetRecord> FindByLastName(string value);
 
         /// <summary>
         /// Finds the records by date of birthday.
         /// </summary>
-        /// <param name="dateOfBirth">The date of birthday.</param>
+        /// <param name="value">The date of birthday.</param>
         /// <returns>Return array of records.</returns>
-        IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth);
+        IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime value);
 
         /// <summary>
         /// Finds the records by the last name.

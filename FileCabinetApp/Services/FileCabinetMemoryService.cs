@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
+using FileCabinetApp.Utility;
 using FileCabinetApp.Validators.RecordValidator;
 
 namespace FileCabinetApp.Services
@@ -18,6 +19,13 @@ namespace FileCabinetApp.Services
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+        private static Func<int, IEnumerable<FileCabinetRecord>> findByIdMemo;
+        private static Func<string, IEnumerable<FileCabinetRecord>> findByFirstNameMemo;
+        private static Func<string, IEnumerable<FileCabinetRecord>> findByLastNamedMemo;
+        private static Func<DateTime, IEnumerable<FileCabinetRecord>> findByDateOfBirsthMemo;
+        private static Func<decimal, IEnumerable<FileCabinetRecord>> findByAnnualIncomeMemo;
+        private static Func<char, IEnumerable<FileCabinetRecord>> findByDrivaerCategoryMemo;
+        private static Func<short, IEnumerable<FileCabinetRecord>> findByWorkingHoursMemo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
@@ -49,6 +57,7 @@ namespace FileCabinetApp.Services
             AddRecordToDict(container.LastName.ToUpperInvariant(), record, this.lastNameDictionary);
             AddRecordToDict(container.DateOfBirthday, record, this.dateOfBirthDictionary);
 
+            ResetMemos();
             return record.Id;
         }
 
@@ -84,6 +93,8 @@ namespace FileCabinetApp.Services
             record.DateOfBirth = container.DateOfBirthday;
             record.DriverLicenseCategory = container.DriverLicenseCategory;
             record.WorkingHoursPerWeek = container.WorkingHoursPerWeek;
+
+            ResetMemos();
         }
 
         /// <summary>
@@ -114,6 +125,7 @@ namespace FileCabinetApp.Services
             AddRecordToDict(container.LastName.ToUpperInvariant(), record, this.lastNameDictionary);
             AddRecordToDict(container.DateOfBirthday, record, this.dateOfBirthDictionary);
 
+            ResetMemos();
             return true;
         }
 
@@ -145,52 +157,70 @@ namespace FileCabinetApp.Services
         /// </returns>
         public IEnumerable<FileCabinetRecord> FindById(int id)
         {
-            return this.list.Where(r => r.Id == id);
+            findByIdMemo ??= Memoizer.Memoize<int, IEnumerable<FileCabinetRecord>>(x => this.list.Where(r => r.Id == x));
+
+            return findByIdMemo(id) ?? throw new ArgumentException($"Record #{id} doesn't exist.");
         }
 
         /// <summary>
         /// Finds the records by the first name.
         /// </summary>
-        /// <param name="firstName">The first name.</param>
+        /// <param name="value">The first name.</param>
         /// <returns>Return array of records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string value)
         {
-            if (firstName != null && this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
+            if (value is null)
             {
-                return this.firstNameDictionary[firstName.ToUpperInvariant()];
+                throw new ArgumentException($"{nameof(value)} can not be null.");
             }
 
-            return new List<FileCabinetRecord>();
+            if (!this.firstNameDictionary.ContainsKey(value.ToUpper(CultureInfo.InvariantCulture)))
+            {
+                throw new ArgumentException($"No records with FirstName - {value}.");
+            }
+
+            findByFirstNameMemo ??= Memoizer.Memoize<string, IEnumerable<FileCabinetRecord>>(n => this.firstNameDictionary[n.ToUpperInvariant()]);
+
+            return findByFirstNameMemo(value) ?? throw new ArgumentException($"Record #{value} doesn't exist.");
         }
 
         /// <summary>
         /// Finds the records by the last name.
         /// </summary>
-        /// <param name="lastName">The last name.</param>
+        /// <param name="value">The last name.</param>
         /// <returns>Return array of records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string value)
         {
-            if (lastName != null && this.lastNameDictionary.ContainsKey(lastName.ToUpperInvariant()))
+            if (value is null)
             {
-                return this.lastNameDictionary[lastName.ToUpperInvariant()];
+                throw new ArgumentException($"{nameof(value)} can not be null.");
             }
 
-            return new List<FileCabinetRecord>();
+            if (!this.lastNameDictionary.ContainsKey(value.ToUpper(CultureInfo.InvariantCulture)))
+            {
+                throw new ArgumentException($"No records with LastName - {value}.");
+            }
+
+            findByLastNamedMemo ??= Memoizer.Memoize<string, IEnumerable<FileCabinetRecord>>(n => this.lastNameDictionary[n.ToUpperInvariant()]);
+
+            return findByLastNamedMemo(value) ?? throw new ArgumentException($"Record #{value} doesn't exist.");
         }
 
         /// <summary>
         /// Finds the records by date of birthday.
         /// </summary>
-        /// <param name="dateOfBirth">The date of birthday.</param>
+        /// <param name="value">The date of birthday.</param>
         /// <returns>Return array of records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime value)
         {
-            if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
+            if (!this.dateOfBirthDictionary.ContainsKey(value))
             {
-                return this.dateOfBirthDictionary[dateOfBirth];
+                throw new ArgumentException($"No records with DateOfBirth - {value}.");
             }
 
-            return new List<FileCabinetRecord>();
+            findByDateOfBirsthMemo ??= Memoizer.Memoize<DateTime, IEnumerable<FileCabinetRecord>>(n => this.dateOfBirthDictionary[n]);
+
+            return findByDateOfBirsthMemo(value) ?? throw new ArgumentException($"Record #{value:yyyy-MMM-dd} doesn't exist.");
         }
 
         /// <summary>
@@ -202,7 +232,9 @@ namespace FileCabinetApp.Services
         /// </returns>
         public IEnumerable<FileCabinetRecord> FindByWorkingHours(short workingHours)
         {
-            return this.list.Where(r => r.WorkingHoursPerWeek == workingHours);
+            findByWorkingHoursMemo ??= Memoizer.Memoize<short, IEnumerable<FileCabinetRecord>>(x => this.list.Where(r => r.WorkingHoursPerWeek == x));
+
+            return findByWorkingHoursMemo(workingHours) ?? throw new ArgumentException($"Record #{workingHours} doesn't exist.");
         }
 
         /// <summary>
@@ -214,7 +246,9 @@ namespace FileCabinetApp.Services
         /// </returns>
         public IEnumerable<FileCabinetRecord> FindByAnnualIncome(decimal annualIncome)
         {
-            return this.list.Where(r => r.AnnualIncome == annualIncome);
+            findByAnnualIncomeMemo ??= Memoizer.Memoize<decimal, IEnumerable<FileCabinetRecord>>(x => this.list.Where(r => r.AnnualIncome == x));
+
+            return findByAnnualIncomeMemo(annualIncome) ?? throw new ArgumentException($"Record #{annualIncome} doesn't exist.");
         }
 
         /// <summary>
@@ -226,7 +260,9 @@ namespace FileCabinetApp.Services
         /// </returns>
         public IEnumerable<FileCabinetRecord> FindByDriverCategory(char driverCategory)
         {
-            return this.list.Where(r => r.DriverLicenseCategory == char.ToUpper(driverCategory, CultureInfo.InvariantCulture));
+            findByDrivaerCategoryMemo ??= Memoizer.Memoize<char, IEnumerable<FileCabinetRecord>>(x => this.list.Where(r => r.DriverLicenseCategory == char.ToUpper(x, CultureInfo.InvariantCulture)));
+
+            return findByDrivaerCategoryMemo(driverCategory) ?? throw new ArgumentException($"Record #{driverCategory} doesn't exist.");
         }
 
         /// <summary>
@@ -308,6 +344,8 @@ namespace FileCabinetApp.Services
             {
                 throw new ArgumentException($"Record #{id} doesn't exist.");
             }
+
+            ResetMemos();
         }
 
         /// <summary>
@@ -319,6 +357,17 @@ namespace FileCabinetApp.Services
         public int Purge()
         {
             return 0;
+        }
+
+        private static void ResetMemos()
+        {
+            findByIdMemo = null;
+            findByFirstNameMemo = null;
+            findByLastNamedMemo = null;
+            findByDateOfBirsthMemo = null;
+            findByAnnualIncomeMemo = null;
+            findByDrivaerCategoryMemo = null;
+            findByWorkingHoursMemo = null;
         }
 
         private static FileCabinetRecord GetNewRecord(ParametersContainer container)

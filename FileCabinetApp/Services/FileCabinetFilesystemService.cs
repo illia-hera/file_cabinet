@@ -247,18 +247,18 @@ namespace FileCabinetApp.Services
         /// <summary>
         /// Finds the records by the first name.
         /// </summary>
-        /// <param name="firstName">The first name.</param>
+        /// <param name="value">The first name.</param>
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string value)
         {
-            if (string.IsNullOrWhiteSpace(firstName))
+            if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ArgumentNullException(nameof(firstName));
+                throw new ArgumentNullException(nameof(value));
             }
 
-            foreach (int index in this.FieldOffsetDictionary["firstName"])
+            foreach (int index in this.FieldOffsetDictionary["value"])
             {
                 byte[] buffer = new byte[120];
                 this.fileStream.Seek(index, SeekOrigin.Begin);
@@ -266,7 +266,7 @@ namespace FileCabinetApp.Services
 
                 string name = ByteConverter.ToString(buffer);
 
-                if (name.Equals(firstName, StringComparison.OrdinalIgnoreCase) && !this.IsDeleted((long)(index - RecordParametersOffsets.FirstName)))
+                if (name.Equals(value, StringComparison.OrdinalIgnoreCase) && !this.IsDeleted((long)(index - RecordParametersOffsets.FirstName)))
                 {
                     var record = this.GetRecord((int)(index - RecordParametersOffsets.FirstName));
 
@@ -278,18 +278,18 @@ namespace FileCabinetApp.Services
         /// <summary>
         /// Finds the records by the last name.
         /// </summary>
-        /// <param name="lastName">The last name.</param>
+        /// <param name="value">The last name.</param>
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string value)
         {
-            if (string.IsNullOrWhiteSpace(lastName))
+            if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ArgumentNullException(nameof(lastName));
+                throw new ArgumentNullException(nameof(value));
             }
 
-            foreach (int index in this.FieldOffsetDictionary["lastName"])
+            foreach (int index in this.FieldOffsetDictionary["value"])
             {
                 byte[] buffer = new byte[120];
                 this.fileStream.Seek(index, SeekOrigin.Begin);
@@ -297,7 +297,7 @@ namespace FileCabinetApp.Services
 
                 string name = ByteConverter.ToString(buffer);
 
-                if (name.Equals(lastName, StringComparison.OrdinalIgnoreCase) && !this.IsDeleted((long)(index - RecordParametersOffsets.LastName)))
+                if (name.Equals(value, StringComparison.OrdinalIgnoreCase) && !this.IsDeleted((long)(index - RecordParametersOffsets.LastName)))
                 {
                     var record = this.GetRecord((int)(index - RecordParametersOffsets.LastName));
 
@@ -309,11 +309,11 @@ namespace FileCabinetApp.Services
         /// <summary>
         /// Finds the records by date of birthday.
         /// </summary>
-        /// <param name="dateOfBirth">The date of birthday.</param>
+        /// <param name="value">The date of birthday.</param>
         /// <returns>
         /// Return array of records.
         /// </returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirthday(DateTime value)
         {
             foreach (int index in this.FieldOffsetDictionary["birthDay"])
             {
@@ -323,7 +323,7 @@ namespace FileCabinetApp.Services
 
                 var dateOfBd = ByteConverter.ToDateTime(buffer);
 
-                if (dateOfBd == dateOfBirth && !this.IsDeleted((long)(index - RecordParametersOffsets.DateOfBirth)))
+                if (dateOfBd == value && !this.IsDeleted((long)(index - RecordParametersOffsets.DateOfBirth)))
                 {
                     var record = this.GetRecord((int)(index - RecordParametersOffsets.DateOfBirth));
 
@@ -588,8 +588,8 @@ namespace FileCabinetApp.Services
             Dictionary<string, List<int>> offsetDictionary = new Dictionary<string, List<int>>
                                                                  {
                                                                      { "id", idsIndexes },
-                                                                     { "lastName", lastNameIndexes },
-                                                                     { "firstName", firstNameIndexes },
+                                                                     { "value", lastNameIndexes },
+                                                                     { "value", firstNameIndexes },
                                                                      { "birthDay", birthDayIndexes },
                                                                      { "workingHours", workingHoursIndexes },
                                                                      { "annualIncome", annualIncomeIndexes },
