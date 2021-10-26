@@ -60,7 +60,7 @@ namespace FileCabinetApp.CommandHandlers
                     sb.Append($"#{fileCabinetRecord.Id}, ");
                 }
 
-                Console.WriteLine($"Records {sb.ToString()}are deleted");
+                Console.WriteLine($"Records {sb}are deleted");
                 return;
             }
 

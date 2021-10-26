@@ -2,23 +2,15 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Xml;
+using System.Reflection;
 using CommandLine;
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.Entities;
-using FileCabinetApp.Entities.JsonSerialization;
-using FileCabinetApp.Printers;
 using FileCabinetApp.Readers;
 using FileCabinetApp.Services;
-using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
-using FileCabinetApp.Validators;
 using FileCabinetApp.Validators.InputValidators;
 using FileCabinetApp.Validators.RecordValidator;
-using FileCabinetApp.Validators.RecordValidator.ParametersValidators;
-using Microsoft.Extensions.Configuration;
-using Options = FileCabinetApp.Entities.Options;
 
 [assembly: CLSCompliant(false)]
 
@@ -53,7 +45,8 @@ namespace FileCabinetApp
             do
             {
                     Console.Write("> ");
-                    var inputs = Console.ReadLine().Split(' ', 2);
+                    var input = Console.ReadLine() ?? throw new ArgumentException("Input can not be null");
+                    var inputs = input.Split(' ', 2);
                     const int commandIndex = 0;
                     const int parameterIndex = 1;
 

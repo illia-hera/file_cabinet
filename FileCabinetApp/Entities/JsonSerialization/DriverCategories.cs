@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileCabinetApp.Entities.JsonSerialization
 {
@@ -17,6 +14,6 @@ namespace FileCabinetApp.Entities.JsonSerialization
         /// <value>
         /// The actual categories.
         /// </value>
-        public char[] ActualCategories { get; set; } // it is need to get records from json
+        public IReadOnlyCollection<char> ActualCategories { get; set; } // it is need to get records from json
     }
 }

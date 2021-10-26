@@ -25,7 +25,8 @@ namespace FileCabinetApp.Readers
         public static ValidationRules Read(string rules, string path)
         {
             IConfigurationRoot configurationRoot = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile(path).Build();
-            var validationRules = configurationRoot.GetSection(rules).Get<ValidationRules>();
+            var root = configurationRoot.GetSection(rules);
+            var validationRules = root.Get<ValidationRules>();
             return validationRules;
         }
     }

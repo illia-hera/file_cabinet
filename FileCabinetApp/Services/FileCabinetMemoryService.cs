@@ -299,12 +299,14 @@ namespace FileCabinetApp.Services
                 {
                     this.list[this.list.IndexOf(match)] = record;
                 }
+                else
+                {
+                    this.list.Add(record);
+                }
 
                 AddRecordToDict(record.FirstName.ToUpperInvariant(), record, this.firstNameDictionary);
                 AddRecordToDict(record.LastName.ToUpperInvariant(), record, this.lastNameDictionary);
                 AddRecordToDict(record.DateOfBirth, record, this.dateOfBirthDictionary);
-
-                this.list.Add(record);
             }
         }
 

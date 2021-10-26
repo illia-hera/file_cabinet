@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using FileCabinetApp.Entities.JsonSerialization;
 using FileCabinetApp.Readers;
@@ -79,7 +80,6 @@ namespace FileCabinetGenerator.RandomGenerator
             return value;
         }
 
-
         /// <summary>
         /// Randoms the driver category.
         /// </summary>
@@ -87,7 +87,7 @@ namespace FileCabinetGenerator.RandomGenerator
         public static char RandomDriverCategory()
         {
             IsRuleSet();
-            char[] actualCategories = Rules.DriverCategories.ActualCategories;
+            char[] actualCategories = Rules.DriverCategories.ActualCategories.ToArray();
             int countActualCategories = actualCategories.Length;
 
             return actualCategories[RandomNumberGenerator.GetInt32(0, countActualCategories)];

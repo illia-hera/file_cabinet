@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using FileCabinetApp.Entities;
@@ -71,11 +73,11 @@ namespace FileCabinetApp.RecordWriters
                 return;
             }
 
-            RecordsGroup recordsGroup = new RecordsGroup() { Record = new List<Record>(records.Count) };
+            var recordsList = new List<Record>(records.Count);
 
             foreach (var record in records)
             {
-                recordsGroup.Record.Add(
+                recordsList.Add(
                     new Record()
                     {
                         DriverLicenseCategory = record.DriverLicenseCategory,
@@ -87,11 +89,10 @@ namespace FileCabinetApp.RecordWriters
                     });
             }
 
+            RecordsGroup recordsGroup = new RecordsGroup() { Record = new Collection<Record>(recordsList) };
             XmlSerializer serializer = new XmlSerializer(typeof(RecordsGroup));
-            using (XmlWriter xw = XmlWriter.Create(this.xmlWriter, new XmlWriterSettings { Indent = true, IndentChars = "\t", }))
-            {
-                serializer.Serialize(xw, recordsGroup, new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty, }));
-            }
+            using XmlWriter xw = XmlWriter.Create(this.xmlWriter, new XmlWriterSettings { Indent = true, IndentChars = "\t", });
+            serializer.Serialize(xw, recordsGroup, new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty, }));
         }
 
         /// <summary>

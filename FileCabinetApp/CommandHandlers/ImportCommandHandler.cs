@@ -44,7 +44,7 @@ namespace FileCabinetApp.CommandHandlers
 
                 if (this.TryReadRecords(parametersTuple))
                 {
-                    Console.WriteLine($"{this.FileCabinetService.GetStat().Item1} records were imported from file {parametersTuple.Item2!.Split('\\')[^1]}");
+                    Console.WriteLine($"All records were imported from file {parametersTuple.Item2!.Split('\\')[^1]}");
                 }
 
                 return;
@@ -58,7 +58,7 @@ namespace FileCabinetApp.CommandHandlers
             IFileCabinetServiceSnapshot snapshot = this.FileCabinetService.MakeSnapshot();
             if (parametersTuple.Item2 is null)
             {
-                Console.WriteLine($"File path can not be null");
+                Console.WriteLine("File path can not be null");
                 return false;
             }
 

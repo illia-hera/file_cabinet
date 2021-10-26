@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FileCabinetApp.Entities.JsonSerialization;
+using FileCabinetApp.Readers;
 using Microsoft.Extensions.Configuration;
 
 namespace FileCabinetApp.Validators.RecordValidator
@@ -44,8 +46,7 @@ namespace FileCabinetApp.Validators.RecordValidator
         /// configuration.</exception>
         private static IRecordValidator CreateRecordValidator(ValidatorBuilder builder, string type)
         {
-            IConfigurationRoot configurationRoot = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("validation-rules.json").Build();
-            ValidationRules configuration = configurationRoot.GetSection(type).Get<ValidationRules>();
+            ValidationRules configuration = RulesReader.Read(type, "validation-rules.json");
 
             if (builder == null)
             {
@@ -57,7 +58,7 @@ namespace FileCabinetApp.Validators.RecordValidator
                 .ValidateDateOfBirth(configuration.DateOfBirth.To, configuration.DateOfBirth.From)
                 .ValidateWorkingHours(configuration.WorkingHoursPerWeek.Max, configuration.WorkingHoursPerWeek.Min)
                 .ValidateAnnualIncome(configuration.AnnualIncome.Max, configuration.AnnualIncome.Min)
-                .ValidateDriverCategory(configuration.DriverCategories.ActualCategories)
+                .ValidateDriverCategory(configuration.DriverCategories.ActualCategories.ToList())
                 .Create();
         }
     }
