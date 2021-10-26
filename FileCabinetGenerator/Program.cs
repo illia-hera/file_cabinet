@@ -42,8 +42,10 @@ namespace FileCabinetGenerator
                 writer.WriteRecords(outputPath, outputType);
                 Console.WriteLine($"All records are exported to file {outputPath?.Split('\\')[^1]}");
             }
-
-            Console.WriteLine("File was no write.");
+            else
+            {
+                Console.WriteLine("File was not write.");
+            }
         }
 
         private static void ParseArgs(IEnumerable<string> args)

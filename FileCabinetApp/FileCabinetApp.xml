@@ -1831,51 +1831,6 @@
             <param name="func">The function.</param>
             <returns>Return result delegate.</returns>
         </member>
-        <member name="T:FileCabinetApp.Utility.Options">
-            <summary>
-            Class Option.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.Utility.Options.OutputType">
-            <summary>
-            Gets or sets the type of the output.
-            </summary>
-            <value>
-            The type of the output.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.Utility.Options.Rules">
-            <summary>
-            Gets or sets the rules.
-            </summary>
-            <value>
-            The rules.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.Utility.Options.Output">
-            <summary>
-            Gets or sets the output.
-            </summary>
-            <value>
-            The output.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.Utility.Options.RecordsAmount">
-            <summary>
-            Gets or sets the records amount.
-            </summary>
-            <value>
-            The records amount.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.Utility.Options.StartId">
-            <summary>
-            Gets or sets the start identifier.
-            </summary>
-            <value>
-            The start identifier.
-            </value>
-        </member>
         <member name="T:FileCabinetApp.Utility.StringExtensions">
             <summary>
             String extensions.

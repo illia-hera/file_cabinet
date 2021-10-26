@@ -25,13 +25,12 @@ namespace FileCabinetGenerator.RandomGenerator
         {
             var records = new List<FileCabinetRecord>(recordsAmount);
 
-            var personGenerator = new PersonNameGenerator();
             Randomizer.CreateRules(rules);
 
             for (int i = 0; i < recordsAmount; i++)
             {
-                string firstName = personGenerator.GenerateRandomFirstName();
-                string lastName = personGenerator.GenerateRandomLastName();
+                string firstName = Randomizer.RandomFirstName();
+                string lastName = Randomizer.RandomLastName();
                 DateTime birthDay = Randomizer.RandomDateOfBirth();
                 short workingHours = Randomizer.RandomWorkingHours();
                 decimal annualIncome = Randomizer.RandomAnnualIncome();

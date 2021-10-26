@@ -20,6 +20,8 @@ using FileCabinetApp.Validators.RecordValidator.ParametersValidators;
 using Microsoft.Extensions.Configuration;
 using Options = FileCabinetApp.Entities.Options;
 
+[assembly: CLSCompliant(false)]
+
 namespace FileCabinetApp
 {
     /// <summary>

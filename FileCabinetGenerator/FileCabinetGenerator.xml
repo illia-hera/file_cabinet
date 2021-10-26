@@ -38,6 +38,18 @@
             </summary>
             <returns>Return random working hours.</returns>
         </member>
+        <member name="M:FileCabinetGenerator.RandomGenerator.Randomizer.RandomFirstName">
+            <summary>
+            Randoms the first name.
+            </summary>
+            <returns>Return random first name.</returns>
+        </member>
+        <member name="M:FileCabinetGenerator.RandomGenerator.Randomizer.RandomLastName">
+            <summary>
+            Randoms the last name.
+            </summary>
+            <returns>Return Random last name.</returns>
+        </member>
         <member name="M:FileCabinetGenerator.RandomGenerator.Randomizer.RandomDriverCategory">
             <summary>
             Randoms the driver category.
@@ -65,6 +77,51 @@
             <returns>
             Return FileCabinetRecords.
             </returns>
+        </member>
+        <member name="T:FileCabinetGenerator.Utility.Options">
+            <summary>
+            Class Option.
+            </summary>
+        </member>
+        <member name="P:FileCabinetGenerator.Utility.Options.OutputType">
+            <summary>
+            Gets or sets the type of the output.
+            </summary>
+            <value>
+            The type of the output.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Utility.Options.Rules">
+            <summary>
+            Gets or sets the rules.
+            </summary>
+            <value>
+            The rules.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Utility.Options.Output">
+            <summary>
+            Gets or sets the output.
+            </summary>
+            <value>
+            The output.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Utility.Options.RecordsAmount">
+            <summary>
+            Gets or sets the records amount.
+            </summary>
+            <value>
+            The records amount.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Utility.Options.StartId">
+            <summary>
+            Gets or sets the start identifier.
+            </summary>
+            <value>
+            The start identifier.
+            </value>
         </member>
         <member name="T:FileCabinetGenerator.Writer.RecordsWriter">
             <summary>

@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using FileCabinetApp.Entities.JsonSerialization;
 using FileCabinetApp.Readers;
+using RandomNameGeneratorLibrary;
 
 namespace FileCabinetGenerator.RandomGenerator
 {
@@ -43,6 +44,41 @@ namespace FileCabinetGenerator.RandomGenerator
             IsRuleSet();
             return (short)RandomNumberGenerator.GetInt32(Rules.WorkingHoursPerWeek.Min, Rules.WorkingHoursPerWeek.Max);
         }
+
+        /// <summary>
+        /// Randoms the first name.
+        /// </summary>
+        /// <returns>Return random first name.</returns>
+        public static string RandomFirstName()
+        {
+            var personGenerator = new PersonNameGenerator();
+            string value;
+            do
+            {
+                value = personGenerator.GenerateRandomFirstName();
+            }
+            while (value.Length < Rules.LastName.Min || value.Length > Rules.LastName.Max);
+
+            return value;
+        }
+
+        /// <summary>
+        /// Randoms the last name.
+        /// </summary>
+        /// <returns>Return Random last name.</returns>
+        public static string RandomLastName()
+        {
+            var personGenerator = new PersonNameGenerator();
+            string value;
+            do
+            {
+                value = personGenerator.GenerateRandomLastName();
+            }
+            while (value.Length < Rules.LastName.Min || value.Length > Rules.LastName.Max);
+
+            return value;
+        }
+
 
         /// <summary>
         /// Randoms the driver category.
