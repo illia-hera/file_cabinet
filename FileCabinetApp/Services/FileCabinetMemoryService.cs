@@ -14,11 +14,6 @@ namespace FileCabinetApp.Services
     /// </summary>
     public class FileCabinetMemoryService : IFileCabinetService
     {
-        private readonly IRecordValidator validator;
-        private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
-        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
-        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
-        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
         private static Func<int, IEnumerable<FileCabinetRecord>> findByIdMemo;
         private static Func<string, IEnumerable<FileCabinetRecord>> findByFirstNameMemo;
         private static Func<string, IEnumerable<FileCabinetRecord>> findByLastNamedMemo;
@@ -26,6 +21,11 @@ namespace FileCabinetApp.Services
         private static Func<decimal, IEnumerable<FileCabinetRecord>> findByAnnualIncomeMemo;
         private static Func<char, IEnumerable<FileCabinetRecord>> findByDrivaerCategoryMemo;
         private static Func<short, IEnumerable<FileCabinetRecord>> findByWorkingHoursMemo;
+        private readonly IRecordValidator validator;
+        private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.

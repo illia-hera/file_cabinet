@@ -4,6 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CommandLine;
+using FileCabinetApp.Utility;
+using FileCabinetGenerator.RandomGenerator;
+using FileCabinetGenerator.Utility;
+using FileCabinetGenerator.Writer;
 
 namespace FileCabinetGenerator
 {
@@ -20,6 +24,8 @@ namespace FileCabinetGenerator
 
         private static int startIndex;
 
+        private static string rule;
+
         /// <summary>
         /// Defines the entry point of the application.
         /// </summary>
@@ -28,14 +34,16 @@ namespace FileCabinetGenerator
         {
             ParseArgs(args);
 
-            var records = RandomRecordsGenerator.Generate(recordsAmount, startIndex);
+            var records = RandomRecordsGenerator.Generate(recordsAmount, startIndex, rule);
             var writer = new RecordsWriter(records);
 
-            if (IsWriteFile())
+            if (IsReWriteFile())
             {
                 writer.WriteRecords(outputPath, outputType);
                 Console.WriteLine($"All records are exported to file {outputPath?.Split('\\')[^1]}");
             }
+
+            Console.WriteLine("File was no write.");
         }
 
         private static void ParseArgs(IEnumerable<string> args)
@@ -52,6 +60,7 @@ namespace FileCabinetGenerator
                             outputPath = o.Output;
                             recordsAmount = o.RecordsAmount;
                             startIndex = o.StartId;
+                            rule = o.Rules;
                         })
                     .WithNotParsed(errs => DisplayHelp(result.ToString()));
 
@@ -65,7 +74,7 @@ namespace FileCabinetGenerator
 
         private static void Validate()
         {
-            if ((outputType != null) && (!outputType.Equals("csv", StringComparison.InvariantCultureIgnoreCase) && !outputType.Equals("xml", StringComparison.InvariantCultureIgnoreCase)))
+            if ((outputType != null) && (!outputType.Equals("csv", StringComparison.OrdinalIgnoreCase) && !outputType.Equals("xml", StringComparison.OrdinalIgnoreCase)))
             {
                 throw new ArgumentException("The output type has to be xml or csv. (Parameter: -t, --output-type)");
             }
@@ -73,7 +82,7 @@ namespace FileCabinetGenerator
             int lastIndexOfBackSlash = outputPath.LastIndexOf("\\", StringComparison.OrdinalIgnoreCase);
             string fileDirection = lastIndexOfBackSlash > 0 ? outputPath[..lastIndexOfBackSlash] : string.Empty;
 
-            if (string.IsNullOrWhiteSpace(outputPath) || (!string.IsNullOrEmpty(fileDirection) && (!Directory.Exists(fileDirection) || string.IsNullOrEmpty(outputPath))))
+            if (string.IsNullOrWhiteSpace(outputPath) || (!string.IsNullOrEmpty(fileDirection) && (!Directory.Exists(fileDirection))))
             {
                 throw new ArgumentException($"Export failed: can't open file {outputPath}. (Parameter: -o, --output).");
             }
@@ -87,13 +96,18 @@ namespace FileCabinetGenerator
             {
                 throw new ArgumentException("Value should be greater than zero. (Parameter: -i, --start-id)");
             }
+
+            if (rule is null)
+            {
+                throw new ArgumentException("Rules is undefined. (Parameter: -r, --rules)");
+            }
         }
 
-        private static bool IsWriteFile()
+        private static bool IsReWriteFile()
         {
             if (File.Exists(outputPath))
             {
-                Console.Write($"File is exist - rewrite {outputPath}? [Y/n] ");
+                Console.Write($"File is exist - rewrite {outputPath}? [y/n] ");
                 string answer = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(answer) || !answer.Equals("y", StringComparison.OrdinalIgnoreCase))
                 {

@@ -18,6 +18,7 @@ using FileCabinetApp.Validators.InputValidators;
 using FileCabinetApp.Validators.RecordValidator;
 using FileCabinetApp.Validators.RecordValidator.ParametersValidators;
 using Microsoft.Extensions.Configuration;
+using Options = FileCabinetApp.Entities.Options;
 
 namespace FileCabinetApp
 {
