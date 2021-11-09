@@ -58,6 +58,11 @@
             </summary>
             <seealso cref="T:FileCabinetApp.CommandHandlers.ICommandHandler" />
         </member>
+        <member name="F:FileCabinetApp.CommandHandlers.CommandHandlerBase.HelpMessages">
+            <summary>
+            The help messages.
+            </summary>
+        </member>
         <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
             Handles the specified application command request.
@@ -252,6 +257,44 @@
             Handles the specified application command request.
             </summary>
             <param name="appCommandRequest">The application command request.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ServiceFinderCommandHandlerBase">
+            <summary>
+            Class <c>ServiceFinderCommandHandlerBase</c>.
+            </summary>
+            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceFinderCommandHandlerBase.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ServiceFinderCommandHandlerBase"/> class.
+            </summary>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceFinderCommandHandlerBase.#ctor(FileCabinetApp.Validators.InputValidators.InputValidator,FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ServiceFinderCommandHandlerBase"/> class.
+            </summary>
+            <param name="validator">The validator.</param>
+            <param name="fileCabinetService">The file cabinet service.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.ServiceFinderCommandHandlerBase.InputValidator">
+            <summary>
+            Gets the input validator.
+            </summary>
+            <value>
+            The input validator.
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceFinderCommandHandlerBase.GetRecordsBy(System.String,System.String)">
+            <summary>
+            Gets the records.
+            </summary>
+            <param name="key">The key.</param>
+            <param name="parameterValue">The parameter value.</param>
+            <returns>
+            Return file cabinet records.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">key - can not be null.</exception>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.StatCommandHandler">
             <summary>
@@ -1276,6 +1319,19 @@
             Gets the stat of users.
             </summary>
             <returns>Return count of records and deleted records in File Cabinet.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindBy(System.String,System.Object)">
+            <summary>
+            Finds the by.
+            </summary>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+            <returns>Return IEnumerable of FileCabinetRecords.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            key - can not be null
+            or
+            value - can not be null.
+            </exception>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.FindById(System.Int32)">
             <summary>

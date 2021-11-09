@@ -83,7 +83,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"GetRecords method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"GetRecordsBy method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }

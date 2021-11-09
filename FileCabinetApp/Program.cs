@@ -119,46 +119,44 @@ namespace FileCabinetApp
         private static void InitFileCabinetService(string[] args)
         {
             IRecordValidator recordValidator;
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(
-                    o =>
+            Parser.Default.ParseArguments<Options>(args).WithParsed(o =>
+                {
+                    if (o.ValidationRules.Equals("custom", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (o.ValidationRules.Equals("custom", StringComparison.OrdinalIgnoreCase))
-                        {
-                            recordValidator = new ValidatorBuilder().CreateCustomValidator();
-                            inputValidator = new InputValidator("custom");
-                            Console.WriteLine("Using custom validation rules.");
-                        }
-                        else
-                        {
-                            recordValidator = new ValidatorBuilder().CreateDefaultValidator();
-                            inputValidator = new InputValidator("default");
-                            Console.WriteLine("Using default validation rules.");
-                        }
+                        recordValidator = new ValidatorBuilder().CreateCustomValidator();
+                        inputValidator = new InputValidator("custom");
+                        Console.WriteLine("Using custom validation rules.");
+                    }
+                    else
+                    {
+                        recordValidator = new ValidatorBuilder().CreateDefaultValidator();
+                        inputValidator = new InputValidator("default");
+                        Console.WriteLine("Using default validation rules.");
+                    }
 
-                        if (o.StorageRules.Equals("file", StringComparison.OrdinalIgnoreCase))
-                        {
-                            fileCabinetService = new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create), recordValidator);
-                            Console.WriteLine("Using file storage rules.");
-                        }
-                        else
-                        {
-                            fileCabinetService = new FileCabinetMemoryService(recordValidator);
-                            Console.WriteLine("Using memory storage rules.");
-                        }
+                    if (o.StorageRules.Equals("file", StringComparison.OrdinalIgnoreCase))
+                    {
+                        fileCabinetService = new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create), recordValidator);
+                        Console.WriteLine("Using file storage rules.");
+                    }
+                    else
+                    {
+                        fileCabinetService = new FileCabinetMemoryService(recordValidator);
+                        Console.WriteLine("Using memory storage rules.");
+                    }
 
-                        if (o.StopWatchUse)
-                        {
-                            fileCabinetService = new ServiceMeter(fileCabinetService);
-                            Console.WriteLine("Using stopWatch.");
-                        }
+                    if (o.StopWatchUse)
+                    {
+                        fileCabinetService = new ServiceMeter(fileCabinetService);
+                        Console.WriteLine("Using stopWatch.");
+                    }
 
-                        if (o.UseLogger)
-                        {
-                            fileCabinetService = new ServiceLogger(fileCabinetService);
-                            Console.WriteLine("Using logger.");
-                        }
-                    });
+                    if (o.UseLogger)
+                    {
+                        fileCabinetService = new ServiceLogger(fileCabinetService);
+                        Console.WriteLine("Using logger.");
+                    }
+                });
         }
     }
 }

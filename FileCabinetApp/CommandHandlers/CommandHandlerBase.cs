@@ -12,18 +12,21 @@ namespace FileCabinetApp.CommandHandlers
     /// <seealso cref="FileCabinetApp.CommandHandlers.ICommandHandler" />
     public class CommandHandlerBase : ICommandHandler
     {
-        private readonly string[] commands = new[]
+        /// <summary>
+        /// The help messages.
+        /// </summary>
+        protected static readonly string[][] HelpMessages = new string[][]
         {
-            "help",
-            "exit",
-            "stat",
-            "create",
-            "export",
-            "import",
-            "delete",
-            "purge",
-            "update",
-            "select",
+            new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
+            new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
+            new string[] { "stat", "prints counts of records.", "The 'stat' command prints counts of records." },
+            new string[] { "insert", "insert new record.", "The 'insert' command insert new record." },
+            new string[] { "export csv/xml", "export records to csv/xml file.", "The 'export csv/xml' command export records to csv/xml file." },
+            new string[] { "import csv/xml", "import records from csv/xml file.", "The 'import csv/xml' command import records from csv/xml file." },
+            new string[] { "delete", "delete record from FileCabinet.", "The 'delete' command delete records from FileCabinet." },
+            new string[] { "purge", "purge bites from file.", "The 'purge' command purge bites from file." },
+            new string[] { "update", "update records parameters.", "The 'update' command update records parameters." },
+            new string[] { "select", "select records by input parameters.", "The 'select' command select records by input parameters." },
         };
 
         private ICommandHandler nextHandler;
@@ -46,7 +49,7 @@ namespace FileCabinetApp.CommandHandlers
 
                 var similar = this.CompareCommand(appCommandRequest.Command);
 
-                if (!string.IsNullOrWhiteSpace(similar))
+                if (!String.IsNullOrWhiteSpace(similar))
                 {
                     Console.WriteLine(similar);
                 }
@@ -142,11 +145,12 @@ namespace FileCabinetApp.CommandHandlers
         private string CompareCommand(string command)
         {
             string[] resultsStrings = new string[3];
-            double[] distanceValues = { double.MaxValue,  double.MaxValue, double.MaxValue };
-            foreach (var s in this.commands)
+            double[] distanceValues = { Double.MaxValue,  Double.MaxValue, Double.MaxValue };
+            foreach (var s in HelpMessages)
             {
-                var comparingValue = DamerauLevenshteinDistance(command, s);
-                ReplaceArrays(s, comparingValue, resultsStrings, distanceValues);
+                string commandName = s[0];
+                var comparingValue = DamerauLevenshteinDistance(command, commandName);
+                ReplaceArrays(commandName, comparingValue, resultsStrings, distanceValues);
             }
 
             var sb = new StringBuilder();

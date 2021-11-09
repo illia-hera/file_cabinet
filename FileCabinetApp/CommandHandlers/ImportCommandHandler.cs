@@ -42,11 +42,17 @@ namespace FileCabinetApp.CommandHandlers
             {
                 var parametersTuple = InputValidator.ValidateImportExportParameters(appCommandRequest.Parameters);
 
-                if (this.TryReadRecords(parametersTuple))
+                try
                 {
-                    Console.WriteLine($"All records were imported from file {parametersTuple.Item2!.Split('\\')[^1]}");
+                    this.TryReadRecords(parametersTuple);
+                }
+                catch (Exception e) when (e is IOException || e is ArgumentNullException || e is ArgumentException)
+                {
+                    Console.WriteLine(e.Message);
+                    return;
                 }
 
+                Console.WriteLine($"All records were imported from file {parametersTuple.Item2!.Split('\\')[^1]}");
                 return;
             }
 
@@ -62,7 +68,7 @@ namespace FileCabinetApp.CommandHandlers
                 return false;
             }
 
-            using var fs = new FileStream(parametersTuple.Item2, FileMode.Open, FileAccess.Read);
+            using FileStream fs = new FileStream(parametersTuple.Item2, FileMode.Open, FileAccess.Read);
             if (parametersTuple.Item1 && parametersTuple.Item3.Equals("csv", StringComparison.OrdinalIgnoreCase))
             {
                 using StreamReader streamReader = new StreamReader(fs);
