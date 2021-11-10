@@ -27,4 +27,10 @@
   <ItemGroup>
     <Folder Include="Validators\InputValidators\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="validation-rules.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

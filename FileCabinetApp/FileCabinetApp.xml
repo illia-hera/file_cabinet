@@ -77,25 +77,6 @@
             <param name="commandHandler">The command handler.</param>
             <returns>Return new CommandHandle.</returns>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.CreateCommandHandler">
-            <summary>
-            Class <c>CreateCommandHandler</c> create records.
-            </summary>
-            <seealso cref="T:FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.CreateCommandHandler"/> class.
-            </summary>
-            <param name="fileCabinetService">The file cabinet service.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
-            <summary>
-            Handles the specified application command request.
-            </summary>
-            <param name="appCommandRequest">The application command request.</param>
-            <exception cref="T:System.ArgumentNullException">appCommandRequest.</exception>
-        </member>
         <member name="T:FileCabinetApp.CommandHandlers.DeleteCommandHandler">
             <summary>
             Delete command implementation.
@@ -360,16 +341,6 @@
         </member>
         <member name="M:FileCabinetApp.Entities.FileCabinetRecord.#ctor(System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char)">
             <summary>Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.FileCabinetRecord"/> class.</summary>
-            <param name="firstName">The first name.</param>
-            <param name="lastName">The last name.</param>
-            <param name="dateOfBirth">The date of birth.</param>
-            <param name="workingHours">The workingHours.</param>
-            <param name="annualIncome">The annualIncome.</param>
-            <param name="driverCategory">Type of the account.</param>
-        </member>
-        <member name="M:FileCabinetApp.Entities.FileCabinetRecord.#ctor(System.Int32,System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char)">
-            <summary>Initializes a new instance of the <see cref="T:FileCabinetApp.Entities.FileCabinetRecord"/> class.</summary>
-            <param name="id">The identifier.</param>
             <param name="firstName">The first name.</param>
             <param name="lastName">The last name.</param>
             <param name="dateOfBirth">The date of birth.</param>
@@ -843,18 +814,6 @@
             <value>
             The record.
             </value>
-        </member>
-        <member name="T:FileCabinetApp.Printers.DefaultRecordPrinter">
-            <summary>
-            Class <c>DefaultRecordPrinter</c> console printer.
-            </summary>
-            <seealso cref="T:FileCabinetApp.Printers.IRecordPrinter" />
-        </member>
-        <member name="M:FileCabinetApp.Printers.DefaultRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.Entities.FileCabinetRecord})">
-            <summary>
-            Prints the specified records.
-            </summary>
-            <param name="records">The records.</param>
         </member>
         <member name="T:FileCabinetApp.Printers.IRecordPrinter">
             <summary>

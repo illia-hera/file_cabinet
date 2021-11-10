@@ -71,7 +71,7 @@ namespace FileCabinetApp.CommandHandlers
                 "ANNUALINCOME" => ParameterReaders.ReadInput(parameterValue, Converter.DecimalConverter, this.InputValidator.AnnualIncomeValidator),
                 "DRIVERCATEGORY" => ParameterReaders.ReadInput(parameterValue, Converter.CharConverter, this.InputValidator.DriverLicenseCategoryValidator),
                 _ => throw new ArgumentException(
-                    "Error in field name. Possible field naming options: id, firstname, lastname, accountType, bonuses, dateofbirth, money.")
+                    $"Error in field name - {key}. Possible field naming options: id, firstname, lastname, accountType, bonuses, dateofbirth, money.")
             };
 
             return this.FileCabinetService.FindBy(key, value);

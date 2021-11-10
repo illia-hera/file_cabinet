@@ -69,7 +69,7 @@ namespace FileCabinetApp.CommandHandlers
         private IEnumerable<FileCabinetRecord> ParseData(string parameters)
         {
             string inputParameterString = parameters.Replace("where ", string.Empty, StringComparison.InvariantCultureIgnoreCase);
-            string[] parameterStrings = inputParameterString.Replace("'", string.Empty, StringComparison.InvariantCultureIgnoreCase).Split('=', StringSplitOptions.RemoveEmptyEntries);
+            string[] parameterStrings = inputParameterString.Replace("'", string.Empty, StringComparison.InvariantCultureIgnoreCase).Split(" = ", StringSplitOptions.RemoveEmptyEntries);
 
             if (parameterStrings.Length % 2 != 0)
             {

@@ -35,10 +35,7 @@ namespace FileCabinetApp.CommandHandlers
             {
                 var sb = new StringBuilder();
                 sb.AppendLine("Unknown command. The input string must be in the following format:");
-                sb.AppendLine("> update set field = 'value', field = 'value' ... where [condition]");
-                sb.AppendLine();
-                sb.AppendLine(" - each [field = 'value'] pair must be separated from each other with '=', a value must be placed into single quotes (').");
-                sb.AppendLine();
+                sb.AppendLine("example: update set field = 'value', field = 'value' ... where [condition]");
 
                 return sb.ToString();
             }
@@ -111,7 +108,7 @@ namespace FileCabinetApp.CommandHandlers
         {
             string[] fieldsToUpdate = dataStrings.RemoveSpecialCharacters().Split("',", StringSplitOptions.RemoveEmptyEntries);
 
-            if (fieldsToUpdate.Any(x => !x.Contains('=', StringComparison.InvariantCultureIgnoreCase) || !x.Contains('\'', StringComparison.InvariantCultureIgnoreCase)))
+            if (fieldsToUpdate.Any(x => !x.Contains('=', StringComparison.InvariantCultureIgnoreCase)))
             {
                 throw new ArgumentException(ExceptionMessage);
             }
@@ -137,7 +134,7 @@ namespace FileCabinetApp.CommandHandlers
         {
             if (!parameters.Contains("set", StringComparison.InvariantCultureIgnoreCase) || !parameters.Contains("where", StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new ArgumentException(ExceptionMessage);
+                throw new ArgumentException($"'set' is not exist {ExceptionMessage}");
             }
 
             string[] dataStrings = parameters.Replace("set", string.Empty, StringComparison.InvariantCultureIgnoreCase).Split("where", StringSplitOptions.RemoveEmptyEntries);

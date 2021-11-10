@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Readers;
 using FileCabinetApp.Services;
@@ -17,6 +13,8 @@ namespace FileCabinetApp.CommandHandlers
     /// <seealso cref="FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
     public class InsertCommandHandler : CabinetServiceCommandHandlerBase
     {
+        private const string Example = "\nexample: insert id, firstname, lastname, dateofbirth, workinghours, annualincome, drivercategory values 1, 'Tadde', 'Gammy', '12/12/2020', 20, 1230m, B";
+
         private const int CountOfParameters = 7;
         private static InputValidator inputValidator;
 
@@ -49,7 +47,7 @@ namespace FileCabinetApp.CommandHandlers
                 var tuple = ParseParameters(appCommandRequest.Parameters);
                 if (tuple is null)
                 {
-                    Console.WriteLine($"Please, correct your input. Count of parameters must be equals {CountOfParameters}");
+                    Console.WriteLine($"Please, correct your input. Count of parameters must be equals {CountOfParameters}{Example}");
                     return;
                 }
 

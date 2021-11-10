@@ -86,9 +86,9 @@ namespace FileCabinetApp
 
         private static ICommandHandler CreateCommandHandler()
         {
-            var commandHandler = new CreateCommandHandler(fileCabinetService);
+            var commandHandler = new HelpCommandHandler();
 
-            commandHandler.SetNext(new HelpCommandHandler())
+            commandHandler
                 .SetNext(new StatCommandHandler(fileCabinetService))
                 .SetNext(new ExitCommandHandler(isR => isRunning = isR))
                 .SetNext(new ExportCommandHandler(fileCabinetService))
@@ -100,20 +100,6 @@ namespace FileCabinetApp
                 .SetNext(new SelectCommandHandler(fileCabinetService, inputValidator));
 
             return commandHandler;
-        }
-
-        private static void DefaultRecordPrint(IEnumerable<FileCabinetRecord> records)
-        {
-            foreach (FileCabinetRecord record in records)
-            {
-                Console.WriteLine($"#{record.Id}," +
-                                  $" {record.FirstName}," +
-                                  $" {record.LastName}," +
-                                  $" {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}," +
-                                  $" working hours: {record.WorkingHoursPerWeek}," +
-                                  $" annual income: {record.AnnualIncome}," +
-                                  $" driver category: {record.DriverLicenseCategory}.");
-            }
         }
 
         private static void InitFileCabinetService(string[] args)
