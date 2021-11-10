@@ -47,9 +47,9 @@ namespace FileCabinetApp.CommandHandlers
             {
                 Console.WriteLine($"There is no '{appCommandRequest.Command}' command.");
 
-                var similar = this.CompareCommand(appCommandRequest.Command);
+                var similar = CompareCommand(appCommandRequest.Command);
 
-                if (!String.IsNullOrWhiteSpace(similar))
+                if (!string.IsNullOrWhiteSpace(similar))
                 {
                     Console.WriteLine(similar);
                 }
@@ -142,10 +142,10 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private string CompareCommand(string command)
+        private static string CompareCommand(string command)
         {
             string[] resultsStrings = new string[3];
-            double[] distanceValues = { Double.MaxValue,  Double.MaxValue, Double.MaxValue };
+            double[] distanceValues = { double.MaxValue,  double.MaxValue, double.MaxValue };
             foreach (var s in HelpMessages)
             {
                 string commandName = s[0];

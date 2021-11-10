@@ -20,6 +20,6 @@ namespace FileCabinetApp.Entities.XmlSerialization
         /// The record.
         /// </value>
         [XmlElement("record")]
-        public Collection<Record> Record { get; set; } // if change Record to read-only it will lead to Errors in Deserialization xml file.
+        public Collection<Record> Record { get; set; } // if public change to read-only it will lead to Errors in Deserialization xml file.
     }
 }
