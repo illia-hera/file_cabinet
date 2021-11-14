@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
 
@@ -40,7 +41,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"Create method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -62,7 +63,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"Create method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -83,7 +84,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"GetRecords method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -103,7 +104,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"Edit method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
         }
 
         /// <summary>
@@ -123,7 +124,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"Edit method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -145,7 +146,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"FindByFirstName method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -167,7 +168,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"FindByLastName method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -189,7 +190,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"FindByDateOfBirth method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -211,7 +212,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"FindByDateOfBirth method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -233,7 +234,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"FindByDateOfBirth method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -255,7 +256,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"FindByDateOfBirth method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -276,7 +277,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"GetStat method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -297,7 +298,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"MakeSnapshot method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
         }
@@ -316,7 +317,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"RemoveRecord method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
         }
 
         /// <summary>
@@ -333,7 +334,7 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"Restore method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
         }
 
         /// <summary>
@@ -352,9 +353,18 @@ namespace FileCabinetApp.Services
 
             sw.Stop();
 
-            Console.WriteLine($"Restore method execution duration is {sw.ElapsedTicks} ticks.");
+            Console.WriteLine($"{GetCurrentMethod()} method execution duration is {sw.ElapsedTicks} ticks.");
 
             return result;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static string GetCurrentMethod()
+        {
+            var st = new StackTrace();
+            var sf = st.GetFrame(1);
+
+            return sf.GetMethod().Name;
         }
     }
 }

@@ -17,19 +17,16 @@ namespace FileCabinetApp.CommandHandlers
     /// Implement Update command.
     /// </summary>
     /// <seealso cref="CabinetServiceCommandHandlerBase" />
-    public class UpdateCommandHandler : CabinetServiceCommandHandlerBase
+    public class UpdateCommandHandler : ServiceFinderCommandHandlerBase
     {
-        private static InputValidator inputValidator;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">The file cabinet service.</param>
         /// <param name="validator">The validator.</param>
         public UpdateCommandHandler(IFileCabinetService fileCabinetService, InputValidator validator)
-            : base(fileCabinetService)
+            : base(validator, fileCabinetService)
         {
-            inputValidator = validator;
         }
 
         private static string ExceptionMessage
@@ -38,10 +35,7 @@ namespace FileCabinetApp.CommandHandlers
             {
                 var sb = new StringBuilder();
                 sb.AppendLine("Unknown command. The input string must be in the following format:");
-                sb.AppendLine("> update set field = 'value', field = 'value' ... where [condition]");
-                sb.AppendLine();
-                sb.AppendLine(" - each [field = 'value'] pair must be separated from each other with '=', a value must be placed into single quotes (').");
-                sb.AppendLine();
+                sb.AppendLine("example: update set field = 'value', field = 'value' ... where [condition]");
 
                 return sb.ToString();
             }
@@ -94,8 +88,7 @@ namespace FileCabinetApp.CommandHandlers
                 }
                 catch (Exception e) when (e is ArgumentException || e is FormatException || e is IOException)
                 {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine("Please, try again.");
+                    Console.WriteLine($"{e.Message}\nPlease, try again.");
                     return;
                 }
                 catch (KeyNotFoundException)
@@ -111,48 +104,11 @@ namespace FileCabinetApp.CommandHandlers
             base.Handle(appCommandRequest);
         }
 
-        private static ParametersContainer GetInputData(FileCabinetRecord record, Dictionary<string, string> fieldValueDictionary)
-        {
-            var container = new ParametersContainer(record.FirstName, record.LastName, record.DateOfBirth, record.WorkingHoursPerWeek, record.AnnualIncome, record.DriverLicenseCategory);
-
-            foreach (KeyValuePair<string, string> pair in fieldValueDictionary)
-            {
-                switch (pair.Key.ToUpperInvariant())
-                {
-                    case "FIRSTNAME":
-                        container.FirstName = ParameterReaders.ReadInput(pair.Value, Converter.StringConverter, inputValidator.FirstNameValidator);
-                        break;
-                    case "LASTNAME":
-                        container.LastName = ParameterReaders.ReadInput(pair.Value, Converter.StringConverter, inputValidator.LastNameValidator);
-                        break;
-                    case "ACCOUNTTYPE":
-                        container.DriverLicenseCategory = ParameterReaders.ReadInput(pair.Value, Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
-                        break;
-                    case "BONUSES":
-                        container.WorkingHoursPerWeek = ParameterReaders.ReadInput(pair.Value, Converter.ShortConverter, inputValidator.WorkingHoursValidator);
-                        break;
-                    case "DATEOFBIRTH":
-                        container.DateOfBirthday = ParameterReaders.ReadInput(pair.Value, Converter.DateConverter, inputValidator.DateOfBirthValidator);
-                        break;
-                    case "MONEY":
-                        container.AnnualIncome = ParameterReaders.ReadInput(pair.Value, Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
-                        break;
-                    case "ID":
-                        throw new ArgumentException("Can't update a record ID.");
-
-                    default:
-                        throw new ArgumentException("Error in field name. Possible field options: firstname, lastname, dateofbirth, accountType, bonuses, money.");
-                }
-            }
-
-            return container;
-        }
-
         private static Dictionary<string, string> GetFieldValueDictionary(string dataStrings)
         {
             string[] fieldsToUpdate = dataStrings.RemoveSpecialCharacters().Split("',", StringSplitOptions.RemoveEmptyEntries);
 
-            if (fieldsToUpdate.Any(x => !x.Contains('=', StringComparison.InvariantCultureIgnoreCase) || !x.Contains('\'', StringComparison.InvariantCultureIgnoreCase)))
+            if (fieldsToUpdate.Any(x => !x.Contains('=', StringComparison.InvariantCultureIgnoreCase)))
             {
                 throw new ArgumentException(ExceptionMessage);
             }
@@ -178,7 +134,7 @@ namespace FileCabinetApp.CommandHandlers
         {
             if (!parameters.Contains("set", StringComparison.InvariantCultureIgnoreCase) || !parameters.Contains("where", StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new ArgumentException(ExceptionMessage);
+                throw new ArgumentException($"'set' is not exist {ExceptionMessage}");
             }
 
             string[] dataStrings = parameters.Replace("set", string.Empty, StringComparison.InvariantCultureIgnoreCase).Split("where", StringSplitOptions.RemoveEmptyEntries);
@@ -191,12 +147,49 @@ namespace FileCabinetApp.CommandHandlers
             return dataStrings;
         }
 
+        private ParametersContainer GetInputData(FileCabinetRecord record, Dictionary<string, string> fieldValueDictionary)
+        {
+            var container = new ParametersContainer(record.FirstName, record.LastName, record.DateOfBirth, record.WorkingHoursPerWeek, record.AnnualIncome, record.DriverLicenseCategory);
+
+            foreach (KeyValuePair<string, string> pair in fieldValueDictionary)
+            {
+                switch (pair.Key.ToUpperInvariant())
+                {
+                    case "FIRSTNAME":
+                        container.FirstName = ParameterReaders.ReadInput(pair.Value, Converter.StringConverter, this.InputValidator.FirstNameValidator);
+                        break;
+                    case "LASTNAME":
+                        container.LastName = ParameterReaders.ReadInput(pair.Value, Converter.StringConverter, this.InputValidator.LastNameValidator);
+                        break;
+                    case "ACCOUNTTYPE":
+                        container.DriverLicenseCategory = ParameterReaders.ReadInput(pair.Value, Converter.CharConverter, this.InputValidator.DriverLicenseCategoryValidator);
+                        break;
+                    case "BONUSES":
+                        container.WorkingHoursPerWeek = ParameterReaders.ReadInput(pair.Value, Converter.ShortConverter, this.InputValidator.WorkingHoursValidator);
+                        break;
+                    case "DATEOFBIRTH":
+                        container.DateOfBirthday = ParameterReaders.ReadInput(pair.Value, Converter.DateConverter, this.InputValidator.DateOfBirthValidator);
+                        break;
+                    case "MONEY":
+                        container.AnnualIncome = ParameterReaders.ReadInput(pair.Value, Converter.DecimalConverter, this.InputValidator.AnnualIncomeValidator);
+                        break;
+                    case "ID":
+                        throw new ArgumentException("Can't update a record ID.");
+
+                    default:
+                        throw new ArgumentException("Error in field name. Possible field options: firstname, lastname, dateofbirth, accountType, bonuses, money.");
+                }
+            }
+
+            return container;
+        }
+
         private string Update(List<FileCabinetRecord> recordsToChange, Dictionary<string, string> fieldValueDictionary)
         {
             var sb = new StringBuilder(recordsToChange.Count);
             foreach (FileCabinetRecord record in recordsToChange)
             {
-                this.FileCabinetService.EditRecord(record.Id, GetInputData(record, fieldValueDictionary));
+                this.FileCabinetService.EditRecord(record.Id, this.GetInputData(record, fieldValueDictionary));
                 sb.Append($"#{record.Id}, ");
             }
 
@@ -227,51 +220,10 @@ namespace FileCabinetApp.CommandHandlers
                 string key = strings[0].Trim();
                 string value = strings[1].Trim();
 
-                recordsToChange = recordsToChange.Union(this.FindBy(key, value));
+                recordsToChange = recordsToChange.Union(this.GetRecordsBy(key, value));
             }
 
             return recordsToChange;
-        }
-
-        private IEnumerable<FileCabinetRecord> FindBy(string key, string parameterValue)
-        {
-            IEnumerable<FileCabinetRecord> records;
-
-            switch (key.ToUpperInvariant())
-            {
-                case "ID":
-                    int id = ParameterReaders.ReadInput(parameterValue, Converter.IntConverter, InputValidator.IdValidator);
-                    records = this.FileCabinetService.FindById(id);
-                    break;
-                case "FIRSTNAME":
-                    var firstName = ParameterReaders.ReadInput(parameterValue, Converter.StringConverter, inputValidator.FirstNameValidator);
-                    records = this.FileCabinetService.FindByFirstName(firstName);
-                    break;
-                case "LASTNAME":
-                    var lastName = ParameterReaders.ReadInput(parameterValue, Converter.StringConverter, inputValidator.LastNameValidator);
-                    records = this.FileCabinetService.FindByLastName(lastName);
-                    break;
-                case "DATEOFBIRTH":
-                    var dateOfBirthday = ParameterReaders.ReadInput(parameterValue, Converter.DateConverter, inputValidator.DateOfBirthValidator);
-                    records = this.FileCabinetService.FindByDateOfBirthday(dateOfBirthday);
-                    break;
-                case "WORKINGHOURS":
-                    var workingHoursPerWeek = ParameterReaders.ReadInput(parameterValue, Converter.ShortConverter, inputValidator.WorkingHoursValidator);
-                    records = this.FileCabinetService.FindByWorkingHours(workingHoursPerWeek);
-                    break;
-                case "ANNUALINCOME":
-                    var annualIncome = ParameterReaders.ReadInput(parameterValue, Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
-                    records = this.FileCabinetService.FindByAnnualIncome(annualIncome);
-                    break;
-                case "DRIVERCATEGORY":
-                    var driverLicenseCategory = ParameterReaders.ReadInput(parameterValue, Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
-                    records = this.FileCabinetService.FindByDriverCategory(driverLicenseCategory);
-                    break;
-                default:
-                    throw new ArgumentException("Error in field name. Possible field naming options: id, firstname, lastname, accountType, bonuses, dateofbirth, money.");
-            }
-
-            return records;
         }
     }
 }

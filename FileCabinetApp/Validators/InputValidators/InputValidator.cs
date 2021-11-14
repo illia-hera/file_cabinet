@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using FileCabinetApp.Entities.JsonSerialization;
+using FileCabinetApp.Readers;
 using Microsoft.Extensions.Configuration;
 
 namespace FileCabinetApp.Validators.InputValidators
@@ -22,11 +23,10 @@ namespace FileCabinetApp.Validators.InputValidators
         {
             if (string.IsNullOrWhiteSpace(validationType))
             {
-                throw new ArgumentNullException(nameof(validationType), $" can not be null or empty");
+                throw new ArgumentNullException(nameof(validationType), $"{nameof(validationType)} can not be null or empty");
             }
 
-            IConfigurationRoot configurationRoot = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("validation-rules.json").Build();
-            this.validationRules = configurationRoot.GetSection(validationType).Get<ValidationRules>();
+            this.validationRules = RulesReader.Read(validationType, "validation-rules.json");
         }
 
         /// <summary>

@@ -4,43 +4,6 @@
         <name>FileCabinetGenerator</name>
     </assembly>
     <members>
-        <member name="T:FileCabinetGenerator.Options">
-            <summary>
-            Class Option.
-            </summary>
-        </member>
-        <member name="P:FileCabinetGenerator.Options.OutputType">
-            <summary>
-            Gets or sets the type of the output.
-            </summary>
-            <value>
-            The type of the output.
-            </value>
-        </member>
-        <member name="P:FileCabinetGenerator.Options.Output">
-            <summary>
-            Gets or sets the output.
-            </summary>
-            <value>
-            The output.
-            </value>
-        </member>
-        <member name="P:FileCabinetGenerator.Options.RecordsAmount">
-            <summary>
-            Gets or sets the records amount.
-            </summary>
-            <value>
-            The records amount.
-            </value>
-        </member>
-        <member name="P:FileCabinetGenerator.Options.StartId">
-            <summary>
-            Gets or sets the start identifier.
-            </summary>
-            <value>
-            The start identifier.
-            </value>
-        </member>
         <member name="T:FileCabinetGenerator.Program">
             <summary>
             Class Program.
@@ -52,31 +15,126 @@
             </summary>
             <param name="args">The arguments.</param>
         </member>
-        <member name="T:FileCabinetGenerator.RandomRecordsGenerator">
+        <member name="T:FileCabinetGenerator.RandomGenerator.Randomizer">
+            <summary>
+            Random value generator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.RandomGenerator.Randomizer.RandomDateOfBirth">
+            <summary>
+            Randoms the day.
+            </summary>
+            <returns>Return random DateTime.</returns>
+        </member>
+        <member name="M:FileCabinetGenerator.RandomGenerator.Randomizer.RandomAnnualIncome">
+            <summary>
+            Randoms the annual income.
+            </summary>
+            <returns>Return annualIncome.</returns>
+        </member>
+        <member name="M:FileCabinetGenerator.RandomGenerator.Randomizer.RandomWorkingHours">
+            <summary>
+            Randoms the working hours.
+            </summary>
+            <returns>Return random working hours.</returns>
+        </member>
+        <member name="M:FileCabinetGenerator.RandomGenerator.Randomizer.RandomFirstName">
+            <summary>
+            Randoms the first name.
+            </summary>
+            <returns>Return random first name.</returns>
+        </member>
+        <member name="M:FileCabinetGenerator.RandomGenerator.Randomizer.RandomLastName">
+            <summary>
+            Randoms the last name.
+            </summary>
+            <returns>Return Random last name.</returns>
+        </member>
+        <member name="M:FileCabinetGenerator.RandomGenerator.Randomizer.RandomDriverCategory">
+            <summary>
+            Randoms the driver category.
+            </summary>
+            <returns>Return random category.</returns>
+        </member>
+        <member name="M:FileCabinetGenerator.RandomGenerator.Randomizer.CreateRules(System.String)">
+            <summary>
+            Creates the rules.
+            </summary>
+            <param name="rules">The rules.</param>
+        </member>
+        <member name="T:FileCabinetGenerator.RandomGenerator.RandomRecordsGenerator">
             <summary>
             Generate random value.
             </summary>
         </member>
-        <member name="M:FileCabinetGenerator.RandomRecordsGenerator.Generate(System.Int32,System.Int32)">
+        <member name="M:FileCabinetGenerator.RandomGenerator.RandomRecordsGenerator.Generate(System.Int32,System.Int32,System.String)">
             <summary>
             Generates the specified records amount.
             </summary>
             <param name="recordsAmount">The records amount.</param>
             <param name="startId">The start identifier.</param>
-            <returns>Return FileCabinetRecords.</returns>
+            <param name="rules">The rules.</param>
+            <returns>
+            Return FileCabinetRecords.
+            </returns>
         </member>
-        <member name="T:FileCabinetGenerator.RecordsWriter">
+        <member name="T:FileCabinetGenerator.Utility.Options">
+            <summary>
+            Class Option.
+            </summary>
+        </member>
+        <member name="P:FileCabinetGenerator.Utility.Options.OutputType">
+            <summary>
+            Gets or sets the type of the output.
+            </summary>
+            <value>
+            The type of the output.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Utility.Options.Rules">
+            <summary>
+            Gets or sets the rules.
+            </summary>
+            <value>
+            The rules.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Utility.Options.Output">
+            <summary>
+            Gets or sets the output.
+            </summary>
+            <value>
+            The output.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Utility.Options.RecordsAmount">
+            <summary>
+            Gets or sets the records amount.
+            </summary>
+            <value>
+            The records amount.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Utility.Options.StartId">
+            <summary>
+            Gets or sets the start identifier.
+            </summary>
+            <value>
+            The start identifier.
+            </value>
+        </member>
+        <member name="T:FileCabinetGenerator.Writer.RecordsWriter">
             <summary>
             Class <c>RecordsWrite</c>.
             </summary>
         </member>
-        <member name="M:FileCabinetGenerator.RecordsWriter.#ctor(System.Collections.Generic.List{FileCabinetApp.Entities.FileCabinetRecord})">
+        <member name="M:FileCabinetGenerator.Writer.RecordsWriter.#ctor(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.Entities.FileCabinetRecord})">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetGenerator.RecordsWriter"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetGenerator.Writer.RecordsWriter"/> class.
             </summary>
             <param name="records">The records.</param>
         </member>
-        <member name="M:FileCabinetGenerator.RecordsWriter.WriteRecords(System.String,System.String)">
+        <member name="M:FileCabinetGenerator.Writer.RecordsWriter.WriteRecords(System.String,System.String)">
             <summary>
             Writes the records.
             </summary>

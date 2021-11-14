@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using FileCabinetApp.Entities;
@@ -15,19 +14,16 @@ namespace FileCabinetApp.CommandHandlers
     /// Delete command implementation.
     /// </summary>
     /// <seealso cref="FileCabinetApp.CommandHandlers.CabinetServiceCommandHandlerBase" />
-    public class DeleteCommandHandler : CabinetServiceCommandHandlerBase
+    public class DeleteCommandHandler : ServiceFinderCommandHandlerBase
     {
-        private static InputValidator inputValidator;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DeleteCommandHandler" /> class.
         /// </summary>
         /// <param name="fileCabinetService">The file cabinet service.</param>
         /// <param name="validator">The validator.</param>
         public DeleteCommandHandler(IFileCabinetService fileCabinetService, InputValidator validator)
-            : base(fileCabinetService)
+            : base(validator, fileCabinetService)
         {
-            inputValidator = validator;
         }
 
         /// <summary>
@@ -44,84 +40,52 @@ namespace FileCabinetApp.CommandHandlers
             if (appCommandRequest.Command.Equals("delete", StringComparison.OrdinalIgnoreCase))
             {
                 StringBuilder sb = new StringBuilder();
+                IEnumerable<FileCabinetRecord> records;
 
-                var tuple = ParseData(appCommandRequest.Parameters);
-                var (keys, values) = tuple;
-
-                IEnumerable<FileCabinetRecord> records = new List<FileCabinetRecord>();
-                for (int i = 0; i < keys.Length; i++)
+                try
                 {
-                    this.GetRecords(keys[i], values[i], ref records);
+                    records = this.ParseData(appCommandRequest.Parameters);
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine(e.Message);
+                    return;
                 }
 
-                foreach (var fileCabinetRecord in records)
+                foreach (var fileCabinetRecord in records.ToList())
                 {
                     this.FileCabinetService.RemoveRecord(fileCabinetRecord.Id);
                     sb.Append($"#{fileCabinetRecord.Id}, ");
                 }
 
-                Console.WriteLine($"Records {sb.ToString()}are deleted");
+                Console.WriteLine(records.Any() ? "Example: delete where id = '1'" : $"Records {sb}are deleted");
+
                 return;
             }
 
             base.Handle(appCommandRequest);
         }
 
-        private static Tuple<string[], string[]> ParseData(string parameters)
+        private IEnumerable<FileCabinetRecord> ParseData(string parameters)
         {
-            string parameterString = parameters.Replace("where ", string.Empty, StringComparison.InvariantCultureIgnoreCase);
-            string[] dataStrings = parameterString.Replace("'", string.Empty, StringComparison.InvariantCultureIgnoreCase).Split('=', StringSplitOptions.RemoveEmptyEntries);
+            string inputParameterString = parameters.Replace("where ", string.Empty, StringComparison.InvariantCultureIgnoreCase);
+            string[] parameterStrings = inputParameterString.Replace("'", string.Empty, StringComparison.InvariantCultureIgnoreCase).Split(" = ", StringSplitOptions.RemoveEmptyEntries);
 
-            if (dataStrings.Length % 2 != 0)
+            if (parameterStrings.Length % 2 != 0)
             {
                 throw new ArgumentException("the input string must be in the following format: delete where field1='value1'");
             }
 
-            string[] keys = new string[dataStrings.Length / 2];
-            string[] values = new string[dataStrings.Length / 2];
+            IEnumerable<FileCabinetRecord> records = new List<FileCabinetRecord>();
 
-            for (int i = 0, j = 0; i < dataStrings.Length; i += 2, j++)
+            for (int i = 0, j = 0; i < parameterStrings.Length; i += 2, j++)
             {
-                keys[j] = dataStrings[i];
-                values[j] = dataStrings[i + 1];
+                string key = parameterStrings[i];
+                string value = parameterStrings[i + 1];
+                records = records.Union(this.GetRecordsBy(key, value));
             }
 
-            return new Tuple<string[], string[]>(keys, values);
-        }
-
-        private void GetRecords(string key, string parameterValue, ref IEnumerable<FileCabinetRecord> records)
-        {
-            switch (key.ToUpperInvariant())
-            {
-                case "ID":
-                    int id = ParameterReaders.ReadInput(parameterValue, Converter.IntConverter, InputValidator.IdValidator);
-                    records = records.Union(this.FileCabinetService.FindById(id));
-                    break;
-                case "FIRSTNAME":
-                    var firstName = ParameterReaders.ReadInput(parameterValue, Converter.StringConverter, inputValidator.FirstNameValidator);
-                    records = records.Union(this.FileCabinetService.FindByFirstName(firstName));
-                    break;
-                case "LASTNAME":
-                    var lastName = ParameterReaders.ReadInput(parameterValue, Converter.StringConverter, inputValidator.LastNameValidator);
-                    records = records.Union(this.FileCabinetService.FindByLastName(lastName));
-                    break;
-                case "DATEOFBIRTH":
-                    var dateOfBirthday = ParameterReaders.ReadInput(parameterValue, Converter.DateConverter, inputValidator.DateOfBirthValidator);
-                    records = records.Union(this.FileCabinetService.FindByDateOfBirthday(dateOfBirthday));
-                    break;
-                case "WORKINGHOURS":
-                    var workingHoursPerWeek = ParameterReaders.ReadInput(parameterValue, Converter.ShortConverter, inputValidator.WorkingHoursValidator);
-                    records = records.Union(this.FileCabinetService.FindByWorkingHours(workingHoursPerWeek));
-                    break;
-                case "ANNUALINCOME":
-                    var annualIncome = ParameterReaders.ReadInput(parameterValue, Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
-                    records = records.Union(this.FileCabinetService.FindByAnnualIncome(annualIncome));
-                    break;
-                case "DRIVERCATEGORY":
-                    var driverLicenseCategory = ParameterReaders.ReadInput(parameterValue, Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
-                    records = records.Union(this.FileCabinetService.FindByDriverCategory(driverLicenseCategory));
-                    break;
-            }
+            return records;
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using FileCabinetApp.Entities;
-using Randomizer;
 using RandomNameGeneratorLibrary;
 
-namespace FileCabinetGenerator
+[assembly: CLSCompliant(false)]
+
+namespace FileCabinetGenerator.RandomGenerator
 {
     /// <summary>
     /// Generate random value.
@@ -16,29 +17,24 @@ namespace FileCabinetGenerator
         /// </summary>
         /// <param name="recordsAmount">The records amount.</param>
         /// <param name="startId">The start identifier.</param>
-        /// <returns>Return FileCabinetRecords.</returns>
-        public static List<FileCabinetRecord> Generate(int recordsAmount, int startId)
+        /// <param name="rules">The rules.</param>
+        /// <returns>
+        /// Return FileCabinetRecords.
+        /// </returns>
+        public static IReadOnlyCollection<FileCabinetRecord> Generate(int recordsAmount, int startId, string rules)
         {
             var records = new List<FileCabinetRecord>(recordsAmount);
 
-            var personGenerator = new PersonNameGenerator();
-
-            var datetimeGenerator = new RandomDateTimeGenerator();
-
-            var shortGenerator = new RandomShortGenerator();
-
-            var decimalGenerator = new RandomDecimalGenerator();
-
-            var charGenerator = new RandomAlphanumericCharGenerator();
+            Randomizer.CreateRules(rules);
 
             for (int i = 0; i < recordsAmount; i++)
             {
-                string firstName = personGenerator.GenerateRandomFirstName();
-                string lastName = personGenerator.GenerateRandomLastName();
-                DateTime birthDay = datetimeGenerator.GenerateValue(new DateTime(1970, 1, 1), new DateTime(2021, 1, 1));
-                short workingHours = shortGenerator.GenerateValue(20, 30);
-                decimal annualIncome = decimalGenerator.GenerateValue(500, 1_500);
-                char driverLicense = charGenerator.GenerateValue('A', 'B');
+                string firstName = Randomizer.RandomFirstName();
+                string lastName = Randomizer.RandomLastName();
+                DateTime birthDay = Randomizer.RandomDateOfBirth();
+                short workingHours = Randomizer.RandomWorkingHours();
+                decimal annualIncome = Randomizer.RandomAnnualIncome();
+                char driverLicense = Randomizer.RandomDriverCategory();
 
                 records.Add(CreateRecord(startId + i - 1, new ParametersContainer(firstName, lastName, birthDay, workingHours, annualIncome, driverLicense)));
             }

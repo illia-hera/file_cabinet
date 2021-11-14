@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace FileCabinetGenerator
+namespace FileCabinetGenerator.Utility
 {
     /// <summary>
     /// Class Option.
@@ -15,6 +15,15 @@ namespace FileCabinetGenerator
         /// </value>
         [Option('t', "output-type", Required = true, HelpText = "Output format type (csv, xml).")]
         public string OutputType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rules.
+        /// </summary>
+        /// <value>
+        /// The rules.
+        /// </value>
+        [Option('r', "rules", Required = true, HelpText = "Default or custom value rules.")]
+        public string Rules { get; set; }
 
         /// <summary>
         /// Gets or sets the output.

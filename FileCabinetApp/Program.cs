@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Xml;
 using CommandLine;
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.Entities;
-using FileCabinetApp.Entities.JsonSerialization;
-using FileCabinetApp.Printers;
 using FileCabinetApp.Readers;
 using FileCabinetApp.Services;
-using FileCabinetApp.Services.SnapshotServices;
 using FileCabinetApp.Utility;
-using FileCabinetApp.Validators;
 using FileCabinetApp.Validators.InputValidators;
 using FileCabinetApp.Validators.RecordValidator;
-using FileCabinetApp.Validators.RecordValidator.ParametersValidators;
-using Microsoft.Extensions.Configuration;
+
+[assembly: CLSCompliant(false)]
 
 namespace FileCabinetApp
 {
@@ -50,7 +42,8 @@ namespace FileCabinetApp
             do
             {
                     Console.Write("> ");
-                    var inputs = Console.ReadLine().Split(' ', 2);
+                    var input = Console.ReadLine() ?? throw new ArgumentException("Input can not be null");
+                    var inputs = input.Split(' ', 2);
                     const int commandIndex = 0;
                     const int parameterIndex = 1;
 
@@ -59,40 +52,11 @@ namespace FileCabinetApp
             while (isRunning);
         }
 
-        /// <summary>
-        /// Gets the valid input parameters.
-        /// </summary>
-        /// <returns>Return container with parameters.</returns>
-        public static ParametersContainer GetValidInputParameters()
-        {
-            var container = new ParametersContainer();
-
-            Console.Write("First name: ");
-            container.FirstName = ParameterReaders.ReadInput(Converter.StringConverter, inputValidator.FirstNameValidator);
-
-            Console.Write("Last name: ");
-            container.LastName = ParameterReaders.ReadInput(Converter.StringConverter, inputValidator.LastNameValidator);
-
-            Console.Write("Date of birth: ");
-            container.DateOfBirthday = ParameterReaders.ReadInput(Converter.DateConverter, inputValidator.DateOfBirthValidator);
-
-            Console.Write("Working Hours Per Week: ");
-            container.WorkingHoursPerWeek = ParameterReaders.ReadInput(Converter.ShortConverter, inputValidator.WorkingHoursValidator);
-
-            Console.Write("Annual Income: ");
-            container.AnnualIncome = ParameterReaders.ReadInput(Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
-
-            Console.Write("Driver License Category: ");
-            container.DriverLicenseCategory = ParameterReaders.ReadInput(Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
-
-            return container;
-        }
-
         private static ICommandHandler CreateCommandHandler()
         {
-            var commandHandler = new CreateCommandHandler(fileCabinetService);
+            var commandHandler = new HelpCommandHandler();
 
-            commandHandler.SetNext(new HelpCommandHandler())
+            commandHandler
                 .SetNext(new StatCommandHandler(fileCabinetService))
                 .SetNext(new ExitCommandHandler(isR => isRunning = isR))
                 .SetNext(new ExportCommandHandler(fileCabinetService))
@@ -106,63 +70,47 @@ namespace FileCabinetApp
             return commandHandler;
         }
 
-        private static void DefaultRecordPrint(IEnumerable<FileCabinetRecord> records)
-        {
-            foreach (FileCabinetRecord record in records)
-            {
-                Console.WriteLine($"#{record.Id}," +
-                                  $" {record.FirstName}," +
-                                  $" {record.LastName}," +
-                                  $" {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.CreateSpecificCulture("en-US"))}," +
-                                  $" working hours: {record.WorkingHoursPerWeek}," +
-                                  $" annual income: {record.AnnualIncome}," +
-                                  $" driver category: {record.DriverLicenseCategory}.");
-            }
-        }
-
         private static void InitFileCabinetService(string[] args)
         {
             IRecordValidator recordValidator;
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(
-                    o =>
+            Parser.Default.ParseArguments<Options>(args).WithParsed(o =>
+                {
+                    if (o.ValidationRules.Equals("custom", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (o.ValidationRules.Equals("custom", StringComparison.OrdinalIgnoreCase))
-                        {
-                            recordValidator = new ValidatorBuilder().CreateCustomValidator();
-                            inputValidator = new InputValidator("custom");
-                            Console.WriteLine("Using custom validation rules.");
-                        }
-                        else
-                        {
-                            recordValidator = new ValidatorBuilder().CreateDefaultValidator();
-                            inputValidator = new InputValidator("default");
-                            Console.WriteLine("Using default validation rules.");
-                        }
+                        recordValidator = new ValidatorBuilder().CreateCustomValidator();
+                        inputValidator = new InputValidator("custom");
+                        Console.WriteLine("Using custom validation rules.");
+                    }
+                    else
+                    {
+                        recordValidator = new ValidatorBuilder().CreateDefaultValidator();
+                        inputValidator = new InputValidator("default");
+                        Console.WriteLine("Using default validation rules.");
+                    }
 
-                        if (o.StorageRules.Equals("file", StringComparison.OrdinalIgnoreCase))
-                        {
-                            fileCabinetService = new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create), recordValidator);
-                            Console.WriteLine("Using file storage rules.");
-                        }
-                        else
-                        {
-                            fileCabinetService = new FileCabinetMemoryService(recordValidator);
-                            Console.WriteLine("Using memory storage rules.");
-                        }
+                    if (o.StorageRules.Equals("file", StringComparison.OrdinalIgnoreCase))
+                    {
+                        fileCabinetService = new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create), recordValidator);
+                        Console.WriteLine("Using file storage rules.");
+                    }
+                    else
+                    {
+                        fileCabinetService = new FileCabinetMemoryService(recordValidator);
+                        Console.WriteLine("Using memory storage rules.");
+                    }
 
-                        if (o.StopWatchUse)
-                        {
-                            fileCabinetService = new ServiceMeter(fileCabinetService);
-                            Console.WriteLine("Using stopWatch.");
-                        }
+                    if (o.StopWatchUse)
+                    {
+                        fileCabinetService = new ServiceMeter(fileCabinetService);
+                        Console.WriteLine("Using stopWatch.");
+                    }
 
-                        if (o.UseLogger)
-                        {
-                            fileCabinetService = new ServiceLogger(fileCabinetService);
-                            Console.WriteLine("Using logger.");
-                        }
-                    });
+                    if (o.UseLogger)
+                    {
+                        fileCabinetService = new ServiceLogger(fileCabinetService);
+                        Console.WriteLine("Using logger.");
+                    }
+                });
         }
     }
 }

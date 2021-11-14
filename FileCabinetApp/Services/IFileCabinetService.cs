@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using FileCabinetApp.Entities;
 using FileCabinetApp.Services.SnapshotServices;
 
@@ -44,6 +45,42 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <returns>Return count of records and deleted records in File Cabinet.</returns>
         Tuple<int, int> GetStat();
+
+        /// <summary>
+        /// Finds the by.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>Return IEnumerable of FileCabinetRecords.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// key - can not be null
+        /// or
+        /// value - can not be null.
+        /// </exception>
+        IEnumerable<FileCabinetRecord> FindBy(string key, object value)
+        {
+            if (key is null)
+            {
+                throw new ArgumentNullException(nameof(key), "can not be null");
+            }
+
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value), "can not be null");
+            }
+
+            return key.ToUpperInvariant() switch
+            {
+                "ID" => this.FindById((int)value),
+                "FIRSTNAME" => this.FindByFirstName((string)value),
+                "LASTNAME" => this.FindByLastName((string)value),
+                "DATEOFBIRTH" => this.FindByDateOfBirthday((DateTime)value),
+                "WORKINGHOURS" => this.FindByWorkingHours((short)value),
+                "ANNUALINCOME" => this.FindByAnnualIncome((decimal)value),
+                "DRIVERCATEGORY" => this.FindByDriverCategory((char)value),
+                _ => throw new ArgumentException("Error in field name. Possible field naming options: id, firstname, lastname, accountType, bonuses, dateofbirth, money.")
+            };
+        }
 
         /// <summary>
         /// Finds the by identifier.

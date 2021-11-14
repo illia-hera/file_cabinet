@@ -188,7 +188,7 @@ namespace FileCabinetApp.Services
             IEnumerable<FileCabinetRecord> result;
             var sb = new StringBuilder();
             sb.Append($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}  -  ");
-            sb.Append($"Calling {GetCurrentMethod()} with FirstName = '{id} ', ");
+            sb.Append($"Calling {GetCurrentMethod()} with Id = '{id} ', ");
 
             using (var fs = new FileStream(this.path, FileMode.Append, FileAccess.Write))
             using (var writer = new StreamWriter(fs, Encoding.UTF8))

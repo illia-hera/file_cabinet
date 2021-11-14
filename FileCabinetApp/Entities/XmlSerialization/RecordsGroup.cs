@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,6 @@ namespace FileCabinetApp.Entities.XmlSerialization
         /// The record.
         /// </value>
         [XmlElement("record")]
-        public List<Record> Record { get; set; } // if change Record to be read-only it will lead to Errors in Deserialization xml file.
+        public Collection<Record> Record { get; set; } // if public change to read-only it will lead to Errors in Deserialization xml file.
     }
 }

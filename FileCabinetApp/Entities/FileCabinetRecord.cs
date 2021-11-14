@@ -63,20 +63,6 @@ namespace FileCabinetApp.Entities
             this.DriverLicenseCategory = driverCategory;
         }
 
-        /// <summary>Initializes a new instance of the <see cref="FileCabinetRecord"/> class.</summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="firstName">The first name.</param>
-        /// <param name="lastName">The last name.</param>
-        /// <param name="dateOfBirth">The date of birth.</param>
-        /// <param name="workingHours">The workingHours.</param>
-        /// <param name="annualIncome">The annualIncome.</param>
-        /// <param name="driverCategory">Type of the account.</param>
-        public FileCabinetRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short workingHours, decimal annualIncome, char driverCategory)
-            : this(firstName, lastName, dateOfBirth, workingHours, annualIncome, driverCategory)
-        {
-            this.Id = id;
-        }
-
         /// <summary>
         /// Gets or sets the status.
         /// </summary>
