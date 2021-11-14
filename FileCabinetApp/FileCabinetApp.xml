@@ -837,12 +837,6 @@
             </summary>
             <param name="args">The arguments.</param>
         </member>
-        <member name="M:FileCabinetApp.Program.GetValidInputParameters">
-            <summary>
-            Gets the valid input parameters.
-            </summary>
-            <returns>Return container with parameters.</returns>
-        </member>
         <member name="T:FileCabinetApp.Readers.FileCabinetRecordCsvReader">
             <summary>
             Class FileCabinetRecordCsvReader.

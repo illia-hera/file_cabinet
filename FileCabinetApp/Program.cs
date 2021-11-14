@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Reflection;
 using CommandLine;
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.Entities;
@@ -53,35 +50,6 @@ namespace FileCabinetApp
                     commandHandler.Handle(new AppCommandRequest(inputs[commandIndex], inputs.Length > 1 ? inputs[parameterIndex] : string.Empty));
             }
             while (isRunning);
-        }
-
-        /// <summary>
-        /// Gets the valid input parameters.
-        /// </summary>
-        /// <returns>Return container with parameters.</returns>
-        public static ParametersContainer GetValidInputParameters()
-        {
-            var container = new ParametersContainer();
-
-            Console.Write("First name: ");
-            container.FirstName = ParameterReaders.ReadInput(Converter.StringConverter, inputValidator.FirstNameValidator);
-
-            Console.Write("Last name: ");
-            container.LastName = ParameterReaders.ReadInput(Converter.StringConverter, inputValidator.LastNameValidator);
-
-            Console.Write("Date of birth: ");
-            container.DateOfBirthday = ParameterReaders.ReadInput(Converter.DateConverter, inputValidator.DateOfBirthValidator);
-
-            Console.Write("Working Hours Per Week: ");
-            container.WorkingHoursPerWeek = ParameterReaders.ReadInput(Converter.ShortConverter, inputValidator.WorkingHoursValidator);
-
-            Console.Write("Annual Income: ");
-            container.AnnualIncome = ParameterReaders.ReadInput(Converter.DecimalConverter, inputValidator.AnnualIncomeValidator);
-
-            Console.Write("Driver License Category: ");
-            container.DriverLicenseCategory = ParameterReaders.ReadInput(Converter.CharConverter, inputValidator.DriverLicenseCategoryValidator);
-
-            return container;
         }
 
         private static ICommandHandler CreateCommandHandler()
